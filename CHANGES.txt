@@ -1,0 +1,300 @@
+Done by Cristian Andrade
+- Color to the foreground on stickers
+- Simple HTML Format to stickers 
+
+Done since Memoranda 1.0-RC3 (20050517)
+
+- Fixed: Dates in TaskTable were not localized
+- Patch '[ 1681680 ] File upload as project ressource' applied
+- Fixed: memoranda.bat
+- Bug [1590113] is fixed partially (TaskTable tooltips are disabled over to-do labels)
+- Fixed: [1571820] Spaces in resource names
+- Fixed: [1531944] Checking tasklist DOCTYPE is removed
+
+Done since Memoranda 1.0-RC2 (20050517)
+
+- New task searching algorythm implemented (no XPath queries). The following
+libraries are excluded: saxon8.jar, saxon8-xom.jar, nux.jar [alexeya] 
+- Antialiasing of text in notes [alexeya]
+- Editor fonts customization implemented (Preferences dialog) [alexeya]
+- "Endless tasks" logic improved [alexeya]
+- Fixed:NullPointer when LAST_OPENED_PROJECT_ID references to missing project [alexeya]
+- Fixed:I18N: bug with unicode characters input (htmleditor) [alexeya]
+- HTMLEditor code is moved into main codebase (net.sf.memoranda.ui.htmleditor
+  package) [alexeya]
+- ID generation algorythm implemented instead of uuidgen.jar library using [alexeya]
+- TreeTable view for tasks hierarchy [alexeya, velhonoja]
+
+Done since Memoranda 1.0-RC1 (20041109)
+
+- Memoranda now remembers notes sort order
+- Fixed: [ 1095685 ] Add Planned Task [ivanrise]
+- Serbian messages added (submitted by Sava Rados <sawa@softhard.org>) [alexeya]
+- Feature: Templates for HTML export [alexeya]
+- Fixed: Overwriting output files with export of multiple notes per day [alexeya]
+- Italian messages added (submitted by Milena Vitali-Charewicz <milo22370@yahoo.com>) [alexeya]
+- German messages added (submitted by Michael Radtke <mradtke@abigale.de>)[alexeya]
+
+Done since Memoranda 1.0b3-20040322
+// On the homestretch before the Final Release:
+
+- CHECK_IF_ALREADY_STARTED configuration option added, FAQ updated 
+  (submitted by Michael Radtke <mradtke@abigale.de>)[alexeya]
+- New feature: Preview a note with web-browser [alexeya]
+- Icons updated [alexeya]
+- Configurable port number (PORT_NUMBER property added)
+  (see also FAQ.txt) [alexeya]
+- Fixed: Incompatibility with old notes format. [alexeya]
+- "File->New note" menu item added [alexeya]
+- Fixed: fixed compile warnings on java 1.5
+- Feature: delete notes using the DELETE key [ivanrise]
+- Fixed: [ 1046374 ] not active selected notes [ivanrise]
+- Fixed: Current note is not changed when another project is selected [alexeya]
+- TaskPanel: "Complete task" icon added, "Show active only" implemented
+  as checkbox in context menu (for consistency with projects menu) [alexeya] 
+- Nicer color for day with notes in calendar [alexeya]
+- Some configuration hack options added (memoranda.properties): 
+    MEMORANDA_HOME - overrides default dir for projects data 
+    ("${user.home}/.memoranda") 
+    USER_CSS - overrides default CSS file for notes editor
+    LOCALES_DIR - overrides default dir to search local messages      [alexeya] 
+- New feature:  848119    Daily Events : Only Working days [ivanrise]
+- New feature: [ 1042012 ] Change task sort order with "status" [ivanrise]
+- We do not need the hoar's quicksort now. Tasks, Events and notes are sorted 
+    using the Comparable interface.[ivanrise]
+- Feature: [ 1039131 ] DEL deletes Project (projects/tasks/events/resources) [ivanrise]
+- Fixed: [ 1039507 ] endless tasks displayed with wrong colors [ivanrise]
+- Added new icons to the task panel
+- Fixed: [ 1039443 ] calendar panel not updated [ivanrise]
+- Fixed: [ 1039112 ] Translation Hints [ivanrise]
+- Fixed: [ 899395 ] Memoranda crashes on JVM 1.5.0 [ivanrise]
+- Fixed: [ 1038393 ] Wrong window dimensions [ivanrise]
+- Fixed: [ 1038044 ] Problems with date selection [ivanrise]
+- New feature: [ 934556 ] Multiple notes per project per day [ivanrise]
+  At the moment there are no changes at the user interface. All notes ares
+  displayed in the notelist. I just added a new button on the editor panel
+  so we can create multiple notes on one day.
+  -->> OLD NOTES ARE NOT COMPATIBLE!!! i changed the xml format as it was told in 
+  the memoranda's developers forum.
+- New feature:  848119    Daily Events : Only Working days [ivanrise]
+
+- Fixed: Bug 988998: End date is not working on new projects dialog [ivanrise]
+- End date on tasks default state is now not enabled. [ivanrise] 
+- Request:843536 Event PopUp-Dialog(Reconstruct).It now looks better [ivanrise]
+- New feature: added task descriptions [rawsushi]
+- Show active tasks only will now show ACTIVE, DEADLINE and FAILED tasks instead of filtering by date [rawsushi]
+- New feature: Complete task will automatically set the
+  %done to 100%. (we need a new icon) [rawsushi / commit ivanrise]
+- New feature: Show active tasks only (we need a new icon) [rawsushi / commit ivanrise]
+- Fixed: Bug 965280: tasks with no end date are not displayed in agenda [ivanrise]
+- default.css is fixed by I18N reasons (default serif and sans-serif fonts for text) [alexeya]
+- Usability of dialog boxes: default buttons and style consistency [alexeya]
+- Splash screen updated [alexeya]
+- "About" dialog updated [alexeya]
+- New Help menu items added ("Online user's guide", "Web site" and 
+  "Report a bug") [alexeya] 
+- All codebase : All catched exceptions are tracked by ExceptionDialog 
+  (net.sf.memoranda.ui.ExceptionDialog.java) [alexeya]
+- New feature: Request 934540:    Open-ended tasks [ivanrise]
+
+Done since Memoranda 1.0b-20031127
+
+- Chinese messages file added (messages_zh.properties) (submitted by <liu-610@163.com>) [alexeya]
+- Current project title in the window titlebar [alexeyA]
+- Fixed : Bug 892368 : Bug on moving TaskTable columns. [ivanrise]
+- All codebase: Comment with CVS Id keyword added [alexeyA]
+- build.xml: App.VERSION_INFO and App.BUILD_INFO values are set at buildtime [alexeyA]
+- build.xml: Ant tasks for making the distributions changed [alexeyA]
+- New feature: Stickers on the Agenda panel [alexeyA]
+- New feature: Request 853579: Compile all notes in a single document [alexeyA]
+- New feature: Sound event notifications [alexeyA]
+- New feature: Request 843542: the "Agenda" panel [alexeyA]
+- Fixed : Bug in calendar when 1st day of month is Sun (e.g. feb-2004) and
+          "first day of week - monday" option is turned on. [alexeyA]
+- Fixed : Systray icon was not clickable in "active events" state [alexeyA]
+- Fixed : "Show active projects only" checkbox [alexeyA]
+- Fixed : Broken ResourceTypeDialog [alexeyA]
+- Fixed : Alt+PgUp and Alt+PgDn shortcuts are rejected 'cause of the conflict with systray4j [alexeyA]
+- Fixed : "Enable L10N" option had no effect for HTMLEditor. [alexeyA]
+- Fixed : NullPointerException when packing project 
+          (please use Util.getEnvDir() in place of hardcoded "{userhome}/.memoranda" path everywhere) [alexeyA]
+- Fixed : Broken new project creation (commented line 324 at ProjectDialog.java) [alexeyA]
+- Fixed bug in sorting-routine for the notes [ivanrise]
+
+Done since Memoranda 1.0a-20031102 release:
+
+- Fixed : Bug 846116 : Events and first day of week [ivanrise]
+- Fixed : Bug 846487 : html-editor : Alternative Font Dialog [pbielen]
+- Fixed : Bug 819143 : Task (sorting on priority) needs to be fixed [jcscoobyrs]
+- Fixed : Bug 843516 : Mouse-event problems on tasks-table [jcscoobyrs]
+- Fixed : Bug 827348 : Delete note from pane [ivanrise]
+- Fixed : Bug 830064 : html-editor: object properties [pbielen]
+- Fixed : Bug 842351 : html-editor : Insert Table Dialog [pbielen]
+- Fixed : Unpacked projects where not being displayed when projectsPanel was expanded. [ivanrise]
+- Fixed : Bug 843991 - Pack and Unpack project [jcscoobyrs]
+- Fixed : Bug 844003 : Project-Preferences-Dialog broken when using quickmenu [pbielen]
+- Fixed : Bug 819144 : Export of notes (html) [jcscoobyrs]
+- Fixed : Bug with alarmB and taskB on dailyItemsPanel
+  + System menus where not being disabled when using these buttons. [ivanrise]
+- Fixed : Bug 842461 - Clear note [ivanrise]
+- Fixed : Bug 842343 - html-editor : search and replace-dialog [pbielen]
+- Fixed : Bug 819131 - New Event Dialog (DateSpinners) [jcscoobyrs]
+- Fixed : Bug 838861 - html-editor : Image Dialog closing [pbielen]
+- Fixed : Bug 835586 - Troubles with events (when passed) [ivanrise]
+- Fixed : Bug 830066 - Resourses : Add new resourse dialog [pbielen]
+- Fixed : Bug 830065 - New Task Dialog [pbielen]
+- Fixed : Bug 830062 - html-editor - Choose Image Dialog [pbielen]
+- Fixed : Bug 830063 - html-editor - Insert Hyperlink Dialog [pbielen]
+- Added FIRST_DAY_OF_WEEK property to preferences panel.[ivanrise]
+  + Re-tuning of the preferences Dailog [pbielen]
+- Now it's possible to set the first day of the week to monday (as used in europe)
+  + just add this line to the memoranda.properties file: FIRST_DAY_OF_WEEK = mon
+  + if FIRST_DAY_OF_WEEK does not exist or it is not mon, then sunday it's set to first day of week.[ivanrise]
+- Enhancement : Route written for MAXIMIZE_BOTH to work then using jre1.4.2 or higher [jcscoobyrs]
+- Fixed: [ 835586 ] Troubles with events (when passed) [ivanrise]
+- Fix : New Resource Dialog [pbielen] 
+  Fixed internationalisation of (New Resource Dialog) jFileChooser.[pbielen]
+
+Done since Memoranda 1.0a-20031028 release:
+
+- Fixed: 832424    Troubles with popups. [ivanrise]
+- Fixed: 827420 Add new project fixed. [ivanrise]
+- Fixed: 832584 New Task Dialog Closing. [ivanrise]
+- Fixed: 832577 New Project Dialog Closing bug. [ivanrise]
+- Fixed: Bug in new resource dialog. It was possible to click the ok button when no text was set. [ivanrise] 
+- Fixed: Bugs related to the projects menu. [ivanrise]
+- Fixed: Bug related to project proerties. Properties were not displayed until selection changed.
+- Now it's possible to remove more than one project at once. [ivanrise]
+- Now it's possible to remove more than one event at once. [ivanrise]
+
+Done since Memoranda 1.0a-20031017 release:                          
+
+- Changement : Changed the ExportFilter.java module to AllFilesFilter.java [pbielen]
+  + did this because the AllFilesFilter.java is now widely used in some FileChoosers.
+  + did a lot of enhancement related to the windows operating system for filefiltering.
+  + i do not run linux, so feedback is wanted for what the goals are on linux-boxes
+- Fixes: Lots of fixed related to the Properties-dialog and it's sub-dialogs. [pbielen]
+  + still a lot of work needed, i will work on the gui while others needs to do fixes on other bugs.
+  + this is gonna take a long time, cause there are layoutmanagers used that do not behave correctly.
+  + this results in unwanted cosmetical problems with TextFields and such.
+  + fixing those cosmetical problems with the managers used now is sometimes really a pain.
+- New about dialog related to the splash-screen [pbielen]
+  + isn't it better to use some kind of yellow color for the kunsstoff L&F ?
+  + Because the splashscreen uses a lot of nice yellow colors i should choose that one.
+- Code cleanup : ProjectDialog.java, code-cleanup and reordering of code. [pbielen]
+  + Reordering means putting the code into the order the dialog is build.
+  + also fixed some cosmetical problems with the buttons.
+  + removed the extra row, but leaved the code in it for future use.
+  = Now gui looks good in XP and Kunststoff-look.
+- Fixed: File - New Project now working [pbielen]
+- Fixed bug regarded to deletion of project and it's history [ivanrise]
+- Fixed: a bug when deleting an event, there where troubles with selected event. [ivanrise]
+- Localization of the preferences dialog and XP-look of browse dialog in it. [pbielen]
+- Fixed: Search-button in search panel disapeared because of translated lines on other languages. [pbielen]
+    * Changed the layout, button in now located below the search-options.
+- FIXED: Bug when the window restores from systray in a minimized state. [alexeya]
+- "Preferences" menu item was moved to "File" menu. [alexeya]
+
+
+Done since Memoranda 1.0a-20030930 release: 
+
+- Preferences dialog implemented [alexeyA]
+- FIXED: Produce well-formed XML files when reserved characters were used 
+  ('&', '>', '<') [alexeyA]
+- Reformat of the About-dialog to display developers and translators [pbielen]
+  * Also localizated some words used in this dialog.
+- Changed order of panel icons, events display first [pbielen]
+  * Changed order of icon display in the control panel 
+      - Events (agenda) is now displayed first
+    - Taks is displayed second
+    - Notes is displayed thirth
+- FIXED: Missing icon src/net/sf/memoranda/ui/resources/icons/calendar.png added.
+- Splash screen and SHOW_SPLASH property added [alexeya]
+- Implemented restoring the frame size and location from previous session [alexeya]
+- FIXED: Bug when current note text is not saved on exit [alexeya]
+- Selected panel is stored in context [alexeya]
+
+
+
++++++ in progress +++++
+
+
+- Translations of dialogs
+- Resizing of dialogs conform to the XP-style look&feel
+
+                         Memoranda 1.0a-20030930 release:
+===================================================================================
+
+The project has been moved from jnotes.sf.net. The current version was renamed 
+to "Memoranda 1.0 alpha".
+
+===================================================================================
+
+     For the ones that are helping with the translation to other languages ...
+
+    - Use an UTF-enabled text editor to edit the files. JEdit 4.1 Final (editor 
+          written in Java) is a good choice.
+    - use UTF-8 encoding instead of your default system codepage.
+    - UTF-8 has support for multi-languages, so also special chars.
+    - Be sure to choose the UTF-8 encoding to avoid problems with
+      special characters that needs to be displayed.
+
+       !!! If you do not follow this tip this can give unexpected results !!!
+
+====================================================================================
+
+Done since jNotes 2.0a-20030902 release:  
+
+- All packages renamed to "net.sf.memoranda.*" [alexeyA]
+- All labels contained "jNotes" are replaced by "Memoranda" [alexeyA]
+- Application environment dir changed to "{user.home}/.memoranda" but existing
+  "{user.home}/.jnotes2" is also supported (for compatibility with previous 
+  installations). [alexeyA]
+- net.sf.memoranda.util.Util.getEnvDir() static method added for getting the actual
+  environment dir.
+- Configuration file name changed to "memoranda.properties" but existing
+  "jnotes2.properties" is also supported (for compatibility with previous 
+  installations). [alexeyA] 
+
+- This file (CHANGES.txt) added [alexeyA]
+- BUGS.txt file added [alexeyA]
+- FIXED: Non-localized messages. [alexeyA] [pbielen]
+    * Dutch (be and nl) Translation-files added & updated (last 10032003)
+    * Pack project Dialog now localized (one fact left... Home-dir ?)
+- FIXED: Bug that editor content is not saved on exit [alexeyA]
+- FIXED: HTMLEditor is localized . [alexeyA] [pbielen]
+- Spanish messages file added (messages_es.properties)
+  Submitted by Ivan R. <ivanrise@msn.com> [alexeyA]    
+- French messages file added (messages_fr.properties) 
+  Submitted by Thomas Chuffart <informatique@pierrelouiscarlier.fr> [alexeyA]
+- Dutch (Netherlands an Belgium) messages files added 
+  (messages_nl.properties, messages_be.properties) [pbielen] Frequently updated !
+- Patterns for local messages added (messages_pattern.properties) [alexeyA]
+    * Needs updating !
+- org.openmechanics.jnotes.util.Local.java: The empty values in local messages 
+  are substituted by keys. [alexeyA]
+- Hiding/showing the AppFrame instead of destroying/restoring the window. 
+  [alexeyA]
+- FIXED: Immediately updating of the Indicators and Calendar labels [alexeyA]
+- Colouring the task dates in Calendar when task is selected. [alexeyA]
+- System tray icon image for KDE added 
+  (src\org\openmechanics\jnotes\ui\resources\icons\jnotes.xpm) [alexeyA]
+- Changing of system tray icon and icon's tooltip for notifying about scheduled
+  events. [alexeyA] + localisited by [pbielen]
+- build.xml: 
+    * 'dist' and 'dist-separate-deps' tasks added
+    * 'package' depends on clean added, to clean before build [pbielen]
+- FIXED: Integer(locale)-problem (2.003) fixed in the yearSpin of the calendar [pbielen]
+- Configuration properties added: DISABLE_SYSTRAY, ON_CLOSE, ON_MINIMIZE, ASK_ON_EXIT 
+  [alexeya]  
+- Japan messages file added (messages_ja.properties)
+  Submitted by Toru Watanabe <t-wata@cablenet.ne.jp> [alexeyA]
+- ImageDialog to insert image file in HTML-editor updated
+  * Fixed internationalisation + cosmetical gui fixes (XP Look)
+
+
+
+
+
+
+

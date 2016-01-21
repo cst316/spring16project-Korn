@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="memoranda" default="package" basedir=".">
+	<!-- Build.xml file initially created by Kenneth J. Pouncey              -->
+	<!-- on 5 september 2003.                                                -->
+	<!-- Kenneth is the project-leader of the tn5250j-project on SourceForge -->
+	<!-- Thank you dude for your contribution to our project !               -->
+	<!-- You can reach him through email : kjpou@pt.lu                       -->
+	<!--=====================================================================-->
+	<!--$Id: build.xml,v 1.18 2007/04/06 21:12:24 alexeya Exp $-->
+	<!-- set global properties for this build -->
+	<property name="name" value="memoranda"/>
+	<property name="version" value="1.0-rc3.1"/>
+	<property name="source.dir" value="${basedir}/src"/>
+	<property name="lib.dir" value="${basedir}/lib"/>
+	<property name="build.dir" value="${basedir}/build"/>
+	<property name="build.classes.dir" value="${build.dir}"/>
+	<property name="main.class" value="net.sf.memoranda.Start"/>
+	<property name="jarname" value="${name}.jar"/>
+	<property name="dist.dir" value="${basedir}/dist"/>
+	<!-- compile options -->
+	<property name="debug" value="off"/>
+	<property name="debuglevel" value="lines,vars,source"/>
+	<property name="optimize" value="off"/>
+	<property name="deprecation" value="off"/>
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp/>
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build.dir}"/>
+	</target>
+	<!-- classpath -->
+	<path id="classpath">
+		<pathelement path="${build.classes.dir}"/>
+		<fileset dir="lib">
+			<include name="*.jar"/>
+			<include name="*.zip"/>
+		</fileset>
+	</path>
+	<!-- =================================================================== -->
+	<!-- Creates the Jar                                                     -->
+	<!-- =================================================================== -->
+	<target name="package" depends="clean,compile" description="Create a Jar-File of your compiled classes">
+		<tstamp>
+			<format property="ts" pattern="MM/dd/yyyy HH:mm:ss z"/>
+		</tstamp>
+		<jar jarfile="${build.dir}/${jarname}">
+			<fileset dir="${build.classes.dir}" includes="*net/**"/>
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}"/>
+				<!--<attribute name="Class-Path" value="${runtime.classpath}"/>-->
+				<attribute name="Implementation-Title" value="${name}"/>
+				<attribute name="Implementation-Version" value="${version}"/>
+				<attribute name="Implementation-Vendor" value="http://memoranda.sf.net"/>
+				<attribute name="Build-Id" value="${DSTAMP}.${build.number} (${ts} ${user.name} [${os.name} ${os.version} ${os.arch}])"/>
+			</manifest>
+		</jar>
+	</target>
+	<target name="compile" depends="init">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<buildnumber/>
+		<move file="${source.dir}/net/sf/memoranda/ui/App.java" tofile="${source.dir}/net/sf/memoranda/ui/~~App.java"/>
+		<copy file="${source.dir}/net/sf/memoranda/ui/~~App.java" tofile="${source.dir}/net/sf/memoranda/ui/App.java"/>
+		<replace file="${source.dir}/net/sf/memoranda/ui/App.java" token="@VERSION@" value="${version}"/>
+		<replace file="${source.dir}/net/sf/memoranda/ui/App.java" token="@BUILD@" value="${DSTAMP}.${build.number}"/>
+		<javac srcdir="${source.dir}" destdir="${build.classes.dir}" excludes="**/Cvs/**,**/*.ini,**/~*" debug="${debug}" debuglevel="${debuglevel}" optimize="${optimize}" deprecation="${deprecation}" failonerror="false" source="1.8" target="1.8">
+			<!-- <compilerarg value="-Xlint:unchecked"/> -->
+			<classpath>
+				<path refid="classpath"/>
+			</classpath>
+		</javac>
+		<move file="${source.dir}/net/sf/memoranda/ui/~~App.java" tofile="${source.dir}/net/sf/memoranda/ui/App.java"/>
+		<delete file="${source.dir}/net/sf/memoranda/ui/~~App.java"/>
+		<copy todir="${build.classes.dir}/net/sf/memoranda/ui/resources">
+			<fileset dir="${source.dir}/net/sf/memoranda/ui/resources"/>
+		</copy>
+		<copy todir="${build.classes.dir}/net/sf/memoranda/ui/htmleditor/resources">
+			<fileset dir="${source.dir}/net/sf/memoranda/ui/htmleditor/resources"/>
+		</copy>
+		<copy todir="${build.classes.dir}/net/sf/memoranda/util/resources">
+			<fileset dir="${source.dir}/net/sf/memoranda/util/resources"/>
+		</copy>
+		<copy todir="${build.classes.dir}/net/sf/memoranda/util/localmessages">
+			<fileset dir="${source.dir}/net/sf/memoranda/util/localmessages"/>
+		</copy>
+		<copy todir="${basedir}/build">
+			<fileset dir="." includes="tasklist.dtd"/>
+		</copy>
+	</target>
+	<target name="checkbuild">
+		<available file="${build.dir}/${jarname}" property="build.present"/>
+	</target>
+	<target name="build-if-needed" depends="checkbuild" unless="build.present">
+		<antcall target="package"/>
+	</target>
+	<target name="dist-full" depends="init, build-if-needed">
+		<!-- Create the full distribution includes:
+    build (build\)
+    sources (src\)
+    dependencies (\lib)    
+    -->
+		<property name="dist.content.dir" value="${dist.dir}/${name}${version}-${DSTAMP}"/>
+		<mkdir dir="${dist.content.dir}"/>
+		<copy todir="${dist.content.dir}/src">
+			<fileset dir="${source.dir}"/>
+		</copy>
+		<copy todir="${dist.content.dir}/build">
+			<fileset dir="${build.dir}" includes="*.jar"/>
+		</copy>
+		<copy todir="${dist.content.dir}/lib">
+			<fileset dir="${lib.dir}"/>
+		</copy>
+		<copy todir="${dist.content.dir}">
+			<fileset dir="." includes="build.xml"/>
+		</copy>
+		<copy todir="${dist.content.dir}">
+			<fileset dir="." includes="LICENSE"/>
+		</copy>
+		<copy todir="${dist.content.dir}">
+			<fileset dir="." includes="memoranda.bat"/>
+		</copy>
+		<copy todir="${dist.content.dir}">
+			<fileset dir="." includes="memoranda.sh"/>
+		</copy>
+		<copy todir="${dist.content.dir}">
+			<fileset dir="." includes="README.txt"/>
+		</copy>
+		<copy todir="${dist.content.dir}">
+			<fileset dir="." includes="FAQ.txt"/>
+		</copy>
+		<copy todir="${dist.content.dir}">
+			<fileset dir="." includes="CHANGES.txt"/>
+		</copy>
+		<copy todir="${dist.content.dir}">
+			<fileset dir="." includes="BUILD.txt"/>
+		</copy>
+		<copy todir="${dist.content.dir}">
+			<fileset dir="." includes="tasklist.dtd"/>
+		</copy>
+		<zip zipfile="${dist.dir}/${name}${version}-${DSTAMP}.zip">
+			<fileset dir="${dist.dir}" includes="${name}${version}-${DSTAMP}/**"/>
+		</zip>
+	</target>	
+	
+	<target name="dist" depends="init, clean-dist">		
+		<antcall target="dist-full"/>
+	</target>
+    
+	<target name="clean">
+		<!-- Delete the ${build} directory tree -->
+		<delete dir="${build.dir}"/>
+		<!--<delete dir="${dist.dir}"/>-->
+	</target>
+    
+    <target name="clean-dist">
+		<delete dir="${dist.dir}"/>
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Runs the compiled program                                           -->
+	<!-- =================================================================== -->
+	<target name="run" depends="compile" description="Run the program">
+		<!--<copy todir="${build}">
+       <fileset dir="${lib.dir}" >
+          <include name="*.jar" />
+          <include name="*.zip" />
+       </fileset>
+    </copy>-->
+		<java classname="${main.class}" fork="true">
+			<classpath refid="classpath"/>
+		</java>
+	<!--		
+		<java jar="${build.dir}/${jarname}" fork="yes">
+			<classpath refid="classpath"/>
+		</java> -->
+	</target>
+</project>

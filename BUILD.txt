@@ -1,0 +1,89 @@
+
+                         Memoranda version 1.0 
+                            Building HOWTO
+
+================================================================================
+
+Obtaining sourcecode
+--------------------
+
+You can obtain the Memoranda source code by the following ways:
+
+	* Download the sourcecode distribution (memoranda-**-src-**.zip) or full
+	  distribution (memoranda-**-**.zip) from
+	  http://prdownloads.sourceforge.net/memoranda
+	
+	* Download the nightly CVS tarball of Memoranda source code from
+	  http://cvs.sourceforge.net/cvstarballs/memoranda-cvsroot.tar.bz2
+	  
+	* Checkout source code from SourceForge CVS server by
+	  
+      $ cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/memoranda login
+      CVS password: (hit enter at the password prompt)
+      $ cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/memoranda checkout
+            memoranda
+            
+
+Dependencies
+------------
+
+The Memoranda depends on some additional third-party libraries which can be 
+downloaded as "memoranda-**-libs-**.zip" file. After download, unpack this file 
+into the Memoranda home directory (it should create the 'lib/' subdirectory 
+there).
+
+Note that you don't need it if you've got the "full" distribution package.
+
+
+Building the Memoranda from sources
+-----------------------------------
+
+For building Memoranda you need Jakarta Ant build tool (v1.5.2 and higher). 
+You can download Ant from http://jakarta.apache.org. 
+
+	1) Set the JAVA_HOME environment variable to your JDK installation 
+      	   directory
+	2) Set the ANT_HOME environment variable to Jakarta Ant directory 
+	3) Go to the Memoranda home directory
+	4) Run 'ant' or 'ant package'
+
+IMPORTANT: $ANT_HOME/bin directory must be on your system PATH.
+
+You can also use the following build commands:
+	
+	'ant dist-bin' - Create the binary distribution package 
+	'ant dist-src' - Create the source distribution package
+	'ant dist-deps' - Create the dependencies distribution package 
+	'ant dist-full' - Create the full distribution package
+	'ant dist' - Create all distribution packages
+	'ant clean' - Delete the 'build' subdirectory
+	'ant clean-dist' - Delete the 'dist' subdirectory
+
+Compile options:
+
+	debug 
+	Indicates whether source should be compiled with debug information; 
+	(on/off, defaults to off)
+			
+	debuglevel 
+	Keyword list to be appended to the -g command-line switch. Legal values 
+	are none or a comma-separated list of the following keywords: lines, vars, and 
+	source. If debuglevel is not specified, by default, nothing will be appended
+	to -g. If debug is not turned on, this attribute will be ignored. 
+	
+	optimize
+	Indicates whether source should be compiled with optimization; (on/off, 
+	defaults to off)
+	
+	deprecation
+	Indicates whether source should be compiled with deprecation information; 
+	(on/off, defaults to off).
+
+To set an option, use the "-D" commandline parameter, e.g.
+
+	ant -Ddebug=on 
+
+
+
+================================================================================
+$Id: BUILD.txt,v 1.1 2004/10/13 12:59:56 alexeya Exp $
