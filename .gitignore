@@ -5,3 +5,4 @@ README.txt
 .settings
 .project
 .DS_Store
+/classes/
