@@ -118,7 +118,7 @@ public class NotesList extends JList {
 
 
     /*$Id: NotesList.java,v 1.9 2005/05/05 16:19:16 ivanrise Exp $*/
-public class NotesListModel extends AbstractListModel {
+public class NotesListModel extends AbstractListModel<Object> {
 
         public NotesListModel() {
             update();
