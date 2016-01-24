@@ -6,7 +6,7 @@ import java.util.Vector;
 public class CurrentNote {
 
 	private static Note currentNote = null;
-    private static Vector noteListeners = new Vector();
+    private static Vector = new Vector();
 
     public static Note get() {
         return currentNote;
