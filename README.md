@@ -15,4 +15,3 @@ Your first steps should be to get your team set up with this code, ensure you ca
 
 Enjoy!
 Dr. Gary
-
