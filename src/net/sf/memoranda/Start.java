@@ -15,7 +15,7 @@ import net.sf.memoranda.ui.*;
 import net.sf.memoranda.util.Configuration;
 
 /**
- *
+ * test
  */
 /*$Id: Start.java,v 1.7 2004/11/22 10:02:37 alexeya Exp $*/
 public class Start {
