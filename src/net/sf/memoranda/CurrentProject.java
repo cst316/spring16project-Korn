@@ -1,4 +1,5 @@
 /**
+
  * CurrentProject.java
  * Created on 13.02.2003, 13:16:52 Alex
  * Package: net.sf.memoranda
