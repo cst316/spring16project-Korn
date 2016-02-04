@@ -473,7 +473,12 @@ public class ProjectsPanel extends JPanel implements ExpandablePanel {
 		if (n != JOptionPane.YES_OPTION)
 			return;
 		
+		CurrentProject.set(null);
 		ProjectManager.removeProject(prj.getID());
+		if(ProjectManager.getActiveProjectsNumber() > 0) 
+			CurrentProject.set((Project)(ProjectManager.getActiveProjects()).toArray()[0]);
+		else
+			CurrentProject.set(ProjectManager.createProject("Default Project", CalendarDate.today(), null));
 		CurrentStorage.get().storeProjectManager();
 		prjTablePanel.projectsTable.clearSelection();
 		prjTablePanel.updateUI();
