@@ -321,47 +321,23 @@ public class AgendaPanel extends JPanel {
             super(Local.getString("Delete Project"), 
             new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/event_remove.png")));
             putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK));
-            setEnabled(true);
+            if(!CurrentProject.get().getTitle().equals("Default Project") || 
+            		ProjectManager.getActiveProjectsNumber() > 1) 
+            	setEnabled(true);
+            else
+            	setEnabled(false);
         }
         
         public void actionPerformed(ActionEvent e) {
         	App.getFrame().projectsPanel.BDeleteProject_actionPerformed(e);
 		}
     }
-	
-/*	public void DeleteProject_actionPerformed(ActionEvent e) {
-		String msg;
-		Project prj;
-		Vector toremove = new Vector();
-		prj = CurrentProject.get();
-		msg = Local.getString("Delete project")
-					+ " '"
-					+ prj.getTitle()
-					+ "'.\n"
-					+ Local.getString("Are you sure?");
-
-		int n =
-			JOptionPane.showConfirmDialog(
-				App.getFrame(),
-				msg,
-				Local.getString("Delete project"),
-				JOptionPane.YES_NO_OPTION);
-		if (n != JOptionPane.YES_OPTION)
-			return;
-		
-		ProjectManager.removeProject(prj.getID());
-		CurrentStorage.get().storeProjectManager();
-		App.getFrame().projectsPanel.prjTablePanel.projectsTable.clearSelection();
-		App.getFrame().projectsPanel.prjTablePanel.updateUI();
-		App.getFrame().projectsPanel.setMenuEnabled(false);
-		refresh(CurrentDate.get());
-	}
-*/
 
 	public void refresh(CalendarDate date) {
 		viewer.setText(AgendaGenerator.getAgenda(date,expandedTasks));
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				refreshProjButtons();
 				if(gotoTask != null) {
 					viewer.scrollToReference(gotoTask);
 					scrollPane.setViewportView(viewer);
@@ -371,6 +347,15 @@ public class AgendaPanel extends JPanel {
 		});
 
 		Util.debug("Summary updated.");
+	}
+	
+	public void refreshProjButtons() {
+		//Refreshes delete project button.
+		if(!CurrentProject.get().getTitle().equals("Default Project") || 
+        		ProjectManager.getActiveProjectsNumber() > 1) 
+        	removeProjB.setEnabled(true);
+        else
+        	removeProjB.setEnabled(false);
 	}
 
 	public void setActive(boolean isa) {
