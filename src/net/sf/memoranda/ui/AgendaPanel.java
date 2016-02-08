@@ -41,12 +41,14 @@ import net.sf.memoranda.Project;
 import net.sf.memoranda.ProjectListener;
 import net.sf.memoranda.ProjectManager;
 import net.sf.memoranda.ResourcesList;
+import net.sf.memoranda.Task;
 import net.sf.memoranda.TaskList;
 //import net.sf.memoranda.History.HistoryForwardAction;
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.date.CurrentDate;
 import net.sf.memoranda.date.DateListener;
 import net.sf.memoranda.util.AgendaGenerator;
+import net.sf.memoranda.util.Context;
 import net.sf.memoranda.util.CurrentStorage;
 import net.sf.memoranda.util.Local;
 import net.sf.memoranda.util.Util;
@@ -219,8 +221,41 @@ public class AgendaPanel extends JPanel {
 						new ImportSticker(name).import_file();
 					}
 					else if(d.startsWith("memoranda:newtask")){
-						  TaskDialog dlg = new TaskDialog(App.getFrame(), Local.getString("New task"));
-						  dlg.show();
+						 TaskDialog dlg = new TaskDialog(App.getFrame(), Local.getString("New task"));
+					        
+					        //XXX String parentTaskId = taskTable.getCurrentRootTask();
+					        
+					        Dimension frmSize = App.getFrame().getSize();
+					        Point loc = App.getFrame().getLocation();
+					        dlg.startDate.getModel().setValue(CurrentDate.get().getDate());
+					        dlg.endDate.getModel().setValue(CurrentDate.get().getDate());
+					        dlg.setLocation((frmSize.width - dlg.getSize().width) / 2 + loc.x, (frmSize.height - dlg.getSize().height) / 2 + loc.y);
+					        dlg.setVisible(true);
+					        if (dlg.CANCELLED)
+					            return;
+					        CalendarDate sd = new CalendarDate((Date) dlg.startDate.getModel().getValue());
+//					        CalendarDate ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
+					          CalendarDate ed;
+					 		if(dlg.chkEndDate.isSelected())
+					 			ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
+					 		else
+					 			ed = null;
+					        long effort = Util.getMillisFromHours(dlg.effortField.getText());
+							//XXX Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
+							Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),null);
+//							CurrentProject.getTaskList().adjustParentTasks(newTask);
+							newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
+					        CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
+					        TaskTable.tableChanged();
+					        parentPanel.updateIndicators();
+					        //taskTable.updateUI();	
+					        
+					        
+					        
+
+
+					       
+
 					}
 				}
 			}

@@ -24,7 +24,7 @@ import net.sf.memoranda.TaskList;
 import net.sf.memoranda.date.CalendarDate;
 import nu.xom.Element;
 /**
- *  
+ *  F
  */
 
 /*$Id: AgendaGenerator.java,v 1.12 2005/06/13 21:25:27 velhonoja Exp $*/
@@ -198,6 +198,7 @@ public class AgendaGenerator {
 		    }                    
 		}
 =======*/
+		
 		if (t.getEndDate().equals(date))
 			s += "<p><font color=\"#FF9900\"><b>"
 					+ Local.getString("Should be done today")
@@ -215,6 +216,7 @@ public class AgendaGenerator {
 				else {
 					days = Local.getString("tomorrow");		        
 				}
+			
 				s += "<p>"
 						+ Local.getString("Deadline")
 						+ ": <i>"

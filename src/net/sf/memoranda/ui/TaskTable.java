@@ -85,15 +85,15 @@ public class TaskTable extends JTable {
 
     public static final int TASK = 101;
 
-    protected TreeTableCellRenderer tree;
+    protected static TreeTableCellRenderer tree;
 
-    protected TaskTableModel model;
+    protected static TaskTableModel model;
     
     protected TreeTableModelAdapter modelAdapter;
     
     protected TaskTreeTableCellRenderer renderer;
 	
-	protected ExpansionHandler expansion; 
+	protected static ExpansionHandler expansion; 
     
     public TaskTable() {
         super();
@@ -195,11 +195,11 @@ public class TaskTable extends JTable {
         }
     }
     
-    public void tableChanged() {
+    public static void tableChanged() {
 		model.fireUpdateCache();
 		model.fireTreeStructureChanged();
 		expansion.expand(tree);
-		updateUI();
+		//updateUI();
     }
     
     /**
