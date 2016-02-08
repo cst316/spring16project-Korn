@@ -3,6 +3,7 @@ package net.sf.memoranda.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -318,6 +319,7 @@ public class EventsPanel extends JPanel {
     	Dimension frmSize = App.getFrame().getSize();
     	Point loc = App.getFrame().getLocation();
     	if (tasktext != null) {
+    		//dlg.setFont((new Font("serif",Font.PLAIN,14)));
     		dlg.textField.setText(tasktext);
     	}
 		dlg.startDate.getModel().setValue(startDate);
@@ -326,6 +328,7 @@ public class EventsPanel extends JPanel {
 
     	dlg.setLocation((frmSize.width - dlg.getSize().width) / 2 + loc.x, (frmSize.height - dlg.getSize().height) / 2 + loc.y);
     	dlg.setEventDate(startDate);
+    	dlg.setFont((new Font("serif",Font.PLAIN,20)));
 		dlg.setVisible(true);
     	if (dlg.CANCELLED)
     		return;
@@ -355,6 +358,8 @@ public class EventsPanel extends JPanel {
     private void saveEvents() {
 	CurrentStorage.get().storeEventsManager();
         eventsTable.refresh();
+//sets tables font size
+        eventsTable.setFont((new Font("serif",Font.PLAIN,16)));
         EventsScheduler.init();
         parentPanel.calendar.jnCalendar.updateUI();
         parentPanel.updateIndicators();
