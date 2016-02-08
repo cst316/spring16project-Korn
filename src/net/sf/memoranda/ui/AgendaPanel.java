@@ -218,6 +218,10 @@ public class AgendaPanel extends JPanel {
 						String name = JOptionPane.showInputDialog(parent,Local.getString("Enter filename to import"),null);
 						new ImportSticker(name).import_file();
 					}
+					else if(d.startsWith("memoranda:newtask")){
+						  TaskDialog dlg = new TaskDialog(App.getFrame(), Local.getString("New task"));
+						  dlg.show();
+					}
 				}
 			}
 		});

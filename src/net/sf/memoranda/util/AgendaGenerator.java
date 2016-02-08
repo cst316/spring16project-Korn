@@ -40,6 +40,7 @@ public class AgendaGenerator {
 					+ "    li {margin-bottom:5px}\n"
 					+ " a {color:black; text-decoration:none}\n"             
 					+ "</style></head>\n"
+					+ "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css.css\">"
 					+ "<body><table width=\"100%\" height=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"4\">\n"
 					+ "<tr>\n";
 	static String FOOTER = "</td></tr></table></body></html>";
@@ -89,7 +90,7 @@ public class AgendaGenerator {
 			}
 			s += "\n</ul>\n";
 		}
-
+		
 		//        Util.debug("html for project " + p.getTitle() + " is\n" + s); 
 		return s;
 	}
@@ -287,6 +288,7 @@ public class AgendaGenerator {
 						+ "<h1>"
 						+ Local.getString("Projects and tasks")
 						+ "</h1>\n";
+		 s += "<table><tr><td><a href=\"memoranda:newtask\"><b>"+Local.getString("New Task")+"</a></td></tr></table>";
 		s += generateProjectInfo(CurrentProject.get(), date, expandedTasks);        
 		for (Iterator i = ProjectManager.getActiveProjects().iterator();
 				i.hasNext();
