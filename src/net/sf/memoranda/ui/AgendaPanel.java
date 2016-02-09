@@ -319,6 +319,7 @@ public class AgendaPanel extends JPanel {
 		toolBar.add(historyForwardB, null);
 		toolBar.addSeparator(new Dimension(8, 24));
 		toolBar.add(removeProjB, null);
+		toolBar.addSeparator(new Dimension(8, 24));
 		toolBar.add(newTaskB, null);
 
 		this.add(toolBar, BorderLayout.NORTH);
