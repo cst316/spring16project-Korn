@@ -110,7 +110,11 @@ public class TaskPanel extends JPanel {
         newTaskB.setFocusable(false);
         newTaskB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
                 parentPanel.tasksPanel.newTaskB_actionPerformed(e);
+=======
+                newTaskB_actionPerformed(e);
+>>>>>>> branch 'master' of https://github.com/cst316/spring16project-Korn
             }
         });
         newTaskB.setBorderPainted(false);
