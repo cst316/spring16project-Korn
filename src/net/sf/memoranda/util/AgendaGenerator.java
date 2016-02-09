@@ -28,6 +28,7 @@ import nu.xom.Element;
 /*$Id: AgendaGenerator.java,v 1.12 2005/06/13 21:25:27 velhonoja Exp $*/
 
 public class AgendaGenerator {
+	static	String fontsize= Configuration.get("BASIC_FONT_SIZE").toString();
 
 	static String HEADER =
 			"<html>" 

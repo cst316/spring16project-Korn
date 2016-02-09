@@ -4,12 +4,15 @@ package net.sf.memoranda.ui;
 import net.sf.memoranda.Project;
 import net.sf.memoranda.Task;
 import net.sf.memoranda.date.CurrentDate;
+import net.sf.memoranda.util.Configuration;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -93,7 +96,7 @@ public class TaskTreeTableCellRenderer extends DefaultTreeCellRenderer implement
             // column 1 contains TreeTableModel
             // and default renderer for it
             // is JTree directly  
-        	label.setFont((new Font("serif",Font.PLAIN,16)));
+        	label.setFont((new Font("serif",Font.PLAIN,Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString()))));
             return table.getTree();
         }
         // default values
@@ -120,17 +123,17 @@ public class TaskTreeTableCellRenderer extends DefaultTreeCellRenderer implement
         // column_name.equals(Local.getString("End date")) ){
         if ((column == 2) || (column == 3)) {	
             label.setText(dateFormat.format((Date) value));
-            label.setFont((new Font("serif",Font.PLAIN,16)));
+            label.setFont((new Font("serif",Font.PLAIN,Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString()))));
             return label;
         }
         // if( column_name.equals( Local.getString("Status") ) ){
         if (column == 5) {
             label.setText(value.toString());
-            label.setFont((new Font("serif",Font.PLAIN,16)));
+            label.setFont((new Font("serif",Font.PLAIN,Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString()))));
             label.setForeground(getColorForTaskStatus(t, false));
             return label;
         }
-        label.setFont((new Font("serif",Font.PLAIN,16)));
+        label.setFont((new Font("serif",Font.PLAIN,Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString()))));
         label.setText(value.toString());
         return label;
     }

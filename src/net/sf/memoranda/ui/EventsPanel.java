@@ -359,7 +359,7 @@ public class EventsPanel extends JPanel {
 	CurrentStorage.get().storeEventsManager();
         eventsTable.refresh();
 //sets tables font size
-        eventsTable.setFont((new Font("serif",Font.PLAIN,16)));
+        eventsTable.setFont((new Font("serif",Font.PLAIN,Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString()))));
         EventsScheduler.init();
         parentPanel.calendar.jnCalendar.updateUI();
         parentPanel.updateIndicators();
