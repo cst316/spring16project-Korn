@@ -99,22 +99,7 @@ public class TaskPanel extends JPanel {
         historyForwardB.setMaximumSize(new Dimension(24, 24));
         historyForwardB.setText("");
 
-        newTaskB.setIcon(
-            new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/todo_new.png")));
-        newTaskB.setEnabled(true);
-        newTaskB.setMaximumSize(new Dimension(24, 24));
-        newTaskB.setMinimumSize(new Dimension(24, 24));
-        newTaskB.setToolTipText(Local.getString("Create new task"));
-        newTaskB.setRequestFocusEnabled(false);
-        newTaskB.setPreferredSize(new Dimension(24, 24));
-        newTaskB.setFocusable(false);
-        newTaskB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                newTaskB_actionPerformed(e);
-            }
-        });
-        newTaskB.setBorderPainted(false);
-        
+       
         subTaskB.setIcon(
             new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/todo_new_sub.png")));
         subTaskB.setEnabled(true);

@@ -61,6 +61,8 @@ public class AgendaPanel extends JPanel {
 	JToolBar toolBar = new JToolBar();
 	JButton historyForwardB = new JButton();
 	JButton removeProjB = new JButton();
+	JButton newTaskB = new JButton();
+	JButton subTaskB = new JButton();
 	JButton export = new JButton();
 	JEditorPane viewer = new JEditorPane("text/html", "");
 	String[] priorities = {"Highest","High","Medium","Low","Lowest"};
@@ -290,6 +292,23 @@ public class AgendaPanel extends JPanel {
 		removeProjB.setBorderPainted(false);
 		removeProjB.setFocusable(false);
 		
+		newTaskB.setIcon(
+		            new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/todo_new.png")));
+		        newTaskB.setEnabled(true);
+		        newTaskB.setMaximumSize(new Dimension(24, 24));
+		        newTaskB.setMinimumSize(new Dimension(24, 24));
+		        newTaskB.setToolTipText(Local.getString("Create new task"));
+		        newTaskB.setRequestFocusEnabled(false);
+		        newTaskB.setPreferredSize(new Dimension(24, 24));
+		        newTaskB.setFocusable(false);
+		        newTaskB.addActionListener(new java.awt.event.ActionListener() {
+		            public void actionPerformed(ActionEvent e) {
+		            	newTaskB_actionPerformed(e);
+		            }
+		        });
+		        newTaskB.setBorderPainted(false);
+		        
+		
 				
 		this.setLayout(borderLayout1);
 		scrollPane.getViewport().setBackground(Color.white);
@@ -300,6 +319,7 @@ public class AgendaPanel extends JPanel {
 		toolBar.add(historyForwardB, null);
 		toolBar.addSeparator(new Dimension(8, 24));
 		toolBar.add(removeProjB, null);
+		toolBar.add(newTaskB, null);
 
 		this.add(toolBar, BorderLayout.NORTH);
 
@@ -387,6 +407,36 @@ public class AgendaPanel extends JPanel {
 
 		Util.debug("Summary updated.");
 	}
+	void newTaskB_actionPerformed(ActionEvent e) {
+        TaskDialog dlg = new TaskDialog(App.getFrame(), Local.getString("New task"));
+        
+        //XXX String parentTaskId = taskTable.getCurrentRootTask();
+        
+        Dimension frmSize = App.getFrame().getSize();
+        Point loc = App.getFrame().getLocation();
+        dlg.startDate.getModel().setValue(CurrentDate.get().getDate());
+        dlg.endDate.getModel().setValue(CurrentDate.get().getDate());
+        dlg.setLocation((frmSize.width - dlg.getSize().width) / 2 + loc.x, (frmSize.height - dlg.getSize().height) / 2 + loc.y);
+        dlg.setVisible(true);
+        if (dlg.CANCELLED)
+            return;
+        CalendarDate sd = new CalendarDate((Date) dlg.startDate.getModel().getValue());
+//        CalendarDate ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
+          CalendarDate ed;
+ 		if(dlg.chkEndDate.isSelected())
+ 			ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
+ 		else
+ 			ed = null;
+        long effort = Util.getMillisFromHours(dlg.effortField.getText());
+		//XXX Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
+		Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),null);
+//		CurrentProject.getTaskList().adjustParentTasks(newTask);
+		newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
+        CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
+        TaskTable.tableChanged();
+        parentPanel.updateIndicators();
+        //taskTable.updateUI();
+    }
 	
 	public void refreshProjButtons() {
 		//Refreshes delete project button.
