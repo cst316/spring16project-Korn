@@ -23,18 +23,18 @@ import net.sf.memoranda.Task;
 import net.sf.memoranda.TaskList;
 import net.sf.memoranda.date.CalendarDate;
 import nu.xom.Element;
-/**
- *  F
- */
+
 
 /*$Id: AgendaGenerator.java,v 1.12 2005/06/13 21:25:27 velhonoja Exp $*/
 
 public class AgendaGenerator {
 
 	static String HEADER =
-			"<html><head><title></title>\n"
+			"<html>" 
+					+ "<head>"
+					+ "<title></title>\n"
 					+ "<style>\n"
-					+ "    body, td {font: 12pt sans-serif}\n"
+					+ "    body, td {font: 16pt sans-serif}\n"
 					+ "    h1 {font:20pt sans-serif; background-color:#E0E0E0; margin-top:0}\n"
 					+ "    h2 {font:16pt sans-serif; margin-bottom:0}\n"
 					+ "    li {margin-bottom:5px}\n"
@@ -60,6 +60,7 @@ public class AgendaGenerator {
 		}
 		s += "</td></tr></table>\n";
 
+		@SuppressWarnings("rawtypes")
 		Vector tasks = (Vector) tl.getActiveSubTasks(null,date);        
 		if (tasks.size() == 0) {
 			s += "<p>" + Local.getString("No actual tasks") + ".</p>\n";        	
@@ -257,9 +258,13 @@ public class AgendaGenerator {
 	static String getPriorityString(int p) {
 		switch (p) {
 		case Task.PRIORITY_NORMAL :
-			return "<font color=\"green\">"+Local.getString("Normal")+"</font>";
+			return 	"<font color=\"green\">" +
+					Local.getString("Normal") +
+					"</font>";
 		case Task.PRIORITY_LOW :
-			return "<font color=\"#3333CC\">"+Local.getString("Low")+"</font>";
+			return 	"<font color=\"#3333CC\">" +
+					Local.getString("Low") +
+					"</font>";
 		case Task.PRIORITY_LOWEST :
 			return "<font color=\"#666699\">"+Local.getString("Lowest")+"</font>";
 		case Task.PRIORITY_HIGH :
