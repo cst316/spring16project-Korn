@@ -303,7 +303,7 @@ public class AgendaPanel extends JPanel {
 		        newTaskB.setFocusable(false);
 		        newTaskB.addActionListener(new java.awt.event.ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
-		            	newTaskB_actionPerformed(e);
+		            	parentPanel.tasksPanel.newTaskB_actionPerformed(e);
 		            }
 		        });
 		        newTaskB.setBorderPainted(false);
@@ -408,7 +408,7 @@ public class AgendaPanel extends JPanel {
 
 		Util.debug("Summary updated.");
 	}
-	void newTaskB_actionPerformed(ActionEvent e) {
+	/* void newTaskB_actionPerformed(ActionEvent e) {
         TaskDialog dlg = new TaskDialog(App.getFrame(), Local.getString("New task"));
         
         //XXX String parentTaskId = taskTable.getCurrentRootTask();
@@ -437,7 +437,7 @@ public class AgendaPanel extends JPanel {
         TaskTable.tableChanged();
         parentPanel.updateIndicators();
         //taskTable.updateUI();
-    }
+    }*/
 	
 	public void refreshProjButtons() {
 		//Refreshes delete project button.

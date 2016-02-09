@@ -110,7 +110,7 @@ public class TaskPanel extends JPanel {
         newTaskB.setFocusable(false);
         newTaskB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                newTaskB_actionPerformed(e);
+                parentPanel.tasksPanel.newTaskB_actionPerformed(e);
             }
         });
         newTaskB.setBorderPainted(false);
