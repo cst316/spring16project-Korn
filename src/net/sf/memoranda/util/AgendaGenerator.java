@@ -295,7 +295,10 @@ public class AgendaGenerator {
 						+ "<h1>"
 						+ Local.getString("Projects and tasks")
 						+ "</h1>\n";
-		 s += "<table><tr><td><a href=\"memoranda:newtask\"><b>"+Local.getString("New Task")+"</a></td></tr></table>";
+		/* commenting out for now shows how to create new html buttons (as ugly as they are)
+		 *  Applications Specific URLs are created in AgendaPanel.hyperlinkUpdate();
+		 *  s += "<table><tr><td><a href=\"memoranda:newtask\"><b>"+Local.getString("New Task")+"</a></td></tr></table>";
+		 */
 		s += generateProjectInfo(CurrentProject.get(), date, expandedTasks);        
 		for (Iterator i = ProjectManager.getActiveProjects().iterator();
 				i.hasNext();
