@@ -60,21 +60,21 @@ public class AgendaPanel extends JPanel {
 	JButton historyBackB = new JButton();
 	JToolBar toolBar = new JToolBar();
 	JButton historyForwardB = new JButton();
-	JButton removeProjB = new JButton();
+	static JButton removeProjB = new JButton();
 	JButton newTaskB = new JButton();
 	JButton subTaskB = new JButton();
 	JButton export = new JButton();
-	JEditorPane viewer = new JEditorPane("text/html", "");
+	static JEditorPane viewer = new JEditorPane("text/html", "");
 	String[] priorities = {"Highest","High","Medium","Low","Lowest"};
-	JScrollPane scrollPane = new JScrollPane();
+	 static JScrollPane scrollPane = new JScrollPane();
 	DailyItemsPanel parentPanel = null;
 	static RemoveProjAction removeProjAction = new RemoveProjAction();
 
 	//	JPopupMenu agendaPPMenu = new JPopupMenu();
 	//	JCheckBoxMenuItem ppShowActiveOnlyChB = new JCheckBoxMenuItem();
 
-	Collection expandedTasks;
-	String gotoTask = null;
+	static Collection expandedTasks;
+	static String gotoTask = null;
 
 	boolean isActive = true;
 
@@ -304,6 +304,7 @@ public class AgendaPanel extends JPanel {
 		        newTaskB.addActionListener(new java.awt.event.ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
 		            	parentPanel.tasksPanel.newTaskB_actionPerformed(e);
+		            	refresh(CurrentDate.get());
 		            }
 		        });
 		        newTaskB.setBorderPainted(false);
@@ -377,7 +378,7 @@ public class AgendaPanel extends JPanel {
 	
 	static class RemoveProjAction extends AbstractAction {
 		
-        public RemoveProjAction() {
+        public  RemoveProjAction() {
             super(Local.getString("Delete Project"), 
             new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/event_remove.png")));
             putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK));
@@ -386,14 +387,17 @@ public class AgendaPanel extends JPanel {
             	setEnabled(true);
             else
             	setEnabled(false);
+            refresh(CurrentDate.get());
+
         }
         
         public void actionPerformed(ActionEvent e) {
         	App.getFrame().projectsPanel.BDeleteProject_actionPerformed(e);
+
 		}
     }
 
-	public void refresh(CalendarDate date) {
+	public static void refresh(CalendarDate date) {
 		viewer.setText(AgendaGenerator.getAgenda(date,expandedTasks));
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -408,7 +412,7 @@ public class AgendaPanel extends JPanel {
 
 		Util.debug("Summary updated.");
 	}
-	 void refreshProjButtons() {
+	 static void refreshProjButtons() {
 		//Refreshes delete project button.
 		if(!CurrentProject.get().getTitle().equals("Default Project") || 
         		ProjectManager.getActiveProjectsNumber() > 1) 

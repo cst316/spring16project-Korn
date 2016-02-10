@@ -37,9 +37,10 @@ public class AgendaGenerator {
 			 return Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString());
 		 }
 	 }
-	//fontsize =Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString());
-	static String HEADER=
-			"<html>" 
+	static String HEADER(){
+		String ret ="";
+	
+			ret += "<html>" 
 					+ "<head>"
 					+ "<title></title>\n"
 					+ "<style>\n"
@@ -57,6 +58,8 @@ public class AgendaGenerator {
 					+ "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css.css\">"
 					+ "<body><table width=\"100%\" height=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"4\">\n"
 					+ "<tr>\n";
+			return ret;
+	}
 
 	static String FOOTER = "</td></tr></table></body></html>";
 
@@ -108,7 +111,7 @@ public class AgendaGenerator {
 		}
 		
 		        //Util.debug("html for project " + p.getTitle() + " is\n" + s);
-		        Util.debug("HEADER is " + HEADER); 
+		        //Util.debug("HEADER is " + HEADER); 
 		return s;
 	}
 
@@ -463,7 +466,7 @@ public class AgendaGenerator {
 		 }
 	
 	public static String getAgenda(CalendarDate date, Collection expandedTasks) {
-		String s = HEADER;
+		String s = HEADER();
 		s += generateAllProjectsInfo(date, expandedTasks);
 		s += generateEventsInfo(date);
 		s += generateStickers(date);

@@ -8,7 +8,7 @@ import net.sf.memoranda.util.CurrentStorage;
 import net.sf.memoranda.util.Local;
 import net.sf.memoranda.util.MimeTypesList;
 import java.awt.*;
-
+import net.sf.memoranda.date.CurrentDate;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.event.*;
@@ -710,6 +710,7 @@ public class PreferencesDialog extends JDialog {
 		App.getFrame().workPanel.dailyItemsPanel.editorPanel.editor.repaint();
 		
 		Configuration.saveConfig();
+		AgendaPanel.refresh(CurrentDate.get());
 		
 	}
 
