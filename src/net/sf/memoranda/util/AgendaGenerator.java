@@ -28,22 +28,28 @@ import nu.xom.Element;
 /*$Id: AgendaGenerator.java,v 1.12 2005/06/13 21:25:27 velhonoja Exp $*/
 
 public class AgendaGenerator {
-	static	String fontsize= Configuration.get("BASIC_FONT_SIZE").toString();
+	static	int fontsize= Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString());
 
 	static String HEADER =
 			"<html>" 
 					+ "<head>"
 					+ "<title></title>\n"
 					+ "<style>\n"
-					+ "    body, td {font: 16pt sans-serif}\n"
-					+ "    h1 {font:20pt sans-serif; background-color:#E0E0E0; margin-top:0}\n"
-					+ "    h2 {font:16pt sans-serif; margin-bottom:0}\n"
+					+ "    body, td {font: "
+						+ fontsize +
+						"pt sans-serif}\n"
+					+ "    h1 {font:"
+					+ (int)(fontsize + 4) 
+					+ "pt sans-serif; background-color:#E0E0E0; margin-top:0}\n"
+					+ "    h2 {font:"
+					+ (int)(fontsize + 2) +"pt sans-serif; margin-bottom:0}\n"
 					+ "    li {margin-bottom:5px}\n"
 					+ " a {color:black; text-decoration:none}\n"             
 					+ "</style></head>\n"
 					+ "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css.css\">"
 					+ "<body><table width=\"100%\" height=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"4\">\n"
 					+ "<tr>\n";
+
 	static String FOOTER = "</td></tr></table></body></html>";
 
 	static String generateTasksInfo(Project p, CalendarDate date, Collection expandedTasks) {    	    	
@@ -93,7 +99,8 @@ public class AgendaGenerator {
 			s += "\n</ul>\n";
 		}
 		
-		//        Util.debug("html for project " + p.getTitle() + " is\n" + s); 
+		        //Util.debug("html for project " + p.getTitle() + " is\n" + s);
+		        Util.debug("HEADER is " + HEADER); 
 		return s;
 	}
 
