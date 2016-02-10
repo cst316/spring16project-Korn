@@ -65,12 +65,12 @@ import nu.xom.Elements;
 /*$Id: AppFrame.java,v 1.33 2005/07/05 08:17:24 alexeya Exp $*/
 
 public class AppFrame extends JFrame {
+	
 
     JPanel contentPane;
     JMenuBar menuBar = new JMenuBar();
     JMenu jMenuFile = new JMenu();
     JMenuItem jMenuFileExit = new JMenuItem();
-
     JToolBar toolBar = new JToolBar();
     JButton jButton3 = new JButton();
     ImageIcon image1;
@@ -268,6 +268,7 @@ public class AppFrame extends JFrame {
                 + App.BUILD_INFO + " )");
 
         jMenuFile.setText(Local.getString("File"));
+        
         jMenuFileExit.setText(Local.getString("Exit"));
         jMenuFileExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

@@ -149,7 +149,7 @@ public class App {
 	 */
 	private void showSplash() {
 		splash = new JFrame();
-		ImageIcon spl =
+				ImageIcon spl =
 			new ImageIcon(App.class.getResource("resources/splash.png"));
 		JLabel l = new JLabel();
 		l.setSize(400, 300);

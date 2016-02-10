@@ -41,12 +41,14 @@ import net.sf.memoranda.Project;
 import net.sf.memoranda.ProjectListener;
 import net.sf.memoranda.ProjectManager;
 import net.sf.memoranda.ResourcesList;
+import net.sf.memoranda.Task;
 import net.sf.memoranda.TaskList;
 //import net.sf.memoranda.History.HistoryForwardAction;
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.date.CurrentDate;
 import net.sf.memoranda.date.DateListener;
 import net.sf.memoranda.util.AgendaGenerator;
+import net.sf.memoranda.util.Context;
 import net.sf.memoranda.util.CurrentStorage;
 import net.sf.memoranda.util.Local;
 import net.sf.memoranda.util.Util;
@@ -59,6 +61,8 @@ public class AgendaPanel extends JPanel {
 	JToolBar toolBar = new JToolBar();
 	JButton historyForwardB = new JButton();
 	JButton removeProjB = new JButton();
+	JButton newTaskB = new JButton();
+	JButton subTaskB = new JButton();
 	JButton export = new JButton();
 	JEditorPane viewer = new JEditorPane("text/html", "");
 	String[] priorities = {"Highest","High","Medium","Low","Lowest"};
@@ -218,6 +222,43 @@ public class AgendaPanel extends JPanel {
 						String name = JOptionPane.showInputDialog(parent,Local.getString("Enter filename to import"),null);
 						new ImportSticker(name).import_file();
 					}
+					else if(d.startsWith("memoranda:newtask")){
+						 TaskDialog dlg = new TaskDialog(App.getFrame(), Local.getString("New task"));
+					        
+					        //XXX String parentTaskId = taskTable.getCurrentRootTask();
+					        
+					        Dimension frmSize = App.getFrame().getSize();
+					        Point loc = App.getFrame().getLocation();
+					        dlg.startDate.getModel().setValue(CurrentDate.get().getDate());
+					        dlg.endDate.getModel().setValue(CurrentDate.get().getDate());
+					        dlg.setLocation((frmSize.width - dlg.getSize().width) / 2 + loc.x, (frmSize.height - dlg.getSize().height) / 2 + loc.y);
+					        dlg.setVisible(true);
+					        if (dlg.CANCELLED)
+					            return;
+					        CalendarDate sd = new CalendarDate((Date) dlg.startDate.getModel().getValue());
+//					        CalendarDate ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
+					          CalendarDate ed;
+					 		if(dlg.chkEndDate.isSelected())
+					 			ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
+					 		else
+					 			ed = null;
+					        long effort = Util.getMillisFromHours(dlg.effortField.getText());
+							//XXX Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
+							Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),null);
+//							CurrentProject.getTaskList().adjustParentTasks(newTask);
+							newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
+					        CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
+					        TaskTable.tableChanged();
+					        parentPanel.updateIndicators();
+					        //taskTable.updateUI();	
+					        
+					        
+					        
+
+
+					       
+
+					}
 				}
 			}
 		});
@@ -251,6 +292,23 @@ public class AgendaPanel extends JPanel {
 		removeProjB.setBorderPainted(false);
 		removeProjB.setFocusable(false);
 		
+		newTaskB.setIcon(
+		            new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/todo_new.png")));
+		        newTaskB.setEnabled(true);
+		        newTaskB.setMaximumSize(new Dimension(24, 24));
+		        newTaskB.setMinimumSize(new Dimension(24, 24));
+		        newTaskB.setToolTipText(Local.getString("Create new task"));
+		        newTaskB.setRequestFocusEnabled(false);
+		        newTaskB.setPreferredSize(new Dimension(24, 24));
+		        newTaskB.setFocusable(false);
+		        newTaskB.addActionListener(new java.awt.event.ActionListener() {
+		            public void actionPerformed(ActionEvent e) {
+		            	parentPanel.tasksPanel.newTaskB_actionPerformed(e);
+		            }
+		        });
+		        newTaskB.setBorderPainted(false);
+		        
+		
 				
 		this.setLayout(borderLayout1);
 		scrollPane.getViewport().setBackground(Color.white);
@@ -261,6 +319,8 @@ public class AgendaPanel extends JPanel {
 		toolBar.add(historyForwardB, null);
 		toolBar.addSeparator(new Dimension(8, 24));
 		toolBar.add(removeProjB, null);
+		toolBar.addSeparator(new Dimension(8, 24));
+		toolBar.add(newTaskB, null);
 
 		this.add(toolBar, BorderLayout.NORTH);
 
@@ -321,47 +381,23 @@ public class AgendaPanel extends JPanel {
             super(Local.getString("Delete Project"), 
             new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/event_remove.png")));
             putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK));
-            setEnabled(true);
+            if(!CurrentProject.get().getTitle().equals("Default Project") || 
+            		ProjectManager.getActiveProjectsNumber() > 1) 
+            	setEnabled(true);
+            else
+            	setEnabled(false);
         }
         
         public void actionPerformed(ActionEvent e) {
         	App.getFrame().projectsPanel.BDeleteProject_actionPerformed(e);
 		}
     }
-	
-/*	public void DeleteProject_actionPerformed(ActionEvent e) {
-		String msg;
-		Project prj;
-		Vector toremove = new Vector();
-		prj = CurrentProject.get();
-		msg = Local.getString("Delete project")
-					+ " '"
-					+ prj.getTitle()
-					+ "'.\n"
-					+ Local.getString("Are you sure?");
-
-		int n =
-			JOptionPane.showConfirmDialog(
-				App.getFrame(),
-				msg,
-				Local.getString("Delete project"),
-				JOptionPane.YES_NO_OPTION);
-		if (n != JOptionPane.YES_OPTION)
-			return;
-		
-		ProjectManager.removeProject(prj.getID());
-		CurrentStorage.get().storeProjectManager();
-		App.getFrame().projectsPanel.prjTablePanel.projectsTable.clearSelection();
-		App.getFrame().projectsPanel.prjTablePanel.updateUI();
-		App.getFrame().projectsPanel.setMenuEnabled(false);
-		refresh(CurrentDate.get());
-	}
-*/
 
 	public void refresh(CalendarDate date) {
 		viewer.setText(AgendaGenerator.getAgenda(date,expandedTasks));
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				refreshProjButtons();
 				if(gotoTask != null) {
 					viewer.scrollToReference(gotoTask);
 					scrollPane.setViewportView(viewer);
@@ -371,6 +407,14 @@ public class AgendaPanel extends JPanel {
 		});
 
 		Util.debug("Summary updated.");
+	}
+	 void refreshProjButtons() {
+		//Refreshes delete project button.
+		if(!CurrentProject.get().getTitle().equals("Default Project") || 
+        		ProjectManager.getActiveProjectsNumber() > 1) 
+        	removeProjB.setEnabled(true);
+        else
+        	removeProjB.setEnabled(false);
 	}
 
 	public void setActive(boolean isa) {
