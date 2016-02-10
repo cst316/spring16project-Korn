@@ -28,21 +28,29 @@ import nu.xom.Element;
 /*$Id: AgendaGenerator.java,v 1.12 2005/06/13 21:25:27 velhonoja Exp $*/
 
 public class AgendaGenerator {
-static int fontsize=Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString());
 
+	 static int fontsize(){
+		 if(Configuration.get("BASE_FONT_SIZE") == ""){
+			 return 16;
+		 }
+		 else {
+			 return Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString());
+		 }
+	 }
+	//fontsize =Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString());
 	static String HEADER=
 			"<html>" 
 					+ "<head>"
 					+ "<title></title>\n"
 					+ "<style>\n"
 					+ "    body, td {font: "
-						+ fontsize +
+						+ fontsize() +
 						"pt sans-serif}\n"
 					+ "    h1 {font:"
-					+ (int)(fontsize + 4) 
+					+ (int)(fontsize() + 4) 
 					+ "pt sans-serif; background-color:#E0E0E0; margin-top:0}\n"
 					+ "    h2 {font:"
-					+ (int)(fontsize + 2) +"pt sans-serif; margin-bottom:0}\n"
+					+ (int)(fontsize() + 2) +"pt sans-serif; margin-bottom:0}\n"
 					+ "    li {margin-bottom:5px}\n"
 					+ " a {color:black; text-decoration:none}\n"             
 					+ "</style></head>\n"
