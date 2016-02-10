@@ -28,9 +28,9 @@ import nu.xom.Element;
 /*$Id: AgendaGenerator.java,v 1.12 2005/06/13 21:25:27 velhonoja Exp $*/
 
 public class AgendaGenerator {
-	static	int fontsize= Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString());
+static int fontsize=Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString());
 
-	static String HEADER =
+	static String HEADER=
 			"<html>" 
 					+ "<head>"
 					+ "<title></title>\n"
@@ -163,15 +163,19 @@ public class AgendaGenerator {
 			//			Util.debug("Task " + t.getID() + " has subtasks");
 			if (expandedTasks.contains(t.getID())) {
 				//				Util.debug("Task " + t.getID() + " is in list of expanded tasks");
-				subTaskOperation = "<a href=\"memoranda:closesubtasks#" + t.getID()+ "\">(-)</a>";				
+				subTaskOperation = "<a href=\"memoranda:closesubtasks#" 
+									+ t.getID()+ "\">(-)</a>";				
 			}
 			else {
-				//				Util.debug("Task " + t.getID() + " is not in list of expanded tasks");
-				subTaskOperation = "<a href=\"memoranda:expandsubtasks#" + t.getID()+ "\">(+)</a>";
+				//	Util.debug("Task " + t.getID() + " is not in list of expanded tasks");
+				subTaskOperation = "<a href=\"memoranda:expandsubtasks#" 
+				+ t.getID()+ "\">(+)</a>";
 			}
 		}
 
-		s += "<a name=\"" + t.getID() + "\"><li><p>" + subTaskOperation + "<a href=\"memoranda:tasks#"
+		s += "<a name=\"" + t.getID() 
+				+ "\"><li><p>" + subTaskOperation 
+				+ "<a href=\"memoranda:tasks#"
 				+ p.getID()
 				+ "\"><b>"
 				+ t.getText()
@@ -215,12 +219,16 @@ public class AgendaGenerator {
 		else {
 			Calendar endDateCal = t.getEndDate().getCalendar();
 			Calendar dateCal = date.getCalendar();
-			int numOfDays = (endDateCal.get(Calendar.YEAR)*365 + endDateCal.get(Calendar.DAY_OF_YEAR)) - 
-					(dateCal.get(Calendar.YEAR)*365 + dateCal.get(Calendar.DAY_OF_YEAR));
+			int numOfDays = (endDateCal.get(Calendar.YEAR)*365 
+					+ endDateCal.get(Calendar.DAY_OF_YEAR))
+					- (dateCal.get(Calendar.YEAR)*365 
+				    + dateCal.get(Calendar.DAY_OF_YEAR));
 			String days = "";
 			if(numOfDays > 0) {
 				if (numOfDays > 1) {
-					days = Local.getString("in")+" "+numOfDays+" "+Local.getString("day(s)");		        
+					days = Local.getString("in")
+							+ " " +numOfDays
+							+ " " +Local.getString("day(s)");		        
 				}
 				else {
 					days = Local.getString("tomorrow");		        
@@ -430,7 +438,7 @@ public class AgendaGenerator {
     	return pQ;
     }
     
-	private static String addExpandHyperLink(String txt, String id) {
+	private static String addExpandHyperLink(final String txt, final String id) {
 		String ret="";
 		int first=txt.indexOf(">");
 		int last=txt.lastIndexOf("<");
