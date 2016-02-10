@@ -58,8 +58,14 @@ public class EventDialog extends JDialog implements WindowListener {
     JPanel repeatPanel = new JPanel(new GridBagLayout());
     public JRadioButton noRepeatRB = new JRadioButton();
     public JRadioButton dailyRepeatRB = new JRadioButton();
+    public JRadioButton hourlyRepeatRB = new JRadioButton();
+    public JRadioButton minutelyRepeatRB = new JRadioButton();
     public JSpinner daySpin = new JSpinner(new SpinnerNumberModel(1,1,365,1));
+    public JSpinner hourSpin = new JSpinner(new SpinnerNumberModel(1,1,24,1));
+    public JSpinner minuteSpin = new JSpinner(new SpinnerNumberModel(1,1,60,1));
     JLabel lblDays = new JLabel();
+    JLabel lblHours = new JLabel();
+    JLabel lblMinutes = new JLabel();
     JLabel lblSince = new JLabel();
     public JSpinner startDate = new JSpinner(new SpinnerDateModel());
     JButton setStartDateB = new JButton();
@@ -141,6 +147,8 @@ public class EventDialog extends JDialog implements WindowListener {
         repeatBorder = new TitledBorder(BorderFactory.createLineBorder(
         Color.gray, 1), Local.getString("Repeat"));
         repeatPanel.setBorder(repeatBorder);
+
+        // no repeat
         noRepeatRB.setMaximumSize(new Dimension(80, 35));
         noRepeatRB.setSelected(true);
         noRepeatRB.setText(Local.getString("No repeat"));
@@ -149,13 +157,64 @@ public class EventDialog extends JDialog implements WindowListener {
                 noRepeatRB_actionPerformed(e);
             }
         });
+
         gbc = new GridBagConstraints();
         gbc.gridx = 0; gbc.gridy = 0;
         gbc.gridwidth = 4;
-        gbc.insets = new Insets(5, 5, 5, 0);
+        gbc.insets = new Insets(5, 5, 5, 0);    // --> might have to change this
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         repeatPanel.add(noRepeatRB, gbc);
+
+        // minute repeat
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.insets = new Insets(5, 5, 5, 0);
+        gbc.anchor = GridBagConstraints.WEST;
+        repeatPanel.add(minutelyRepeatRB, gbc);
+        minutelyRepeatRB.setText("Every");
+        minuteSpin.setPreferredSize(new Dimension(50, 24));
+
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1; gbc.gridy = 1;
+        gbc.insets = new Insets(5, 5, 5, 0);
+        gbc.anchor = GridBagConstraints.WEST;
+        repeatPanel.add(minuteSpin, gbc);
+        lblMinutes.setText("minute(s)");
+
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2; gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(5, 5, 5, 40);
+        gbc.anchor = GridBagConstraints.WEST;
+        repeatPanel.add(lblMinutes, gbc);
+
+        // hour repeat
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.insets = new Insets(5, 5, 5, 0);
+        gbc.anchor = GridBagConstraints.WEST;
+        repeatPanel.add(hourlyRepeatRB, gbc);
+        hourlyRepeatRB.setText("Every");
+        hourSpin.setPreferredSize(new Dimension(50, 24));
+
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1; gbc.gridy = 2;
+        gbc.insets = new Insets(5, 5, 5, 0);
+        gbc.anchor = GridBagConstraints.WEST;
+        repeatPanel.add(hourSpin, gbc);
+        lblHours.setText("hour(s)");
+
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2; gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(5, 5, 5, 40);
+        gbc.anchor = GridBagConstraints.WEST;
+        repeatPanel.add(lblHours, gbc);
+
+        ////////////
+
+        // daily repeat
         dailyRepeatRB.setActionCommand("daily");
         dailyRepeatRB.setText(Local.getString("Every"));
         dailyRepeatRB.addActionListener(new java.awt.event.ActionListener() {
@@ -163,28 +222,32 @@ public class EventDialog extends JDialog implements WindowListener {
                 dailyRepeatRB_actionPerformed(e);
             }
         });
+
         gbc = new GridBagConstraints();
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0; gbc.gridy = 3;
         gbc.insets = new Insets(5, 5, 5, 0);
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(dailyRepeatRB, gbc);
         daySpin.setPreferredSize(new Dimension(50, 24));
+
         gbc = new GridBagConstraints();
-        gbc.gridx = 1; gbc.gridy = 1;
+        gbc.gridx = 1; gbc.gridy = 3;
         gbc.insets = new Insets(5, 5, 5, 0);
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(daySpin, gbc);
         lblDays.setText(Local.getString("day(s)"));
+
         gbc = new GridBagConstraints();
-        gbc.gridx = 2; gbc.gridy = 1;
+        gbc.gridx = 2; gbc.gridy = 3;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(5, 5, 5, 40);
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(lblDays, gbc);
         lblSince.setText(Local.getString("Since"));
         lblSince.setMinimumSize(new Dimension(70, 16));
+
         gbc = new GridBagConstraints();
-        gbc.gridx = 4; gbc.gridy = 1;
+        gbc.gridx = 4; gbc.gridy = 3;
         gbc.insets = new Insets(5, 0, 5, 5);
         gbc.anchor = GridBagConstraints.EAST;
         repeatPanel.add(lblSince, gbc);
@@ -214,7 +277,7 @@ public class EventDialog extends JDialog implements WindowListener {
         	sdf.toPattern()));
         //---------------------------------------------------
         gbc = new GridBagConstraints();
-        gbc.gridx = 5; gbc.gridy = 1;
+        gbc.gridx = 5; gbc.gridy = 3;
         gbc.insets = new Insets(5, 0, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(startDate, gbc);
@@ -229,10 +292,12 @@ public class EventDialog extends JDialog implements WindowListener {
         setStartDateB.setPreferredSize(new Dimension(24, 24));
 
         gbc = new GridBagConstraints();
-        gbc.gridx = 6; gbc.gridy = 1;
+        gbc.gridx = 6; gbc.gridy = 3;
         gbc.insets = new Insets(5, 0, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(setStartDateB, gbc);
+
+        // weekly repeat
         weeklyRepeatRB.setActionCommand("weekly");
         weeklyRepeatRB.setText(Local.getString("Every"));
         weeklyRepeatRB.addActionListener(new java.awt.event.ActionListener() {
@@ -240,14 +305,16 @@ public class EventDialog extends JDialog implements WindowListener {
                 weeklyRepeatRB_actionPerformed(e);
             }
         });
+
         gbc = new GridBagConstraints();
-        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridx = 0; gbc.gridy = 4;
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(weeklyRepeatRB, gbc);
         weekdaysCB.setPreferredSize(new Dimension(100, 25));
+
         gbc = new GridBagConstraints();
-        gbc.gridx = 1; gbc.gridy = 2;
+        gbc.gridx = 1; gbc.gridy = 4;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(5, 0, 5, 40);
         gbc.anchor = GridBagConstraints.WEST;
@@ -259,8 +326,9 @@ public class EventDialog extends JDialog implements WindowListener {
                 enableEndDateCB_actionPerformed(e);
             }
         });
+
         gbc = new GridBagConstraints();
-        gbc.gridx = 4; gbc.gridy = 2;
+        gbc.gridx = 4; gbc.gridy = 4;
         gbc.insets = new Insets(5, 0, 5, 5);
         gbc.anchor = GridBagConstraints.EAST;
         repeatPanel.add(enableEndDateCB, gbc);
@@ -287,15 +355,17 @@ public class EventDialog extends JDialog implements WindowListener {
 		// working days
 		workingDaysOnlyCB.setText(Local.getString("Working days only"));
 		workingDaysOnlyCB.setHorizontalAlignment(SwingConstants.RIGHT);
+
 		gbc = new GridBagConstraints();
-        gbc.gridx = 4; gbc.gridy = 3;
+        gbc.gridx = 4; gbc.gridy = 4;
 		gbc.gridwidth = 2;
         gbc.insets = new Insets(5, 0, 5, 5);
         gbc.anchor = GridBagConstraints.EAST;
 		repeatPanel.add(workingDaysOnlyCB, gbc);
 		// -------------------------------------
+
         gbc = new GridBagConstraints();
-        gbc.gridx = 5; gbc.gridy = 2;
+        gbc.gridx = 5; gbc.gridy = 4;
         gbc.insets = new Insets(5, 0, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(endDate, gbc);
@@ -309,8 +379,9 @@ public class EventDialog extends JDialog implements WindowListener {
                 setEndDateB_actionPerformed(e);
             }
         });
+
         gbc = new GridBagConstraints();
-        gbc.gridx = 6; gbc.gridy = 2;
+        gbc.gridx = 6; gbc.gridy = 4;
         gbc.insets = new Insets(5, 0, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(setEndDateB, gbc);
@@ -321,20 +392,23 @@ public class EventDialog extends JDialog implements WindowListener {
                 monthlyRepeatRB_actionPerformed(e);
             }
         });
+
         gbc = new GridBagConstraints();
-        gbc.gridx = 0; gbc.gridy = 3;
+        gbc.gridx = 0; gbc.gridy = 5;
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(monthlyRepeatRB, gbc);
         dayOfMonthSpin.setPreferredSize(new Dimension(50, 24));
+
         gbc = new GridBagConstraints();
-        gbc.gridx = 1; gbc.gridy = 3;
+        gbc.gridx = 1; gbc.gridy = 5;
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(dayOfMonthSpin, gbc);
         lblDoM.setText(Local.getString("day of month"));
+
         gbc = new GridBagConstraints();
-        gbc.gridx = 2; gbc.gridy = 3;
+        gbc.gridx = 2; gbc.gridy = 5;
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(lblDoM, gbc);
@@ -345,14 +419,19 @@ public class EventDialog extends JDialog implements WindowListener {
 				yearlyRepeatRB_actionPerformed(e);
 			}
 		});
+
 		gbc = new GridBagConstraints();
-		gbc.gridx = 0; gbc.gridy = 4;
+		gbc.gridx = 0; gbc.gridy = 6;
 		gbc.gridwidth = 5;
 		gbc.insets = new Insets(5, 5, 5, 10);
 		gbc.anchor = GridBagConstraints.WEST;
 		repeatPanel.add(yearlyRepeatRB, gbc);
+
+        //
         
         repeatRBGroup.add(noRepeatRB);
+        repeatRBGroup.add(minutelyRepeatRB);
+        repeatRBGroup.add(hourlyRepeatRB);
         repeatRBGroup.add(dailyRepeatRB);
         repeatRBGroup.add(weeklyRepeatRB);
         repeatRBGroup.add(monthlyRepeatRB);
@@ -468,6 +547,28 @@ public class EventDialog extends JDialog implements WindowListener {
         enableEndDateCB.setEnabled(true);
 		startDate.getModel().setValue(
 			startCalFrame.cal.get().getCalendar().getTime());        
+    }
+
+    public void hourlyRepeatRB_actionPerformed(ActionEvent e) {
+        disableElements();
+        weekdaysCB.setEnabled(true);
+        startDate.setEnabled(true);
+        setStartDateB.setEnabled(true);
+        lblSince.setEnabled(true);
+        enableEndDateCB.setEnabled(true);
+        startDate.getModel().setValue(
+                startCalFrame.cal.get().getCalendar().getTime());
+    }
+
+    public void minutelyRepeatRB_actionPerformed(ActionEvent e) {
+        disableElements();
+        weekdaysCB.setEnabled(true);
+        startDate.setEnabled(true);
+        setStartDateB.setEnabled(true);
+        lblSince.setEnabled(true);
+        enableEndDateCB.setEnabled(true);
+        startDate.getModel().setValue(
+                startCalFrame.cal.get().getCalendar().getTime());
     }
 
     public void noRepeatRB_actionPerformed(ActionEvent e) {
