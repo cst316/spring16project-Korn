@@ -199,4 +199,8 @@ public class ProjectImpl implements Project {
     /*public ResourcesList getResourcesList() {
         return CurrentStorage.get().openResourcesList(this);
     }*/
+    
+    public boolean equals(Project prj) {
+    	return (this.getID().equals(prj.getID()));
+    }
 }

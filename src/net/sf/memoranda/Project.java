@@ -53,5 +53,6 @@ public interface Project {
     
     void freeze();
     void unfreeze();  
+    public boolean equals(Project prj);
     
 }
