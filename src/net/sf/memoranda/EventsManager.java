@@ -39,6 +39,8 @@ public class EventsManager {
 	public static final int REPEAT_WEEKLY = 2;
 	public static final int REPEAT_MONTHLY = 3;
 	public static final int REPEAT_YEARLY = 4;
+	public static final int REPEAT_HOURLY = 5;
+    public static final int REPEAT_MINUTELY = 6;
 
 	public static Document _doc = null;
 	static Element _root = null;
@@ -188,7 +190,12 @@ public class EventsManager {
 			//System.out.println(date.inPeriod(ev.getStartDate(),
 			// ev.getEndDate()));
 			if (date.inPeriod(ev.getStartDate(), ev.getEndDate())) {
-				if (ev.getRepeat() == REPEAT_DAILY) {
+                if (ev.getRepeat() == REPEAT_HOURLY) {
+                    int n = date.getCalendar().get(Calendar.HOUR_OF_DAY);
+                    int ns = ev.getStartDate().getCalendar().get(Calendar.HOUR_OF_DAY);
+                    if ((n - ns) % ev.getPeriod() == 0)
+                        v.add(ev);
+                } else if (ev.getRepeat() == REPEAT_DAILY) {
 					int n = date.getCalendar().get(Calendar.DAY_OF_YEAR);
 					int ns =
 						ev.getStartDate().getCalendar().get(

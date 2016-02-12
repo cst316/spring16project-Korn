@@ -80,7 +80,7 @@ public class EditorPanel extends JPanel {
 
 	public JTextField titleField = new JTextField();
 
-	JButton newB = new JButton();
+	JButton btn_New_Note = new JButton();
 
 	JButton previewB = new JButton();
 
@@ -123,7 +123,7 @@ public class EditorPanel extends JPanel {
 			new ImageIcon(net.sf.memoranda.ui.AppFrame.class
 					.getResource("resources/icons/filenew.png"))) {
 		public void actionPerformed(ActionEvent e) {
-			newB_actionPerformed(e);
+			btn_New_Note_actionPerformed(e);
 		}
 	};
 
@@ -164,15 +164,15 @@ public class EditorPanel extends JPanel {
 
 		this.setLayout(borderLayout1);
 
-		newB.setAction(newAction);
-		newB.setMaximumSize(new Dimension(24, 24));
-		newB.setMinimumSize(new Dimension(24, 24));
-		newB.setPreferredSize(new Dimension(24, 24));
-		newB.setRequestFocusEnabled(false);
-		newB.setToolTipText(Local.getString("New note"));
-		newB.setBorderPainted(false);
-		newB.setFocusable(false);
-		newB.setText("");
+		btn_New_Note.setAction(newAction);
+		btn_New_Note.setMaximumSize(new Dimension(24, 24));
+		btn_New_Note.setMinimumSize(new Dimension(24, 24));
+		btn_New_Note.setPreferredSize(new Dimension(24, 24));
+		btn_New_Note.setRequestFocusEnabled(false);
+		btn_New_Note.setToolTipText(Local.getString("New note"));
+		btn_New_Note.setBorderPainted(false);
+		btn_New_Note.setFocusable(false);
+		btn_New_Note.setText("");
 
 		importB.setAction(importAction);
 		importB.setBorderPainted(false);
@@ -312,7 +312,7 @@ public class EditorPanel extends JPanel {
 		editor.editToolbar.setFloatable(false);
 		titleBar.setFloatable(false);
 		this.add(jPanel1, BorderLayout.CENTER);
-		editorToolBar.add(newB, null);
+		editorToolBar.add(btn_New_Note, null);
 		editorToolBar.addSeparator(new Dimension(8, 24));
 		editorToolBar.add(historyBackB, null);
 		editorToolBar.add(historyForwardB, null);
@@ -570,7 +570,7 @@ public class EditorPanel extends JPanel {
 		new HTMLFileImport(f, editor);
 	}
 
-	void newB_actionPerformed(ActionEvent e) {
+	void btn_New_Note_actionPerformed(ActionEvent e) {
 		CurrentNote.set(null, true);
 		setDocument(null);
 		this.titleField.requestFocus();

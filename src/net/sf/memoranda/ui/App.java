@@ -141,7 +141,8 @@ public class App {
 	public static void closeWindow() {
 		if (frame == null)
 			return;
-		frame.dispose();
+		frame.setEnabled(false);
+		//frame.dispose();
 	}
 
 	/**
@@ -149,7 +150,7 @@ public class App {
 	 */
 	private void showSplash() {
 		splash = new JFrame();
-		ImageIcon spl =
+				ImageIcon spl =
 			new ImageIcon(App.class.getResource("resources/splash.png"));
 		JLabel l = new JLabel();
 		l.setSize(400, 300);

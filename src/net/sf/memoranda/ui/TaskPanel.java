@@ -110,6 +110,8 @@ public class TaskPanel extends JPanel {
         newTaskB.setFocusable(false);
         newTaskB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
+                parentPanel.tasksPanel.newTaskB_actionPerformed(e);
                 newTaskB_actionPerformed(e);
             }
         });
@@ -279,7 +281,6 @@ public class TaskPanel extends JPanel {
             }
         });
     ppSubTasks.setIcon(new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/todo_new.png")));
-
     ppParentTask.setFont(new java.awt.Font("Dialog", 1, 11));
     ppParentTask.setText(Local.getString("Parent Task"));
     ppParentTask.addActionListener(new java.awt.event.ActionListener() {

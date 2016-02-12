@@ -43,8 +43,6 @@ import net.sf.memoranda.TaskList;
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.date.CurrentDate;
 import net.sf.memoranda.date.DateListener;
-import net.sf.memoranda.util.Context;
-import net.sf.memoranda.util.CurrentStorage;
 import net.sf.memoranda.util.*;
 
 /*$Id: ProjectsPanel.java,v 1.14 2005/01/04 09:59:22 pbielen Exp $*/
@@ -456,4 +454,37 @@ public class ProjectsPanel extends JPanel implements ExpandablePanel {
 		ppProperties.setEnabled(enabled);		
 	}
 
+	public void BDeleteProject_actionPerformed(ActionEvent e) {
+		String msg;
+		Project prj;
+		prj = CurrentProject.get();
+		msg = Local.getString("Delete project")
+					+ " '"
+					+ prj.getTitle()
+					+ "'.\n"
+					+ Local.getString("Are you sure?");
+
+		int n =
+			JOptionPane.showConfirmDialog(
+				App.getFrame(),
+				msg,
+				Local.getString("Delete project"),
+				JOptionPane.YES_NO_OPTION);
+		if (n != JOptionPane.YES_OPTION)
+			return;
+		
+		if(ProjectManager.getActiveProjectsNumber() > 1) 
+			if(((Project)ProjectManager.getActiveProjects().toArray()[1]).equals(prj))
+				CurrentProject.set((Project)(ProjectManager.getActiveProjects().toArray()[0]));
+			else
+				CurrentProject.set((Project)(ProjectManager.getActiveProjects().toArray()[1]));
+		else
+			CurrentProject.set(ProjectManager.createProject("Default Project", CalendarDate.today(), null));
+		ProjectManager.removeProject(prj.getID());
+		CurrentProject.set(CurrentProject.get());
+		CurrentStorage.get().storeProjectManager();
+		prjTablePanel.projectsTable.clearSelection();
+		prjTablePanel.updateUI();
+		setMenuEnabled(false);
+	}
 }

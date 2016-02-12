@@ -23,25 +23,44 @@ import net.sf.memoranda.Task;
 import net.sf.memoranda.TaskList;
 import net.sf.memoranda.date.CalendarDate;
 import nu.xom.Element;
-/**
- *  
- */
+
 
 /*$Id: AgendaGenerator.java,v 1.12 2005/06/13 21:25:27 velhonoja Exp $*/
 
 public class AgendaGenerator {
 
-	static String HEADER =
-			"<html><head><title></title>\n"
+	 static int fontsize(){
+		 if(Configuration.get("BASE_FONT_SIZE") == ""){
+			 return 16;
+		 }
+		 else {
+			 return Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString());
+		 }
+	 }
+	static String HEADER(){
+		String ret ="";
+	
+			ret += "<html>" 
+					+ "<head>"
+					+ "<title></title>\n"
 					+ "<style>\n"
-					+ "    body, td {font: 12pt sans-serif}\n"
-					+ "    h1 {font:20pt sans-serif; background-color:#E0E0E0; margin-top:0}\n"
-					+ "    h2 {font:16pt sans-serif; margin-bottom:0}\n"
+					+ "    body, td {font: "
+						+ fontsize() +
+						"pt sans-serif}\n"
+					+ "    h1 {font:"
+					+ (int)(fontsize() + 4) 
+					+ "pt sans-serif; background-color:#E0E0E0; margin-top:0}\n"
+					+ "    h2 {font:"
+					+ (int)(fontsize() + 2) +"pt sans-serif; margin-bottom:0}\n"
 					+ "    li {margin-bottom:5px}\n"
 					+ " a {color:black; text-decoration:none}\n"             
 					+ "</style></head>\n"
+					+ "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css.css\">"
 					+ "<body><table width=\"100%\" height=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"4\">\n"
 					+ "<tr>\n";
+			return ret;
+	}
+
 	static String FOOTER = "</td></tr></table></body></html>";
 
 	static String generateTasksInfo(Project p, CalendarDate date, Collection expandedTasks) {    	    	
@@ -59,6 +78,7 @@ public class AgendaGenerator {
 		}
 		s += "</td></tr></table>\n";
 
+		@SuppressWarnings("rawtypes")
 		Vector tasks = (Vector) tl.getActiveSubTasks(null,date);        
 		if (tasks.size() == 0) {
 			s += "<p>" + Local.getString("No actual tasks") + ".</p>\n";        	
@@ -89,8 +109,9 @@ public class AgendaGenerator {
 			}
 			s += "\n</ul>\n";
 		}
-
-		//        Util.debug("html for project " + p.getTitle() + " is\n" + s); 
+		
+		        //Util.debug("html for project " + p.getTitle() + " is\n" + s);
+		        //Util.debug("HEADER is " + HEADER); 
 		return s;
 	}
 
@@ -153,15 +174,19 @@ public class AgendaGenerator {
 			//			Util.debug("Task " + t.getID() + " has subtasks");
 			if (expandedTasks.contains(t.getID())) {
 				//				Util.debug("Task " + t.getID() + " is in list of expanded tasks");
-				subTaskOperation = "<a href=\"memoranda:closesubtasks#" + t.getID()+ "\">(-)</a>";				
+				subTaskOperation = "<a href=\"memoranda:closesubtasks#" 
+									+ t.getID()+ "\">(-)</a>";				
 			}
 			else {
-				//				Util.debug("Task " + t.getID() + " is not in list of expanded tasks");
-				subTaskOperation = "<a href=\"memoranda:expandsubtasks#" + t.getID()+ "\">(+)</a>";
+				//	Util.debug("Task " + t.getID() + " is not in list of expanded tasks");
+				subTaskOperation = "<a href=\"memoranda:expandsubtasks#" 
+				+ t.getID()+ "\">(+)</a>";
 			}
 		}
 
-		s += "<a name=\"" + t.getID() + "\"><li><p>" + subTaskOperation + "<a href=\"memoranda:tasks#"
+		s += "<a name=\"" + t.getID() 
+				+ "\"><li><p>" + subTaskOperation 
+				+ "<a href=\"memoranda:tasks#"
 				+ p.getID()
 				+ "\"><b>"
 				+ t.getText()
@@ -197,6 +222,7 @@ public class AgendaGenerator {
 		    }                    
 		}
 =======*/
+		
 		if (t.getEndDate().equals(date))
 			s += "<p><font color=\"#FF9900\"><b>"
 					+ Local.getString("Should be done today")
@@ -204,16 +230,21 @@ public class AgendaGenerator {
 		else {
 			Calendar endDateCal = t.getEndDate().getCalendar();
 			Calendar dateCal = date.getCalendar();
-			int numOfDays = (endDateCal.get(Calendar.YEAR)*365 + endDateCal.get(Calendar.DAY_OF_YEAR)) - 
-					(dateCal.get(Calendar.YEAR)*365 + dateCal.get(Calendar.DAY_OF_YEAR));
+			int numOfDays = (endDateCal.get(Calendar.YEAR)*365 
+					+ endDateCal.get(Calendar.DAY_OF_YEAR))
+					- (dateCal.get(Calendar.YEAR)*365 
+				    + dateCal.get(Calendar.DAY_OF_YEAR));
 			String days = "";
 			if(numOfDays > 0) {
 				if (numOfDays > 1) {
-					days = Local.getString("in")+" "+numOfDays+" "+Local.getString("day(s)");		        
+					days = Local.getString("in")
+							+ " " +numOfDays
+							+ " " +Local.getString("day(s)");		        
 				}
 				else {
 					days = Local.getString("tomorrow");		        
 				}
+			
 				s += "<p>"
 						+ Local.getString("Deadline")
 						+ ": <i>"
@@ -254,9 +285,13 @@ public class AgendaGenerator {
 	static String getPriorityString(int p) {
 		switch (p) {
 		case Task.PRIORITY_NORMAL :
-			return "<font color=\"green\">"+Local.getString("Normal")+"</font>";
+			return 	"<font color=\"green\">" +
+					Local.getString("Normal") +
+					"</font>";
 		case Task.PRIORITY_LOW :
-			return "<font color=\"#3333CC\">"+Local.getString("Low")+"</font>";
+			return 	"<font color=\"#3333CC\">" +
+					Local.getString("Low") +
+					"</font>";
 		case Task.PRIORITY_LOWEST :
 			return "<font color=\"#666699\">"+Local.getString("Lowest")+"</font>";
 		case Task.PRIORITY_HIGH :
@@ -287,6 +322,10 @@ public class AgendaGenerator {
 						+ "<h1>"
 						+ Local.getString("Projects and tasks")
 						+ "</h1>\n";
+		/* commenting out for now shows how to create new html buttons (as ugly as they are)
+		 *  Applications Specific URLs are created in AgendaPanel.hyperlinkUpdate();
+		 *  s += "<table><tr><td><a href=\"memoranda:newtask\"><b>"+Local.getString("New Task")+"</a></td></tr></table>";
+		 */
 		s += generateProjectInfo(CurrentProject.get(), date, expandedTasks);        
 		for (Iterator i = ProjectManager.getActiveProjects().iterator();
 				i.hasNext();
@@ -377,7 +416,7 @@ public class AgendaGenerator {
 				.class
 				.getResource("resources/agenda/removesticker.gif")
 				.toExternalForm();
-		 String s = "<hr><hr><table border=\"0\" cellpadding=\"0\" width=\"100%\"><tr><td><a href=\"memoranda:importstickers\"><b>"+Local.getString("Import Annotation")+"</b></a></td><td><a href=\"memoranda:exportstickerst\"><b>"+Local.getString("Export annotation to .txt")+"</b></a><td><a href=\"memoranda:exportstickersh\"><b>"+Local.getString("Export annotation to .html")+"</b></a></td></tr></table>"
+		 String s = "<hr><hr><table border=\"0\" cellpadding=\"0\" width=\"100%\"><tr><td><a href=\"memoranda:importstickers\"><b>"+Local.getString("Import Notes")+"</b></a></td><td><a href=\"memoranda:exportstickerst\"><b>"+Local.getString("Export notes to .txt")+"</b></a><td><a href=\"memoranda:exportstickersh\"><b>"+Local.getString("Export notes to .html")+"</b></a></td></tr></table>"
 				 +   "<table border=\"0\" cellpadding=\"0\" width=\"100%\"><tr><td><a href=\"memoranda:addsticker\"><img align=\"left\" width=\"22\" height=\"22\" src=\""				
 				 + iurl
 				+ "\" border=\"0\"  hspace=\"0\" vspace=\"0\" alt=\"New sticker\"></a></td><td width=\"100%\"><a href=\"memoranda:addsticker\"><b>&nbsp;"
@@ -410,7 +449,7 @@ public class AgendaGenerator {
     	return pQ;
     }
     
-	private static String addExpandHyperLink(String txt, String id) {
+	private static String addExpandHyperLink(final String txt, final String id) {
 		String ret="";
 		int first=txt.indexOf(">");
 		int last=txt.lastIndexOf("<");
@@ -427,7 +466,7 @@ public class AgendaGenerator {
 		 }
 	
 	public static String getAgenda(CalendarDate date, Collection expandedTasks) {
-		String s = HEADER;
+		String s = HEADER();
 		s += generateAllProjectsInfo(date, expandedTasks);
 		s += generateEventsInfo(date);
 		s += generateStickers(date);
