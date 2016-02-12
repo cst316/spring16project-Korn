@@ -388,5 +388,24 @@ public class TaskImpl implements Task, Comparable {
 		return false;
 	}
 
+	@Override
+	public int getRepeat() {
+        Attribute a = _element.getAttribute("repeat-type");
+        if (a != null) return new Integer(a.getValue()).intValue();
+        return 0;
+	}
+	
+	public int getPeriod() {
+    Attribute a = _element.getAttribute("period");
+    if (a != null) return new Integer(a.getValue()).intValue();
+    return 0;
+	}
+
+	@Override
+	public boolean isRepeatable() {
+    	Attribute a = _element.getAttribute("repeat-type");
+        return a != null;
+	}
+
 	
 }
