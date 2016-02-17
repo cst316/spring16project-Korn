@@ -357,7 +357,7 @@ public class EventDialog extends JDialog implements WindowListener {
 		workingDaysOnlyCB.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		gbc = new GridBagConstraints();
-        gbc.gridx = 4; gbc.gridy = 4;
+        gbc.gridx = 4; gbc.gridy = 5;
 		gbc.gridwidth = 2;
         gbc.insets = new Insets(5, 0, 5, 5);
         gbc.anchor = GridBagConstraints.EAST;
