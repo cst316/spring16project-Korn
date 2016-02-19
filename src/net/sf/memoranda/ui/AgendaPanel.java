@@ -61,6 +61,7 @@ public class AgendaPanel extends JPanel {
 	JToolBar toolBar = new JToolBar();
 	JButton historyForwardB = new JButton();
 	static JButton removeProjB = new JButton();
+	static JButton newProjB = new JButton();
 	JButton newTaskB = new JButton();
 	JButton subTaskB = new JButton();
 	JButton export = new JButton();
@@ -282,6 +283,8 @@ public class AgendaPanel extends JPanel {
 		historyForwardB.setMaximumSize(new Dimension(24, 24));
 		historyForwardB.setText("");
 		
+		newProjB.add(comp));
+		
 		removeProjB.setAction(AgendaPanel.removeProjAction);
 		removeProjB.setPreferredSize(new Dimension(24 ,24));
 		removeProjB.setRequestFocusEnabled(false);
@@ -319,6 +322,7 @@ public class AgendaPanel extends JPanel {
 		toolBar.add(historyBackB, null);
 		toolBar.add(historyForwardB, null);
 		toolBar.addSeparator(new Dimension(8, 24));
+		toolBar.add(newProjB, null);
 		toolBar.add(removeProjB, null);
 		toolBar.addSeparator(new Dimension(8, 24));
 		toolBar.add(newTaskB, null);
