@@ -320,7 +320,7 @@ public class EventDialog extends JDialog implements WindowListener {
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(weekdaysCB, gbc);
         enableEndDateCB.setHorizontalAlignment(SwingConstants.RIGHT);
-        enableEndDateCB.setText(Local.getString("Till"));
+        enableEndDateCB.setText(Local.getString("End Date"));
         enableEndDateCB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 enableEndDateCB_actionPerformed(e);
