@@ -57,7 +57,7 @@ public class TaskDialog extends JDialog {
     Border border4;
 //    Border border5;
 //    Border border6;
-    JPanel jPanel2 = new JPanel(new GridLayout(3, 2));
+    JPanel jPanel2 = new JPanel(new GridLayout(4, 2));
     JTextField todoField = new JTextField();
     
     // added by rawsushi
@@ -67,7 +67,7 @@ public class TaskDialog extends JDialog {
     
 //    Border border7;
     Border border8;
-    CalendarFrame startCalFrame = new CalendarFrame();
+    CalendarFrame startCalFrame = new CalendarFrame();///
     CalendarFrame endCalFrame = new CalendarFrame();
     String[] priority = {Local.getString("Lowest"), Local.getString("Low"),
         Local.getString("Normal"), Local.getString("High"),
@@ -79,6 +79,7 @@ public class TaskDialog extends JDialog {
     JLabel jLabel6 = new JLabel();
     JButton setStartDateB = new JButton();
     JPanel jPanel1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    JPanel jPanelRecurrence = new JPanel(new GridLayout(4, 2));
     JLabel jLabel2 = new JLabel();
     JSpinner startDate;
     JSpinner endDate;
@@ -96,6 +97,11 @@ public class TaskDialog extends JDialog {
     JLabel jLabelEffort = new JLabel();
     JLabel jLabelDescription = new JLabel();
 	JCheckBox chkEndDate = new JCheckBox();
+	
+	JCheckBox chkRepeat = new JCheckBox();
+	String[] repeatTypes = {"Daily", "Weekly", "Monthly"};
+	JComboBox cmboRepeatType = new JComboBox(repeatTypes);
+	
 	
 	JPanel jPanelProgress = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 	JLabel jLabelProgress = new JLabel();
@@ -154,6 +160,21 @@ public class TaskDialog extends JDialog {
 				chkEndDate_actionPerformed(e);
 			}
 		});
+		chkRepeat.setSelected(false);
+		chkRepeat_actionPerformed(null);
+		chkRepeat.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				chkRepeat_actionPerformed(e);
+			}
+		});
+		cmboRepeatType.setSelectedIndex(0);
+		cmboRepeatType.setVisible(false);
+		cmboRepeatType.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cmboRepeatType_actionPerformed(e);
+			}
+		});
+		
         okB.setMaximumSize(new Dimension(100, 26));
         okB.setMinimumSize(new Dimension(100, 26));
         okB.setPreferredSize(new Dimension(100, 26));
@@ -345,6 +366,7 @@ public class TaskDialog extends JDialog {
         jPanel1.add(jLabel2, null);
         jPanel1.add(endDate, null);
         jPanel1.add(setEndDateB, null);
+        
         // added by rawsushi
         jPanel2.add(jPanelEffort, null);
         jPanelEffort.add(jLabelEffort, null);
@@ -353,6 +375,10 @@ public class TaskDialog extends JDialog {
         jPanel2.add(jPanel4, null);
         jPanel4.add(priorityCB, null);
         jPanel2.add(jPanel3, null);
+
+        jPanel2.add(jPanelRecurrence, null);
+        jPanelRecurrence.add(chkRepeat, null);
+        jPanelRecurrence.add(cmboRepeatType, null);
         
         jPanel3.add(setNotifB, null);
         
@@ -420,6 +446,24 @@ public class TaskDialog extends JDialog {
 		}
 	}
 
+	void chkRepeat_actionPerformed(ActionEvent e) {
+		cmboRepeatType.setVisible(chkRepeat.isSelected());
+		cmboRepeatType_actionPerformed(e);		
+	}
+	//#TODO
+	void cmboRepeatType_actionPerformed(ActionEvent e) {
+		
+		if (false) { 
+			if (chkRepeat.isSelected()) {
+				Date currentEndDate = (Date) endDate.getModel().getValue();
+				Date currentStartDate = (Date) startDate.getModel().getValue();
+				if (currentEndDate.getTime() < currentStartDate.getTime()) {
+					endDate.getModel().setValue(currentStartDate);
+				}
+			}
+		}
+	}
+	
     void setStartDateB_actionPerformed(ActionEvent e) {
         startCalFrame.setLocation(setStartDateB.getLocation());
         startCalFrame.setSize(200, 200);
