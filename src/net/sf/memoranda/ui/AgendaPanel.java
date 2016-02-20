@@ -284,8 +284,16 @@ public class AgendaPanel extends JPanel {
 		historyForwardB.setMaximumSize(new Dimension(24, 24));
 		historyForwardB.setText("");
 		
-		//newProjB.add(comp);
-		
+		newProjB.setAction(AgendaPanel.newProjAction);
+		newProjB.setPreferredSize(new Dimension(24 ,24));
+		newProjB.setRequestFocusEnabled(false);
+		newProjB.setToolTipText(Local.getString("Removes the currently active project"));
+		newProjB.setMinimumSize(new Dimension(24, 24));
+		newProjB.setMaximumSize(new Dimension(24, 24));
+		newProjB.setText("");
+		newProjB.setBorderPainted(false);
+		newProjB.setFocusable(false);
+
 		removeProjB.setAction(AgendaPanel.removeProjAction);
 		removeProjB.setPreferredSize(new Dimension(24 ,24));
 		removeProjB.setRequestFocusEnabled(false);
@@ -390,7 +398,7 @@ public class AgendaPanel extends JPanel {
             putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK));
             setEnabled(true);
             refresh(CurrentDate.get());
-
+            
         }
         
         public void actionPerformed(ActionEvent e) {
@@ -436,6 +444,7 @@ public class AgendaPanel extends JPanel {
 
 		Util.debug("Summary updated.");
 	}
+	
 	 static void refreshProjButtons() {
 		//Refreshes delete project button.
 		if(!CurrentProject.get().getTitle().equals("Default Project") || 
