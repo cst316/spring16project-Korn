@@ -70,6 +70,7 @@ public class AgendaPanel extends JPanel {
 	 static JScrollPane scrollPane = new JScrollPane();
 	DailyItemsPanel parentPanel = null;
 	static RemoveProjAction removeProjAction = new RemoveProjAction();
+	static NewProjAction newProjAction = new NewProjAction();
 
 	//	JPopupMenu agendaPPMenu = new JPopupMenu();
 	//	JCheckBoxMenuItem ppShowActiveOnlyChB = new JCheckBoxMenuItem();
@@ -283,7 +284,7 @@ public class AgendaPanel extends JPanel {
 		historyForwardB.setMaximumSize(new Dimension(24, 24));
 		historyForwardB.setText("");
 		
-		newProjB.add(comp));
+		//newProjB.add(comp);
 		
 		removeProjB.setAction(AgendaPanel.removeProjAction);
 		removeProjB.setPreferredSize(new Dimension(24 ,24));
@@ -380,11 +381,30 @@ public class AgendaPanel extends JPanel {
 		//		toggleShowActiveOnly_actionPerformed(null);		
 	}
 	
+	//Event listener class adding a new project.
+	static class NewProjAction extends AbstractAction {
+		
+        public  NewProjAction() {
+            super(Local.getString("Create Project"), 
+            new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/newproject.png")));
+            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK));
+            setEnabled(true);
+            refresh(CurrentDate.get());
+
+        }
+        
+        public void actionPerformed(ActionEvent e) {
+        	App.getFrame().projectsPanel.ppNewProject_actionPerformed(e);
+
+		}
+    }
+	
+	//Event listener class for the Delete Project button on the agenda panel.
 	static class RemoveProjAction extends AbstractAction {
 		
         public  RemoveProjAction() {
             super(Local.getString("Delete Project"), 
-            new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/event_remove.png")));
+            new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/removeproject.png")));
             putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK));
             if(!CurrentProject.get().getTitle().equals("Default Project") || 
             		ProjectManager.getActiveProjectsNumber() > 1) 
