@@ -374,7 +374,15 @@ public class EventsPanel extends JPanel {
         CalendarDate ed = null;
         if (dlg.enableEndDateCB.isSelected())
             ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
-        if (dlg.dailyRepeatRB.isSelected()) {
+        if(dlg.minutelyRepeatRB.isSelected()){
+        	rtype= EventsManager.REPEAT_MINUTELY;
+        	period= ((Integer) dlg.minuteSpin.getModel().getValue()).intValue();
+        }
+        else if (dlg.hourlyRepeatRB.isSelected()){
+        	rtype=EventsManager.REPEAT_HOURLY;
+        	period = ((Integer) dlg.hourSpin.getModel().getValue()).intValue();
+        }
+        else if (dlg.dailyRepeatRB.isSelected()) {
             rtype = EventsManager.REPEAT_DAILY;
             period = ((Integer) dlg.daySpin.getModel().getValue()).intValue();
         } else if (dlg.weeklyRepeatRB.isSelected()) {
