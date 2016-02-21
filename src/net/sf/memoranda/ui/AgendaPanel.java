@@ -69,8 +69,8 @@ public class AgendaPanel extends JPanel {
 	String[] priorities = {"Highest","High","Medium","Low","Lowest"};
 	 static JScrollPane scrollPane = new JScrollPane();
 	DailyItemsPanel parentPanel = null;
-	static RemoveProjAction removeProjAction = new RemoveProjAction();
-	static NewProjAction newProjAction = new NewProjAction();
+	public static RemoveProjAction removeProjAction = new RemoveProjAction();
+	public static NewProjAction newProjAction = new NewProjAction();
 
 	//	JPopupMenu agendaPPMenu = new JPopupMenu();
 	//	JCheckBoxMenuItem ppShowActiveOnlyChB = new JCheckBoxMenuItem();
@@ -390,7 +390,7 @@ public class AgendaPanel extends JPanel {
 	}
 	
 	//Event listener class adding a new project.
-	static class NewProjAction extends AbstractAction {
+	public static class NewProjAction extends AbstractAction {
 		
         public  NewProjAction() {
             super(Local.getString("Create Project"), 
@@ -408,7 +408,7 @@ public class AgendaPanel extends JPanel {
     }
 	
 	//Event listener class for the Delete Project button on the agenda panel.
-	static class RemoveProjAction extends AbstractAction {
+	public static class RemoveProjAction extends AbstractAction {
 		
         public  RemoveProjAction() {
             super(Local.getString("Delete Project"), 
