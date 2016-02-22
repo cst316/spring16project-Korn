@@ -95,8 +95,9 @@ public class TaskTreeTableCellRenderer extends DefaultTreeCellRenderer implement
             // this never happens because
             // column 1 contains TreeTableModel
             // and default renderer for it
-            // is JTree directly  
-        	label.setFont((new Font("serif",Font.PLAIN,Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString()))));
+            // is JTree directly 
+        	System.out.println("TaskTreeLabelCellRenderer.java attempting to access BASE FONT SIZE current valute is" + Configuration.get("BASE_FONT_SIZE").toString());
+               	label.setFont((new Font("serif",Font.PLAIN,Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString()))));
             return table.getTree();
         }
         // default values
@@ -129,12 +130,23 @@ public class TaskTreeTableCellRenderer extends DefaultTreeCellRenderer implement
         // if( column_name.equals( Local.getString("Status") ) ){
         if (column == 5) {
             label.setText(value.toString());
+            try{
             label.setFont((new Font("serif",Font.PLAIN,Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString()))));
+            }
+            catch(Exception f){
+            	System.out.println("BASE_FONT_SIZE not found ignoring font size");
+            }
             label.setForeground(getColorForTaskStatus(t, false));
             return label;
         }
+        try{
         label.setFont((new Font("serif",Font.PLAIN,Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString()))));
         label.setText(value.toString());
+        }
+        catch(Exception g)
+        {
+        	System.out.println("BASE_FONT_SIZE not found");
+        }
         return label;
     }
 
