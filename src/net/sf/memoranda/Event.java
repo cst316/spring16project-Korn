@@ -35,11 +35,15 @@ public interface Event {
     int getRepeat();
     
     CalendarDate getStartDate();
+
     CalendarDate getEndDate();
+
     int getPeriod();
+
     boolean isRepeatable();
     
     Date getTime();
+
     String getTimeString();
     
 	boolean getWorkingDays();

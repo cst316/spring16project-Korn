@@ -1,424 +1,452 @@
 /**
  * EventsManager.java Created on 08.03.2003, 12:35:19 Alex Package:
  * net.sf.memoranda
- * 
+ *
  * @author Alex V. Alishevskikh, alex@openmechanics.net Copyright (c) 2003
- *         Memoranda Team. http://memoranda.sf.net
+ * Memoranda Team. http://memoranda.sf.net
  */
 package net.sf.memoranda;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Vector;
-import java.util.Map;
-import java.util.Collections;
-
 
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.util.CurrentStorage;
 import net.sf.memoranda.util.Util;
-import nu.xom.Attribute;
+import nu.xom.*;
+
+import java.util.*;
+
 //import nu.xom.Comment;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Elements;
-import nu.xom.ParentNode;
 
 /**
- *  
+ *
  */
 /*$Id: EventsManager.java,v 1.11 2004/10/06 16:00:11 ivanrise Exp $*/
 public class EventsManager {
-/*	public static final String NS_JNEVENTS =
-		"http://www.openmechanics.org/2003/jnotes-events-file";
-*/
-	public static final int NO_REPEAT = 0;
-	public static final int REPEAT_DAILY = 1;
-	public static final int REPEAT_WEEKLY = 2;
-	public static final int REPEAT_MONTHLY = 3;
-	public static final int REPEAT_YEARLY = 4;
-	public static final int REPEAT_HOURLY = 5;
+    /*	public static final String NS_JNEVENTS =
+            "http://www.openmechanics.org/2003/jnotes-events-file";
+    */
+    public static final int NO_REPEAT = 0;
+    public static final int REPEAT_DAILY = 1;
+    public static final int REPEAT_WEEKLY = 2;
+    public static final int REPEAT_MONTHLY = 3;
+    public static final int REPEAT_YEARLY = 4;
+    public static final int REPEAT_HOURLY = 5;
     public static final int REPEAT_MINUTELY = 6;
 
-	public static Document _doc = null;
-	static Element _root = null;
+    public static Document _doc = null;
+    static Element _root = null;
 
-	static {
-		CurrentStorage.get().openEventsManager();
-		if (_doc == null) {
-			_root = new Element("eventslist");
+    static {
+        CurrentStorage.get().openEventsManager();
+
+        if (_doc == null) {
+            _root = new Element("eventslist");
 /*			_root.addNamespaceDeclaration("jnevents", NS_JNEVENTS);
-			_root.appendChild(
+            _root.appendChild(
 				new Comment("This is JNotes 2 data file. Do not modify.")); */
-			_doc = new Document(_root);
-		} else
-			_root = _doc.getRootElement();
+            _doc = new Document(_root);
+        } else
+            _root = _doc.getRootElement();
+    }
 
-	}
+    public static void createSticker(String text, int prior) {
+        Element sticker = new Element("sticker");
+        sticker.addAttribute(new Attribute("id", Util.generateId()));
+        sticker.addAttribute(new Attribute("priority", prior + ""));
+        sticker.appendChild(text);
+        _root.appendChild(sticker);
+    }
 
-	public static void createSticker(String text, int prior) {
-		Element el = new Element("sticker");
-		el.addAttribute(new Attribute("id", Util.generateId()));
-		el.addAttribute(new Attribute("priority", prior+""));
-		el.appendChild(text);
-		_root.appendChild(el);
-	}
+    @SuppressWarnings("unchecked")
+    public static Map getStickers() {
+        Map map = new HashMap();
+        Elements elements = _root.getChildElements("sticker");
 
-	@SuppressWarnings("unchecked")
-	public static Map getStickers() {
-		Map m = new HashMap();
-		Elements els = _root.getChildElements("sticker");
-		for (int i = 0; i < els.size(); i++) {
-			Element se = els.get(i);
-			m.put(se.getAttribute("id").getValue(), se);
-		}
-		return m;
-	}
+        for (int i = 0; i < elements.size(); i++) {
+            Element sticker = elements.get(i);
+            map.put(sticker.getAttribute("id").getValue(), sticker);
+        }
 
-	public static void removeSticker(String stickerId) {
-		Elements els = _root.getChildElements("sticker");
-		for (int i = 0; i < els.size(); i++) {
-			Element se = els.get(i);
-			if (se.getAttribute("id").getValue().equals(stickerId)) {
-				_root.removeChild(se);
-				break;
-			}
-		}
-	}
+        return map;
+    }
 
-	public static boolean isNREventsForDate(CalendarDate date) {
-		Day d = getDay(date);
-		if (d == null)
-			return false;
-		if (d.getElement().getChildElements("event").size() > 0)
-			return true;
-		return false;
-	}
+    public static void removeSticker(String stickerId) {
+        Elements elements = _root.getChildElements("sticker");
 
-	public static Collection getEventsForDate(CalendarDate date) {
-		Vector v = new Vector();
-		Day d = getDay(date);
-		if (d != null) {
-			Elements els = d.getElement().getChildElements("event");
-			for (int i = 0; i < els.size(); i++)
-				v.add(new EventImpl(els.get(i)));
-		}
-		Collection r = getRepeatableEventsForDate(date);
-		if (r.size() > 0)
-			v.addAll(r);
-		//EventsVectorSorter.sort(v);
-		Collections.sort(v);
-		return v;
-	}
+        for (int i = 0; i < elements.size(); i++) {
+            Element sticker = elements.get(i);
 
-	public static Event createEvent(
-		CalendarDate date,
-		int hh,
-		int mm,
-		String text) {
-		Element el = new Element("event");
-		el.addAttribute(new Attribute("id", Util.generateId()));
-		el.addAttribute(new Attribute("hour", String.valueOf(hh)));
-		el.addAttribute(new Attribute("min", String.valueOf(mm)));
-		el.appendChild(text);
-		Day d = getDay(date);
-		if (d == null)
-			d = createDay(date);
-		d.getElement().appendChild(el);
-		return new EventImpl(el);
-	}
+            if (sticker.getAttribute("id").getValue().equals(stickerId)) {
+                _root.removeChild(sticker);
+                break;
+            }
+        }
+    }
 
-	public static Event createRepeatableEvent(
-		int type,
-		CalendarDate startDate,
-		CalendarDate endDate,
-		int period,
-		int hh,
-		int mm,
-		String text,
-		boolean workDays) {
-		Element el = new Element("event");
-		Element rep = _root.getFirstChildElement("repeatable");
-		if (rep == null) {
-			rep = new Element("repeatable");
-			_root.appendChild(rep);
-		}
-		el.addAttribute(new Attribute("repeat-type", String.valueOf(type)));
-		el.addAttribute(new Attribute("id", Util.generateId()));
-		el.addAttribute(new Attribute("hour", String.valueOf(hh)));
-		el.addAttribute(new Attribute("min", String.valueOf(mm)));
-		el.addAttribute(new Attribute("startDate", startDate.toString()));
-		if (endDate != null)
-			el.addAttribute(new Attribute("endDate", endDate.toString()));
-		el.addAttribute(new Attribute("period", String.valueOf(period)));
-		// new attribute for wrkin days - ivanrise
-		el.addAttribute(new Attribute("workingDays",String.valueOf(workDays)));
-		el.appendChild(text);
-		rep.appendChild(el);
-		return new EventImpl(el);
-	}
+    public static boolean isNREventsForDate(CalendarDate date) {
+        Day day = getDay(date);
 
-	public static Collection getRepeatableEvents() {
-		Vector v = new Vector();
-		Element rep = _root.getFirstChildElement("repeatable");
-		if (rep == null)
-			return v;
-		Elements els = rep.getChildElements("event");
-		for (int i = 0; i < els.size(); i++)
-			v.add(new EventImpl(els.get(i)));
-		return v;
-	}
+        if (day == null)
+            return false;
 
-	public static Collection getRepeatableEventsForDate(CalendarDate date) {
-		Vector reps = (Vector) getRepeatableEvents();
-		Vector v = new Vector();
-		for (int i = 0; i < reps.size(); i++) {
-			Event ev = (Event) reps.get(i);
-			
-			// --- ivanrise
-			// ignore this event if it's a 'only working days' event and today is weekend.
-			if(ev.getWorkingDays() && (date.getCalendar().get(Calendar.DAY_OF_WEEK) == 1 ||
-				date.getCalendar().get(Calendar.DAY_OF_WEEK) == 7)) continue;
-			// ---
-			/*
+        if (day.getElement().getChildElements("event").size() > 0)
+            return true;
+
+        return false;
+    }
+
+    public static Collection getEventsForDate(CalendarDate date) {
+        Vector vector = new Vector();
+        Day day = getDay(date);
+
+        if (day != null) {
+            Elements elements = day.getElement().getChildElements("event");
+            for (int i = 0; i < elements.size(); i++)
+                vector.add(new EventImpl(elements.get(i)));
+        }
+
+        Collection r = getRepeatableEventsForDate(date);
+
+        if (r.size() > 0)
+            vector.addAll(r);
+
+        //EventsVectorSorter.sort(v);
+        Collections.sort(vector);
+
+        return vector;
+    }
+
+    public static Event createEvent(CalendarDate date, int hour, int minute, String text) {
+        Element event = new Element("event");
+        event.addAttribute(new Attribute("id", Util.generateId()));
+        event.addAttribute(new Attribute("hour", String.valueOf(hour)));
+        event.addAttribute(new Attribute("min", String.valueOf(minute)));
+        event.appendChild(text);
+        Day day = getDay(date);
+
+        if (day == null)
+            day = createDay(date);
+
+        day.getElement().appendChild(event);
+
+        return new EventImpl(event);
+    }
+
+    public static Event createRepeatableEvent(
+            int repeatType,
+            CalendarDate startDate,
+            CalendarDate endDate,
+            int period,
+            int hour,
+            int minute,
+            String text,
+            boolean workDays) {
+        Element event = new Element("event");
+        Element repeatable = _root.getFirstChildElement("repeatable");
+
+        if (repeatable == null) {
+            repeatable = new Element("repeatable");
+            _root.appendChild(repeatable);
+        }
+
+        event.addAttribute(new Attribute("repeat-type", String.valueOf(repeatType)));
+        event.addAttribute(new Attribute("id", Util.generateId()));
+        event.addAttribute(new Attribute("hour", String.valueOf(hour)));
+        event.addAttribute(new Attribute("min", String.valueOf(minute)));
+        event.addAttribute(new Attribute("startDate", startDate.toString()));
+
+        if (endDate != null)
+            event.addAttribute(new Attribute("endDate", endDate.toString()));
+
+        event.addAttribute(new Attribute("period", String.valueOf(period)));
+        // new attribute for wrkin days - ivanrise
+        event.addAttribute(new Attribute("workingDays", String.valueOf(workDays)));
+        event.appendChild(text);
+        repeatable.appendChild(event);
+
+        return new EventImpl(event);
+    }
+
+    public static Collection getRepeatableEvents() {
+        Vector vector = new Vector();
+        Element repeatable = _root.getFirstChildElement("repeatable");
+
+        if (repeatable == null)
+            return vector;
+
+        Elements elements = repeatable.getChildElements("event");
+
+        for (int i = 0; i < elements.size(); i++)
+            vector.add(new EventImpl(elements.get(i)));
+
+        return vector;
+    }
+
+    public static Collection getRepeatableEventsForDate(CalendarDate date) {
+        Vector repeatableEvents = (Vector) getRepeatableEvents();
+        Vector vector = new Vector();
+
+        for (int i = 0; i < repeatableEvents.size(); i++) {
+            Event event = (Event) repeatableEvents.get(i);
+
+            // --- ivanrise
+            // ignore this event if it's a 'only working days' event and today is weekend.
+            if (event.getWorkingDays() && (
+                    (date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ||
+                            (date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY))))
+                continue;
+            // ---
+            /*
 			 * /if ( ((date.after(ev.getStartDate())) &&
 			 * (date.before(ev.getEndDate()))) ||
 			 * (date.equals(ev.getStartDate()))
 			 */
-			//System.out.println(date.inPeriod(ev.getStartDate(),
-			// ev.getEndDate()));
-			if (date.inPeriod(ev.getStartDate(), ev.getEndDate())) {
-                if (ev.getRepeat() == REPEAT_HOURLY) {
+            //System.out.println(date.inPeriod(ev.getStartDate(),
+            // ev.getEndDate()));
+
+            if (date.inPeriod(event.getStartDate(), event.getEndDate())) {
+                if (event.getRepeat() == REPEAT_MINUTELY) {
+                    int n = date.getCalendar().get(Calendar.MINUTE);
+                    int ns = event.getStartDate().getCalendar().get(Calendar.MINUTE);
+                    if ((n - ns) % event.getHour() == 0)
+                        vector.add(event);
+                } else if (event.getRepeat() == REPEAT_HOURLY) {
                     int n = date.getCalendar().get(Calendar.HOUR_OF_DAY);
-                    int ns = ev.getStartDate().getCalendar().get(Calendar.HOUR_OF_DAY);
-                    if ((n - ns) % ev.getPeriod() == 0)
-                        v.add(ev);
-                } else if (ev.getRepeat() == REPEAT_DAILY) {
-					int n = date.getCalendar().get(Calendar.DAY_OF_YEAR);
-					int ns =
-						ev.getStartDate().getCalendar().get(
-							Calendar.DAY_OF_YEAR);
-					//System.out.println((n - ns) % ev.getPeriod());
-					if ((n - ns) % ev.getPeriod() == 0)
-						v.add(ev);
-				} else if (ev.getRepeat() == REPEAT_WEEKLY) {
-					if (date.getCalendar().get(Calendar.DAY_OF_WEEK)
-						== ev.getPeriod())
-						v.add(ev);
-				} else if (ev.getRepeat() == REPEAT_MONTHLY) {
-					if (date.getCalendar().get(Calendar.DAY_OF_MONTH)
-						== ev.getPeriod())
-						v.add(ev);
-				} else if (ev.getRepeat() == REPEAT_YEARLY) {
-					int period = ev.getPeriod();
-					//System.out.println(date.getCalendar().get(Calendar.DAY_OF_YEAR));
-					if ((date.getYear() % 4) == 0
-						&& date.getCalendar().get(Calendar.DAY_OF_YEAR) > 60)
-						period++;
+                    int ns = event.getStartDate().getCalendar().get(Calendar.HOUR_OF_DAY);
+                    if ((n - ns) % event.getPeriod() == 0)
+                        vector.add(event);
+                } else if (event.getRepeat() == REPEAT_DAILY) {
+                    int n = date.getCalendar().get(Calendar.DAY_OF_YEAR);
+                    int ns = event.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR);
+                    if ((n - ns) % event.getPeriod() == 0)
+                        vector.add(event);
+                } else if (event.getRepeat() == REPEAT_WEEKLY) {
+                    if (date.getCalendar().get(Calendar.DAY_OF_WEEK) == event.getPeriod())
+                        vector.add(event);
+                } else if (event.getRepeat() == REPEAT_MONTHLY) {
+                    if (date.getCalendar().get(Calendar.DAY_OF_MONTH) == event.getPeriod())
+                        vector.add(event);
+                } else if (event.getRepeat() == REPEAT_YEARLY) {
+                    int period = event.getPeriod();
 
-					if (date.getCalendar().get(Calendar.DAY_OF_YEAR) == period)
-						v.add(ev);
-				}
-			}
-		}
-		return v;
-	}
+                    if ((date.getYear() % 4) == 0
+                            && date.getCalendar().get(Calendar.DAY_OF_YEAR) > 60)
+                        period++;
 
-	public static Collection getActiveEvents() {
-		return getEventsForDate(CalendarDate.today());
-	}
+                    if (date.getCalendar().get(Calendar.DAY_OF_YEAR) == period)
+                        vector.add(event);
+                }
+            }
+        }
 
-	public static Event getEvent(CalendarDate date, int hh, int mm) {
-		Day d = getDay(date);
-		if (d == null)
-			return null;
-		Elements els = d.getElement().getChildElements("event");
-		for (int i = 0; i < els.size(); i++) {
-			Element el = els.get(i);
-			if ((new Integer(el.getAttribute("hour").getValue()).intValue()
-				== hh)
-				&& (new Integer(el.getAttribute("min").getValue()).intValue()
-					== mm))
-				return new EventImpl(el);
-		}
-		return null;
-	}
+        return vector;
+    }
 
-	public static void removeEvent(CalendarDate date, int hh, int mm) {
-		Day d = getDay(date);
-		if (d == null)
-			d.getElement().removeChild(getEvent(date, hh, mm).getContent());
-	}
+    public static Collection getActiveEvents() {
+        return getEventsForDate(CalendarDate.today());
+    }
 
-	public static void removeEvent(Event ev) {
-		ParentNode parent = ev.getContent().getParent();
-		parent.removeChild(ev.getContent());
-	}
+    public static Event getEvent(CalendarDate date, int hour, int minute) {
+        Day day = getDay(date);
 
-	private static Day createDay(CalendarDate date) {
-		Year y = getYear(date.getYear());
-		if (y == null)
-			y = createYear(date.getYear());
-		Month m = y.getMonth(date.getMonth());
-		if (m == null)
-			m = y.createMonth(date.getMonth());
-		Day d = m.getDay(date.getDay());
-		if (d == null)
-			d = m.createDay(date.getDay());
-		return d;
-	}
+        if (day == null)
+            return null;
 
-	private static Year createYear(int y) {
-		Element el = new Element("year");
-		el.addAttribute(new Attribute("year", new Integer(y).toString()));
-		_root.appendChild(el);
-		return new Year(el);
-	}
+        Elements elements = day.getElement().getChildElements("event");
 
-	private static Year getYear(int y) {
-		Elements yrs = _root.getChildElements("year");
-		String yy = new Integer(y).toString();
-		for (int i = 0; i < yrs.size(); i++)
-			if (yrs.get(i).getAttribute("year").getValue().equals(yy))
-				return new Year(yrs.get(i));
-		//return createYear(y);
-		return null;
-	}
+        for (int i = 0; i < elements.size(); i++) {
+            Element element = elements.get(i);
+            if ((new Integer(element.getAttribute("hour").getValue()) == hour)
+                    && (new Integer(element.getAttribute("min").getValue()) == minute))
+                return new EventImpl(element);
+        }
 
-	private static Day getDay(CalendarDate date) {
-		Year y = getYear(date.getYear());
-		if (y == null)
-			return null;
-		Month m = y.getMonth(date.getMonth());
-		if (m == null)
-			return null;
-		return m.getDay(date.getDay());
-	}
+        return null;
+    }
 
-	static class Year {
-		Element yearElement = null;
+    public static void removeEvent(CalendarDate date, int hour, int minute) {
+        Day day = getDay(date);
 
-		public Year(Element el) {
-			yearElement = el;
-		}
+        if (day == null)
+            day.getElement().removeChild(getEvent(date, hour, minute).getContent());
+    }
 
-		public int getValue() {
-			return new Integer(yearElement.getAttribute("year").getValue())
-				.intValue();
-		}
+    public static void removeEvent(Event event) {
+        ParentNode parent = event.getContent().getParent();
+        parent.removeChild(event.getContent());
+    }
 
-		public Month getMonth(int m) {
-			Elements ms = yearElement.getChildElements("month");
-			String mm = new Integer(m).toString();
-			for (int i = 0; i < ms.size(); i++)
-				if (ms.get(i).getAttribute("month").getValue().equals(mm))
-					return new Month(ms.get(i));
-			//return createMonth(m);
-			return null;
-		}
+    private static Day createDay(CalendarDate date) {
+        Year year = getYear(date.getYear());
 
-		private Month createMonth(int m) {
-			Element el = new Element("month");
-			el.addAttribute(new Attribute("month", new Integer(m).toString()));
-			yearElement.appendChild(el);
-			return new Month(el);
-		}
+        if (year == null)
+            year = createYear(date.getYear());
 
-		public Vector getMonths() {
-			Vector v = new Vector();
-			Elements ms = yearElement.getChildElements("month");
-			for (int i = 0; i < ms.size(); i++)
-				v.add(new Month(ms.get(i)));
-			return v;
-		}
+        Month month = year.getMonth(date.getMonth());
 
-		public Element getElement() {
-			return yearElement;
-		}
+        if (month == null)
+            month = year.createMonth(date.getMonth());
 
-	}
+        Day day = month.getDay(date.getDay());
 
-	static class Month {
-		Element mElement = null;
+        if (day == null)
+            day = month.createDay(date.getDay());
 
-		public Month(Element el) {
-			mElement = el;
-		}
+        return day;
+    }
 
-		public int getValue() {
-			return new Integer(mElement.getAttribute("month").getValue())
-				.intValue();
-		}
+    private static Year createYear(int year) {
+        Element element = new Element("year");
+        element.addAttribute(new Attribute("year", new Integer(year).toString()));
+        _root.appendChild(element);
 
-		public Day getDay(int d) {
-			if (mElement == null)
-				return null;
-			Elements ds = mElement.getChildElements("day");
-			String dd = new Integer(d).toString();
-			for (int i = 0; i < ds.size(); i++)
-				if (ds.get(i).getAttribute("day").getValue().equals(dd))
-					return new Day(ds.get(i));
-			//return createDay(d);
-			return null;
-		}
+        return new Year(element);
+    }
 
-		private Day createDay(int d) {
-			Element el = new Element("day");
-			el.addAttribute(new Attribute("day", new Integer(d).toString()));
-			el.addAttribute(
-				new Attribute(
-					"date",
-					new CalendarDate(
-						d,
-						getValue(),
-						new Integer(
-							((Element) mElement.getParent())
-								.getAttribute("year")
-								.getValue())
-							.intValue())
-						.toString()));
+    private static Year getYear(int intYear) {
+        Elements years = _root.getChildElements("year");
+        String year = Integer.toString(intYear);
+        for (int i = 0; i < years.size(); i++)
+            if (years.get(i).getAttribute("year").getValue().equals(year))
+                return new Year(years.get(i));
+        //return createYear(year);
 
-			mElement.appendChild(el);
-			return new Day(el);
-		}
+        return null;
+    }
 
-		public Vector getDays() {
-			if (mElement == null)
-				return null;
-			Vector v = new Vector();
-			Elements ds = mElement.getChildElements("day");
-			for (int i = 0; i < ds.size(); i++)
-				v.add(new Day(ds.get(i)));
-			return v;
-		}
+    private static Day getDay(CalendarDate date) {
+        Year y = getYear(date.getYear());
+        if (y == null)
+            return null;
+        Month m = y.getMonth(date.getMonth());
+        if (m == null)
+            return null;
+        return m.getDay(date.getDay());
+    }
 
-		public Element getElement() {
-			return mElement;
-		}
+    static class Year {
+        Element yearElement = null;
 
-	}
+        public Year(Element el) {
+            yearElement = el;
+        }
 
-	static class Day {
-		Element dEl = null;
+        public int getValue() {
+            return new Integer(yearElement.getAttribute("year").getValue()).intValue();
+        }
 
-		public Day(Element el) {
-			dEl = el;
-		}
+        public Month getMonth(int m) {
+            Elements ms = yearElement.getChildElements("month");
+            String mm = new Integer(m).toString();
+            for (int i = 0; i < ms.size(); i++)
+                if (ms.get(i).getAttribute("month").getValue().equals(mm))
+                    return new Month(ms.get(i));
+            //return createMonth(m);
+            return null;
+        }
 
-		public int getValue() {
-			return new Integer(dEl.getAttribute("day").getValue()).intValue();
-		}
+        private Month createMonth(int m) {
+            Element element = new Element("month");
+            element.addAttribute(new Attribute("month", new Integer(m).toString()));
+            yearElement.appendChild(element);
+
+            return new Month(element);
+        }
+
+        public Vector getMonths() {
+            Vector vector = new Vector();
+            Elements months = yearElement.getChildElements("month");
+
+            for (int i = 0; i < months.size(); i++)
+                vector.add(new Month(months.get(i)));
+
+            return vector;
+        }
+
+        public Element getElement() {
+            return yearElement;
+        }
+
+    }
+
+    static class Month {
+        Element mElement = null;
+
+        public Month(Element el) {
+            mElement = el;
+        }
+
+        public int getValue() {
+            return new Integer(mElement.getAttribute("month").getValue())
+                    .intValue();
+        }
+
+        public Day getDay(int d) {
+            if (mElement == null)
+                return null;
+            Elements ds = mElement.getChildElements("day");
+            String dd = new Integer(d).toString();
+            for (int i = 0; i < ds.size(); i++)
+                if (ds.get(i).getAttribute("day").getValue().equals(dd))
+                    return new Day(ds.get(i));
+            //return createDay(d);
+            return null;
+        }
+
+        private Day createDay(int d) {
+            Element el = new Element("day");
+            el.addAttribute(new Attribute("day", new Integer(d).toString()));
+            el.addAttribute(
+                    new Attribute(
+                            "date",
+                            new CalendarDate(
+                                    d,
+                                    getValue(),
+                                    new Integer(
+                                            ((Element) mElement.getParent())
+                                                    .getAttribute("year")
+                                                    .getValue())
+                                            .intValue())
+                                    .toString()));
+
+            mElement.appendChild(el);
+            return new Day(el);
+        }
+
+        public Vector getDays() {
+            if (mElement == null)
+                return null;
+            Vector v = new Vector();
+            Elements ds = mElement.getChildElements("day");
+            for (int i = 0; i < ds.size(); i++)
+                v.add(new Day(ds.get(i)));
+            return v;
+        }
+
+        public Element getElement() {
+            return mElement;
+        }
+
+    }
+
+    static class Day {
+        Element dEl = null;
+
+        public Day(Element el) {
+            dEl = el;
+        }
+
+        public int getValue() {
+            return new Integer(dEl.getAttribute("day").getValue()).intValue();
+        }
 
 		/*
 		 * public Note getNote() { return new NoteImpl(dEl);
 		 */
 
-		public Element getElement() {
-			return dEl;
-		}
-	}
+        public Element getElement() {
+            return dEl;
+        }
+    }
 /*
 	static class EventsVectorSorter {
 
