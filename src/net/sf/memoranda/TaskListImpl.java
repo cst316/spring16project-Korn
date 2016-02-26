@@ -137,7 +137,7 @@ public class TaskListImpl implements TaskList {
         return new TaskImpl(el, this);
     }
 	
-    public Task createRepeatableTask(
+    public Task createRepeatingTask(
     		CalendarDate startDate,
     		CalendarDate endDate,
     		int period,

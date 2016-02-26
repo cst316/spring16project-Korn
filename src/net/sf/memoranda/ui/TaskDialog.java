@@ -52,12 +52,13 @@ public class TaskDialog extends JDialog {
     JPanel dialogTitlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JLabel header = new JLabel();
     public boolean CANCELLED = true;
+    public 
     JPanel jPanel8 = new JPanel(new GridBagLayout());
     Border border3;
     Border border4;
 //    Border border5;
 //    Border border6;
-    JPanel jPanel2 = new JPanel(new GridLayout(4, 2));
+    JPanel jPanel2 = new JPanel(new GridLayout(3, 2));
     JTextField todoField = new JTextField();
     
     // added by rawsushi
@@ -79,7 +80,8 @@ public class TaskDialog extends JDialog {
     JLabel jLabel6 = new JLabel();
     JButton setStartDateB = new JButton();
     JPanel jPanel1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-    JPanel jPanelRecurrence = new JPanel(new GridLayout(4, 2));
+    JPanel jPanelRecurrence = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    JLabel jLabelRecr = new JLabel();
     JLabel jLabel2 = new JLabel();
     JSpinner startDate;
     JSpinner endDate;
@@ -91,7 +93,7 @@ public class TaskDialog extends JDialog {
 //    JPanel jPanelNotes = new JPanel(new FlowLayout(FlowLayout.LEFT));
     
     JButton setNotifB = new JButton();
-    JComboBox priorityCB = new JComboBox(priority);
+    JComboBox<?> priorityCB = new JComboBox<Object>(priority);
     JLabel jLabel7 = new JLabel();
     // added by rawsushi
     JLabel jLabelEffort = new JLabel();
@@ -100,7 +102,7 @@ public class TaskDialog extends JDialog {
 	
 	JCheckBox chkRepeat = new JCheckBox();
 	String[] repeatTypes = {"Daily", "Weekly", "Monthly"};
-	JComboBox cmboRepeatType = new JComboBox(repeatTypes);
+	JComboBox<?> cmboRepeatType = new JComboBox<Object>(repeatTypes);
 	
 	
 	JPanel jPanelProgress = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -282,6 +284,10 @@ public class TaskDialog extends JDialog {
                 setStartDateB_actionPerformed(e);
             }
         });
+        jLabelRecr.setMaximumSize(new Dimension(270, 16));
+        jLabelRecr.setHorizontalAlignment(SwingConstants.RIGHT);
+        jLabelRecr.setText(Local.getString("Repeating"));
+        
         jLabel2.setMaximumSize(new Dimension(270, 16));
         //jLabel2.setPreferredSize(new Dimension(60, 16));
         jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -377,6 +383,7 @@ public class TaskDialog extends JDialog {
         jPanel2.add(jPanel3, null);
 
         jPanel2.add(jPanelRecurrence, null);
+        jPanelRecurrence.add(jLabelRecr, null);
         jPanelRecurrence.add(chkRepeat, null);
         jPanelRecurrence.add(cmboRepeatType, null);
         
