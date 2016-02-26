@@ -160,6 +160,7 @@ public class TaskDialog extends JDialog {
 				chkEndDate_actionPerformed(e);
 			}
 		});
+		chkRepeat.setText("Recurring");
 		chkRepeat.setSelected(false);
 		chkRepeat_actionPerformed(null);
 		chkRepeat.addActionListener(new java.awt.event.ActionListener() {
