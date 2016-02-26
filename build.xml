@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="memoranda" default="package" basedir=".">
+<project name="Memoranda" default="package" basedir="." xmlns:jacoco="antlib:org.jacoco.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle.ant">
 	<!-- Build.xml file initially created by Kenneth J. Pouncey              -->
 	<!-- on 5 september 2003.                                                -->
 	<!-- Kenneth is the project-leader of the tn5250j-project on SourceForge -->
@@ -8,20 +8,36 @@
 	<!--=====================================================================-->
 	<!--$Id: build.xml,v 1.18 2007/04/06 21:12:24 alexeya Exp $-->
 	<!-- set global properties for this build -->
-	<property name="name" value="memoranda"/>
-	<property name="version" value="1.0-rc3.1"/>
-	<property name="source.dir" value="${basedir}/src"/>
-	<property name="lib.dir" value="${basedir}/lib"/>
-	<property name="build.dir" value="${basedir}/build"/>
-	<property name="build.classes.dir" value="${build.dir}"/>
-	<property name="main.class" value="net.sf.memoranda.Start"/>
-	<property name="jarname" value="${name}.jar"/>
-	<property name="dist.dir" value="${basedir}/dist"/>
+	<property name="name"                  value="memoranda"/>
+	<property name="version"               value="1.0-rc3.1"/>
+	<property name="source.dir"            value="${basedir}/src"/>
+	<property name="lib.dir"               value="${basedir}/lib"/>
+	<property name="build.dir"             value="${basedir}/build"/>
+	<property name="build.classes.dir"     value="${build.dir}"/>
+	<property name="main.class"            value="net.sf.memoranda.Start"/>
+    <property name="tests.dir"             value="${build.dir}/tests"/>
+    <property name="tests.junit.dir"       value="${tests.dir}/junit"/>
+	<property name="tests.jacoco.dir"      value="${tests.dir}/jacoco"/>
+	<property name="tests.findbugs.dir"    value="${tests.dir}/findbugs"/>
+	<property name="tests.checkstyle.dir"  value="${tests.dir}/checkstyle"/>
+	<property name="jarname"               value="${name}.jar"/>
+	<property name="dist.dir"              value="${basedir}/dist"/>
 	<!-- compile options -->
-	<property name="debug" value="off"/>
-	<property name="debuglevel" value="lines,vars,source"/>
-	<property name="optimize" value="off"/>
+	<property name="debug"       value="off"/>
+	<property name="debuglevel"  value="lines,vars,source"/>
+	<property name="optimize"    value="off"/>
 	<property name="deprecation" value="off"/>
+	
+	<taskdef resource="org/jacoco/ant/antlib.xml"
+	            uri="antlib:org.jacoco.ant"
+	            classpath="${lib.dir}/jacocoant.jar"/>
+	
+	<taskdef name="findbugs"
+	           classname="edu.umd.cs.findbugs.anttask.FindBugsTask"
+	           classpath="${lib.dir}/findbugs-ant.jar"/>
+	
+	<taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
+	         classpath="lib/checkstyle-6.15-all.jar"/>
 
 	<target name="init">
 		<!-- Create the time stamp -->
@@ -174,4 +190,83 @@
 			<classpath refid="classpath"/>
 		</java> -->
 	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Runs the JUnit Test                                                 -->
+	<!-- =================================================================== -->
+	<target name="junit" depends="compile" description="Runs the JUnit tests">
+		<delete dir="${test.junit.dir}"/>
+		<delete dir="${test.jacoco.dir}"/>
+		<mkdir dir="${tests.junit.dir}"/>
+		<mkdir dir="${tests.jacoco.dir}"/>
+		<jacoco:coverage destfile="lib/jacoco.exec">
+			<junit printsummary="withOutAndErr" haltonfailure="yes" fork="on">
+		    	<classpath>
+		    		<path refid="classpath" />
+		    	</classpath>
+		    	<formatter type="xml"/>
+		    	<batchtest todir="${tests.junit.dir}">
+		    		<fileset dir="${source.dir}">
+		        		<include name="**/*Test*.java"/>
+		        	</fileset>
+		    	</batchtest>
+		    </junit>
+		</jacoco:coverage>
+		
+		<junitreport todir="${tests.junit.dir}">
+			<fileset dir="${tests.junit.dir}">
+		    	<include name="TEST-*.xml"/>
+		    </fileset>
+		   	<report format="frames" styledir="${lib.dir}" todir="${tests.junit.dir}" />
+		</junitreport>
+		        
+		<jacoco:report>
+			<executiondata>
+		    	<file file="lib/jacoco.exec"/>
+		    </executiondata>
+		    <structure name="Memoranda">
+		    	<classfiles>
+		        	<fileset dir="${build.classes.dir}"/>
+		        </classfiles>
+		        	<sourcefiles encoding="UTF-8">
+		            	<fileset dir="src"/>
+		            </sourcefiles>
+		   	</structure>
+			<html destdir="${tests.jacoco.dir}"/>
+		   	<xml destfile="${tests.jacoco.dir}/jacoco.xml"/>
+		    <csv destfile="${tests.jacoco.dir}/jacoco.csv"/>
+		</jacoco:report>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Runs findbugs                                                       -->
+	<!-- =================================================================== -->
+	<target name="findbugs" depends="compile" description="Runs findbugs">
+		<mkdir dir="${tests.findbugs.dir}"/>
+		<findbugs home="${lib.dir}"
+			reportLevel="high"
+			output="html"
+		    outputFile="${tests.findbugs.dir}/findbugs.html" >
+		    <auxClasspath refid="classpath"/>
+		    <sourcePath path="${source.dir}" />
+		    <class location="${build.classes.dir}" />
+		</findbugs>
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Runs checkstyle                                                     -->
+	<!-- =================================================================== -->
+	<target name="checkstyle" depends="compile" description="Runs checkstyle">
+		<mkdir dir="${tests.checkstyle.dir}"/>
+		<checkstyle config="${lib.dir}/CST316CheckstyleConfig.xml"
+		              failureProperty="checkstyle.failure"
+		              failOnViolation="false">
+			<classpath>
+				<path refid = "classpath"/>
+			</classpath>
+		    <formatter type="xml" tofile="${tests.checkstyle.dir}/checkstyle_report.xml"/>
+		    <fileset dir="${source.dir}" includes="**/*.java"/>
+		</checkstyle>
+	</target>
+	
 </project>
