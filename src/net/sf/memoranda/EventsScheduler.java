@@ -50,7 +50,7 @@ public class EventsScheduler {
                 Calendar calendar = new GregorianCalendar(Local.getCurrentLocale());
                 // replace with event.getStartDate() when includes minute & hour
                 CalendarDate date = CalendarDate.today();
-                int minutes, hours;
+                int minutes, hours,day;
                 EventTimer timer;
 
                 if (event.getRepeat() == EventsManager.REPEAT_MINUTELY) {
@@ -83,7 +83,27 @@ public class EventsScheduler {
 
                 else if (event.getRepeat() == EventsManager.REPEAT_HOURLY) {
                     // get remaining minutes from now until next cycle
+                	timer= new EventTimer(event);
+                	int now=date.getCalendar().get(Calendar.HOUR);
+                	int difference =now% event.getPeriod()+1;
+                	
+                	hours = calendar.get(Calendar.HOUR)+difference;
+                	day= calendar.get(Calendar.DAY_OF_WEEK);
+                	calendar.set(Calendar.DAY_OF_WEEK, day);
+                	calendar.set(Calendar.MINUTE,0);
+                	timer.schedule(new NotifyTask(timer), calendar.getTime());
+                	_timers.add(timer);
                     // then get hours from now until midnight
+                	while(calendar.getTime().getTime()<getMidnight().getTime()){
+                		timer= new EventTimer(event);
+                		hours += event.getPeriod();
+                		if(hours> 24){
+                			calendar.set(Calendar.DAY_OF_WEEK,++day);
+                			hours%=24;
+                		}
+                		calendar.set(Calendar.HOUR, hours);
+                		timer.schedule(new NotifyTask(timer), calendar.getTime());
+                	}
                 }
 
                 else {
