@@ -519,12 +519,12 @@ public class TaskPanel extends JPanel {
         			sd, //Start Date
         			ed, //End Date
         			dlg.cmboRepeatType.getSelectedIndex(), //Frequency of repetition
-        			type, //
+        			dlg.cmboRepeatType.getSelectedIndex(), //Frequency of repeat
         			hh, //Time at which the task will recur.
         			mm, //Minute at which the task will recur.
         			dlg.todoField.getText(), //ToD/Title of task
         			dlg.priorityCB.getSelectedIndex(), //Integer Priority
-        			workDays,//
+        			dlg.cbWorkingDays.isSelected(), //Boolean to denote recurrence is working days only
         			effort, //Estimated # of hours of work
         			dlg.descriptionField.getText(), //Description
         			null); //Parent Task ID
@@ -537,7 +537,7 @@ public class TaskPanel extends JPanel {
         		effort, //Estimated # of hours of work
         		dlg.descriptionField.getText(), //Description
         		null); //Parent Task ID
-        //}
+//        }
         
 //		CurrentProject.getTaskList().adjustParentTasks(newTask);
 		//#TODO
