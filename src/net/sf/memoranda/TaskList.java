@@ -24,14 +24,13 @@ public interface TaskList {
     Task createRepeatingTask(
     		CalendarDate startDate,
     		CalendarDate endDate,
-    		int period,
-    		int type,
-    		int hh,
-    		int mm,
     		String text,
     		int priority,    		
+    		long effort, 
+    		String description, 
+    		String parentTaskId,
     		boolean workDays,
-    		long effort, String description, String parentTaskId);
+    		int type);
     
     void removeTask(Task task);
 

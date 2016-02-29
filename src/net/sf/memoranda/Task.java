@@ -35,6 +35,7 @@ public interface Task {
 	public static final int REPEAT_WEEKLY = 2;
 	public static final int REPEAT_MONTHLY = 3;
 	public static final int REPEAT_YEARLY = 4;
+    public static final int[] REPEAT_FREQUENCIES = {NO_REPEAT, REPEAT_DAILY, REPEAT_WEEKLY, REPEAT_MONTHLY, REPEAT_YEARLY};
 
     
     CalendarDate getStartDate();

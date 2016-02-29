@@ -244,7 +244,23 @@ public class AgendaPanel extends JPanel {
 					 			ed = null;
 					        long effort = Util.getMillisFromHours(dlg.effortField.getText());
 							//XXX Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
-							Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),null);
+					        Task newTask;
+							if(dlg.chkRepeat.isSelected())
+							{
+								newTask = CurrentProject.getTaskList().createRepeatingTask(
+										sd, ed, dlg.todoField.getText(), 
+										dlg.priorityCB.getSelectedIndex(),effort, 
+										dlg.descriptionField.getText(),null,
+										false, //#TODO Placeholder value until implemented //Boolean to denote recurrence is working days only 
+										dlg.cmboRepeatType.getSelectedIndex());
+							}
+							else 
+							{
+								newTask = CurrentProject.getTaskList().createTask(
+										sd, ed, dlg.todoField.getText(), 
+										dlg.priorityCB.getSelectedIndex(),effort, 
+										dlg.descriptionField.getText(),null);
+							}
 //							CurrentProject.getTaskList().adjustParentTasks(newTask);
 							newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
 					        CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());

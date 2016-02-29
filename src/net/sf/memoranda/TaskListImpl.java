@@ -103,7 +103,14 @@ public class TaskListImpl implements TaskList {
         return filterActiveTasks(allTasks,date);
     }
 
-    public Task createTask(CalendarDate startDate, CalendarDate endDate, String text, int priority, long effort, String description, String parentTaskId) {
+    public Task createTask(
+    		CalendarDate startDate, 
+    		CalendarDate endDate, 
+    		String text, 
+    		int priority, 
+    		long effort, 
+    		String description, 
+    		String parentTaskId) {
         Element el = new Element("task");
         el.addAttribute(new Attribute("startDate", startDate.toString()));
         if (endDate != null)
@@ -140,12 +147,13 @@ public class TaskListImpl implements TaskList {
     public Task createRepeatingTask(
     		CalendarDate startDate,
     		CalendarDate endDate,
-    		int period,
-    		int type,
     		String text,
-    		int priority,    		
+    		int priority,    
+    		long effort, 
+    		String description, 
+    		String parentTaskId,		
     		boolean workDays,
-    		long effort, String description, String parentTaskId) {
+    		int frequency) {
     		Element el = new Element("task");
     		Element rep = _root.getFirstChildElement("repeatableTasks");
     		if (rep == null) {
@@ -160,9 +168,7 @@ public class TaskListImpl implements TaskList {
             el.addAttribute(new Attribute("progress", "0"));
             el.addAttribute(new Attribute("effort", String.valueOf(effort)));
             el.addAttribute(new Attribute("priority", String.valueOf(priority)));
-
-            el.addAttribute(new Attribute("repeat-type", String.valueOf(type)));
-    		el.addAttribute(new Attribute("period", String.valueOf(period)));
+            el.addAttribute(new Attribute("frequency", String.valueOf(frequency)));
     		// new attribute for wrkin days - ivanrise
     		el.addAttribute(new Attribute("workingDays",String.valueOf(workDays)));
 

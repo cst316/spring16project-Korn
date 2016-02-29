@@ -511,8 +511,6 @@ public class TaskPanel extends JPanel {
  			ed = null;
         long effort = Util.getMillisFromHours(dlg.effortField.getText());
 		//XXX Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
-		
-        
         //DANIEL: Set it up to determine if it's recurring or not!
 /*        if(dlg.chkRepeat.isSelected()) {
         	Task newTask = CurrentProject.getTaskList().createRepeatableTask(
@@ -522,7 +520,7 @@ public class TaskPanel extends JPanel {
         			dlg.cmboRepeatType.getSelectedIndex(), //Frequency of repeat
         			dlg.todoField.getText(), //ToD/Title of task
         			dlg.priorityCB.getSelectedIndex(), //Integer Priority
-        			dlg.cbWorkingDays.isSelected(), //Boolean to denote recurrence is working days only
+        			false, //#TODO Placeholder value until implemented //Boolean to denote recurrence is working days only
         			effort, //Estimated # of hours of work
         			dlg.descriptionField.getText(), //Description
         			null); //Parent Task ID
@@ -578,7 +576,10 @@ public class TaskPanel extends JPanel {
  		else
  			ed = null;
         long effort = Util.getMillisFromHours(dlg.effortField.getText());
-		Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
+		Task newTask = CurrentProject.getTaskList().createTask(
+				sd, ed, dlg.todoField.getText(), 
+				dlg.priorityCB.getSelectedIndex(),effort, 
+				dlg.descriptionField.getText(),parentTaskId);
         newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
 //		CurrentProject.getTaskList().adjustParentTasks(newTask);
 
@@ -591,7 +592,9 @@ public class TaskPanel extends JPanel {
     void calcTask_actionPerformed(ActionEvent e) {
         TaskCalcDialog dlg = new TaskCalcDialog(App.getFrame());
         dlg.pack();
-        Task t = CurrentProject.getTaskList().getTask(taskTable.getModel().getValueAt(taskTable.getSelectedRow(), TaskTable.TASK_ID).toString());
+        Task t = CurrentProject.getTaskList().getTask(
+        		taskTable.getModel().getValueAt(taskTable.getSelectedRow(), 
+        				TaskTable.TASK_ID).toString());
         
         Dimension frmSize = App.getFrame().getSize();
         Point loc = App.getFrame().getLocation();

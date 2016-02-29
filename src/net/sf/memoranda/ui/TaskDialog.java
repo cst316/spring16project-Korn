@@ -39,10 +39,6 @@ import javax.swing.JCheckBox;
 import net.sf.memoranda.CurrentProject;
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.util.Local;
-import java.awt.Panel;
-import java.awt.Scrollbar;
-import java.awt.Component;
-import javax.swing.JSeparator;
 
 /*$Id: TaskDialog.java,v 1.25 2005/12/01 08:12:26 alexeya Exp $*/
 public class TaskDialog extends JDialog {
@@ -105,9 +101,9 @@ public class TaskDialog extends JDialog {
 	JCheckBox chkEndDate = new JCheckBox();
 	
 	JCheckBox chkRepeat = new JCheckBox();
-	String[] repeatTypes = {"Daily", "Weekly", "Monthly"};
+	String[] repeatTypes = {"Daily", "Weekly", "Monthly", "Yearly"};
 	JComboBox<?> cmboRepeatType = new JComboBox<Object>(repeatTypes);
-	public JCheckBox cbWorkingDays = new JCheckBox();	
+	
 	
 	JPanel jPanelProgress = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 	JLabel jLabelProgress = new JLabel();
@@ -118,8 +114,6 @@ public class TaskDialog extends JDialog {
 	CalendarDate startDateMax = CurrentProject.get().getEndDate();
 	CalendarDate endDateMin = startDateMin;
 	CalendarDate endDateMax = startDateMax;
-	private final Panel jPanelFiller = new Panel();
-	private final JSeparator separator = new JSeparator();
     
     public TaskDialog(Frame frame, String title) {
         super(frame, title, true);
@@ -168,7 +162,20 @@ public class TaskDialog extends JDialog {
 				chkEndDate_actionPerformed(e);
 			}
 		});
+		chkRepeat.setSelected(false);
 		chkRepeat_actionPerformed(null);
+		chkRepeat.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				chkRepeat_actionPerformed(e);
+			}
+		});
+		cmboRepeatType.setSelectedIndex(0);
+		cmboRepeatType.setVisible(false);
+		cmboRepeatType.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cmboRepeatType_actionPerformed(e);
+			}
+		});
 		
         okB.setMaximumSize(new Dimension(100, 26));
         okB.setMinimumSize(new Dimension(100, 26));
@@ -277,6 +284,9 @@ public class TaskDialog extends JDialog {
                 setStartDateB_actionPerformed(e);
             }
         });
+        jLabelRecr.setMaximumSize(new Dimension(270, 16));
+        jLabelRecr.setHorizontalAlignment(SwingConstants.RIGHT);
+        jLabelRecr.setText(Local.getString("Repeating"));
         
         jLabel2.setMaximumSize(new Dimension(270, 16));
         //jLabel2.setPreferredSize(new Dimension(60, 16));
@@ -371,6 +381,11 @@ public class TaskDialog extends JDialog {
         jPanel2.add(jPanel4, null);
         jPanel4.add(priorityCB, null);
         jPanel2.add(jPanel3, null);
+
+        jPanel2.add(jPanelRecurrence, null);
+        jPanelRecurrence.add(jLabelRecr, null);
+        jPanelRecurrence.add(chkRepeat, null);
+        jPanelRecurrence.add(cmboRepeatType, null);
         
         jPanel3.add(setNotifB, null);
         
@@ -380,39 +395,6 @@ public class TaskDialog extends JDialog {
         jPanel2.add(jPanelProgress);
         
         priorityCB.setSelectedItem(Local.getString("Normal"));
-        chkRepeat.setSelected(false);
-        chkRepeat.addActionListener(new java.awt.event.ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		chkRepeat_actionPerformed(e);
-        	}
-        });
-        cmboRepeatType.setSelectedIndex(0);
-        cmboRepeatType.setVisible(false);
-        cmboRepeatType.addActionListener(new java.awt.event.ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		cmboRepeatType_actionPerformed(e);
-        	}
-        });
-        
-        jPanel2.add(jPanelFiller);
-        jLabelRecr.setMaximumSize(new Dimension(270, 16));
-        jLabelRecr.setHorizontalAlignment(SwingConstants.RIGHT);
-        jLabelRecr.setText(Local.getString("Repeating"));
-        
-                jPanel2.add(jPanelRecurrence, null);
-                jPanelRecurrence.add(jLabelRecr, null);
-                jPanelRecurrence.add(chkRepeat, null);
-                separator.setPreferredSize(new Dimension(15, 0));
-                separator.setVisible(true);
-                
-                jPanelRecurrence.add(separator);
-                jPanelRecurrence.add(cmboRepeatType, null);
-                cbWorkingDays.setText("Working Days Only");
-                jPanel2.add(cbWorkingDays);
-                cbWorkingDays.setHorizontalTextPosition(SwingConstants.LEADING);
-                
-                cbWorkingDays.setSelected(false);
-                cbWorkingDays.setVisible(false);
         startCalFrame.cal.addSelectionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (ignoreStartChanged)
@@ -473,10 +455,8 @@ public class TaskDialog extends JDialog {
 
 	void chkRepeat_actionPerformed(ActionEvent e) {
 		cmboRepeatType.setVisible(chkRepeat.isSelected());
-		cmboRepeatType_actionPerformed(e);
-		cbWorkingDays.setVisible(chkRepeat.isSelected());
+		cmboRepeatType_actionPerformed(e);		
 	}
-	
 	//#TODO
 	void cmboRepeatType_actionPerformed(ActionEvent e) {
 		
