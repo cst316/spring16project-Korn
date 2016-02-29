@@ -520,8 +520,6 @@ public class TaskPanel extends JPanel {
         			ed, //End Date
         			dlg.cmboRepeatType.getSelectedIndex(), //Frequency of repetition
         			dlg.cmboRepeatType.getSelectedIndex(), //Frequency of repeat
-        			hh, //Time at which the task will recur.
-        			mm, //Minute at which the task will recur.
         			dlg.todoField.getText(), //ToD/Title of task
         			dlg.priorityCB.getSelectedIndex(), //Integer Priority
         			dlg.cbWorkingDays.isSelected(), //Boolean to denote recurrence is working days only

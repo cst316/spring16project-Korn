@@ -142,8 +142,6 @@ public class TaskListImpl implements TaskList {
     		CalendarDate endDate,
     		int period,
     		int type,
-    		int hh,
-    		int mm,
     		String text,
     		int priority,    		
     		boolean workDays,
