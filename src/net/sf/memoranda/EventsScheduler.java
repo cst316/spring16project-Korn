@@ -47,11 +47,17 @@ public class EventsScheduler {
             System.out.println((Calendar.getInstance()).getTime());
 
             if (eventTime.after((Calendar.getInstance().getTime()))) {
-                Calendar calendar = new GregorianCalendar(Local.getCurrentLocale());
+/*
+            	Calendar calendar = new GregorianCalendar(Local.getCurrentLocale());
                 // replace with event.getStartDate() when includes minute & hour
                 CalendarDate date = CalendarDate.today();
                 int minutes, hours,day;
                 EventTimer timer;
+                
+*/           
+                checkMinute(event);
+                
+/*               
 
                 if (event.getRepeat() == EventsManager.REPEAT_MINUTELY) {
                     // get remaining minutes from now until next cycle
@@ -81,6 +87,7 @@ public class EventsScheduler {
                     }
                 }
 
+                
                 else if (event.getRepeat() == EventsManager.REPEAT_HOURLY) {
                     // get remaining minutes from now until next cycle
                 	timer= new EventTimer(event);
@@ -111,11 +118,12 @@ public class EventsScheduler {
                     timer.schedule(new NotifyTask(timer), event.getTime());
                     _timers.add(timer);
                 }
-
+*/////////////////////////////////////////
                 /*DEBUG*/
                 System.out.println(event.getTimeString());
             }
         }
+
 
         /*DEBUG*/
         System.out.println("----------");
@@ -129,14 +137,48 @@ public class EventsScheduler {
         }, midnight);
         notifyChanged();
     }
+    public static void checkMinute(Event event ){
+    	Calendar calendar = new GregorianCalendar(Local.getCurrentLocale());
+        // replace with event.getStartDate() when includes minute & hour
+        CalendarDate date = CalendarDate.today();
+        int minutes, hours;
+        EventTimer timer;
+    	
+    	if (event.getRepeat() == EventsManager.REPEAT_MINUTELY) {
+            // get remaining minutes from now until next cycle
+            timer = new EventTimer(event);
+            int now = date.getCalendar().get(Calendar.MINUTE);
+            int difference = now % event.getPeriod() + 1;
 
+            minutes = calendar.get(Calendar.MINUTE) + difference;
+            hours = calendar.get(Calendar.HOUR_OF_DAY);
+            calendar.set(Calendar.HOUR_OF_DAY, hours);
+            calendar.set(Calendar.MINUTE, minutes);
+            calendar.set(Calendar.SECOND, 0);
+            timer.schedule(new NotifyTask(timer), calendar.getTime());
+            _timers.add(timer);
+
+            // then get the rest until midnight
+            while (calendar.getTime().getTime() < getMidnight().getTime()) {
+                timer = new EventTimer(event);
+                minutes += event.getPeriod();
+                if (minutes > 60) {
+                    calendar.set(Calendar.HOUR_OF_DAY, ++hours);
+                    minutes %= 60;
+                }
+                calendar.set(Calendar.MINUTE, minutes);
+                timer.schedule(new NotifyTask(timer), calendar.getTime());
+                _timers.add(timer);
+            }
+        }
+    }
     public static void cancelAll() {
         for (int i = 0; i < _timers.size(); i++) {
             EventTimer timer = (EventTimer) _timers.get(i);
             timer.cancel();
         }
     }
-
+    
     public static Vector getScheduledEvents() {
         Vector vector = new Vector();
 
