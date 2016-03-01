@@ -52,11 +52,22 @@ public class EventsScheduler {
                 // replace with event.getStartDate() when includes minute & hour
                 CalendarDate date = CalendarDate.today();
                 int minutes, hours,day;
-                EventTimer timer;
+               
                 
 */           
-                checkMinute(event);
-                
+            	 EventTimer timer=null;
+            	if (event.getRepeat() == EventsManager.REPEAT_MINUTELY) {
+            		eventMinute(event,timer);
+            	}
+            	
+            	else if (event.getRepeat() == EventsManager.REPEAT_HOURLY) {
+            		eventHour(event,timer);
+            	}
+                else {
+                    timer = new EventTimer(event);
+                    timer.schedule(new NotifyTask(timer), event.getTime());
+                    _timers.add(timer);
+                }
 /*               
 
                 if (event.getRepeat() == EventsManager.REPEAT_MINUTELY) {
@@ -112,13 +123,9 @@ public class EventsScheduler {
                 		timer.schedule(new NotifyTask(timer), calendar.getTime());
                 	}
                 }
+*/
 
-                else {
-                    timer = new EventTimer(event);
-                    timer.schedule(new NotifyTask(timer), event.getTime());
-                    _timers.add(timer);
-                }
-*/////////////////////////////////////////
+
                 /*DEBUG*/
                 System.out.println(event.getTimeString());
             }
@@ -137,40 +144,70 @@ public class EventsScheduler {
         }, midnight);
         notifyChanged();
     }
-    public static void checkMinute(Event event ){
+    public static void eventMinute(Event event, EventTimer timer ){
     	Calendar calendar = new GregorianCalendar(Local.getCurrentLocale());
         // replace with event.getStartDate() when includes minute & hour
         CalendarDate date = CalendarDate.today();
         int minutes, hours;
-        EventTimer timer;
     	
-    	if (event.getRepeat() == EventsManager.REPEAT_MINUTELY) {
-            // get remaining minutes from now until next cycle
-            timer = new EventTimer(event);
-            int now = date.getCalendar().get(Calendar.MINUTE);
-            int difference = now % event.getPeriod() + 1;
+	
+        // get remaining minutes from now until next cycle
+        timer = new EventTimer(event);
+        int now = date.getCalendar().get(Calendar.MINUTE);
+        int difference = now % event.getPeriod() + 1;
 
-            minutes = calendar.get(Calendar.MINUTE) + difference;
-            hours = calendar.get(Calendar.HOUR_OF_DAY);
-            calendar.set(Calendar.HOUR_OF_DAY, hours);
+        minutes = calendar.get(Calendar.MINUTE) + difference;
+        hours = calendar.get(Calendar.HOUR_OF_DAY);
+        calendar.set(Calendar.HOUR_OF_DAY, hours);
+        calendar.set(Calendar.MINUTE, minutes);
+        calendar.set(Calendar.SECOND, 0);
+        timer.schedule(new NotifyTask(timer), calendar.getTime());
+        _timers.add(timer);
+
+        // then get the rest until midnight
+        while (calendar.getTime().getTime() < getMidnight().getTime()) {
+            timer = new EventTimer(event);
+            minutes += event.getPeriod();
+            if (minutes > 60) {
+                calendar.set(Calendar.HOUR_OF_DAY, ++hours);
+                minutes %= 60;
+            }
             calendar.set(Calendar.MINUTE, minutes);
-            calendar.set(Calendar.SECOND, 0);
             timer.schedule(new NotifyTask(timer), calendar.getTime());
             _timers.add(timer);
-
-            // then get the rest until midnight
-            while (calendar.getTime().getTime() < getMidnight().getTime()) {
-                timer = new EventTimer(event);
-                minutes += event.getPeriod();
-                if (minutes > 60) {
-                    calendar.set(Calendar.HOUR_OF_DAY, ++hours);
-                    minutes %= 60;
-                }
-                calendar.set(Calendar.MINUTE, minutes);
-                timer.schedule(new NotifyTask(timer), calendar.getTime());
-                _timers.add(timer);
-            }
         }
+    }
+    
+    public static void eventHour(Event event, EventTimer timer){
+    	Calendar calendar = new GregorianCalendar(Local.getCurrentLocale());
+        // replace with event.getStartDate() when includes minute & hour
+        CalendarDate date = CalendarDate.today();
+        int hours, day;
+    	
+    	
+            // get remaining minutes from now until next cycle
+        	timer= new EventTimer(event);
+        	int now=date.getCalendar().get(Calendar.HOUR);
+        	int difference =now% event.getPeriod()+1;
+        	
+        	hours = calendar.get(Calendar.HOUR)+difference;
+        	day= calendar.get(Calendar.DAY_OF_WEEK);
+        	calendar.set(Calendar.DAY_OF_WEEK, day);
+        	calendar.set(Calendar.MINUTE,0);
+        	timer.schedule(new NotifyTask(timer), calendar.getTime());
+        	_timers.add(timer);
+            // then get hours from now until midnight
+        	while(calendar.getTime().getTime()<getMidnight().getTime()){
+        		timer= new EventTimer(event);
+        		hours += event.getPeriod();
+        		if(hours> 24){
+        			calendar.set(Calendar.DAY_OF_WEEK,++day);
+        			hours%=24;
+        		}
+        		calendar.set(Calendar.HOUR, hours);
+        		timer.schedule(new NotifyTask(timer), calendar.getTime());
+        	}
+    	
     }
     public static void cancelAll() {
         for (int i = 0; i < _timers.size(); i++) {
