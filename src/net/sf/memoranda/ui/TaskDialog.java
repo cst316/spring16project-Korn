@@ -39,6 +39,7 @@ import javax.swing.JCheckBox;
 import net.sf.memoranda.CurrentProject;
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.util.Local;
+import net.sf.memoranda.Task;
 
 /*$Id: TaskDialog.java,v 1.25 2005/12/01 08:12:26 alexeya Exp $*/
 public class TaskDialog extends JDialog {
@@ -101,9 +102,8 @@ public class TaskDialog extends JDialog {
 	JCheckBox chkEndDate = new JCheckBox();
 	
 	JCheckBox chkRepeat = new JCheckBox();
-	String[] repeatTypes = {"Daily", "Weekly", "Monthly", "Yearly"};
-	JComboBox<?> cmboRepeatType = new JComboBox<Object>(repeatTypes);
-	
+	JComboBox<?> cmboRepeatType = new JComboBox<Object>(Task.REPEAT_FREQUENCIES_LIST);
+	public JCheckBox chkWorkingDays = new JCheckBox();
 	
 	JPanel jPanelProgress = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 	JLabel jLabelProgress = new JLabel();
@@ -386,6 +386,11 @@ public class TaskDialog extends JDialog {
         jPanelRecurrence.add(jLabelRecr, null);
         jPanelRecurrence.add(chkRepeat, null);
         jPanelRecurrence.add(cmboRepeatType, null);
+        chkWorkingDays.setText("Working Days Only");
+        jPanelRecurrence.add(chkWorkingDays, null);
+        chkWorkingDays.setHorizontalTextPosition(SwingConstants.LEADING);
+        chkWorkingDays.setSelected(false);
+        chkWorkingDays.setVisible(false);
         
         jPanel3.add(setNotifB, null);
         
@@ -456,6 +461,7 @@ public class TaskDialog extends JDialog {
 	void chkRepeat_actionPerformed(ActionEvent e) {
 		cmboRepeatType.setVisible(chkRepeat.isSelected());
 		cmboRepeatType_actionPerformed(e);		
+		chkWorkingDays.setVisible(chkRepeat.isSelected());
 	}
 	//#TODO
 	void cmboRepeatType_actionPerformed(ActionEvent e) {
