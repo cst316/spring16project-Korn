@@ -153,19 +153,15 @@ public class TaskListImpl implements TaskList {
     		String description, 
     		String parentTaskId,		
     		boolean workDays,
+    		int progress,
     		int frequency) {
     		Element el = new Element("task");
-    		Element rep = _root.getFirstChildElement("repeatableTasks");
-    		if (rep == null) {
-    			rep = new Element("repeatableTasks");
-    			_root.appendChild(rep);
-    		}
             el.addAttribute(new Attribute("startDate", startDate.toString()));
             if (endDate != null)
     			el.addAttribute(new Attribute("endDate", endDate.toString()));
             String id = Util.generateId();
             el.addAttribute(new Attribute("id", id));
-            el.addAttribute(new Attribute("progress", "0"));
+            el.addAttribute(new Attribute("progress", String.valueOf(progress)));
             el.addAttribute(new Attribute("effort", String.valueOf(effort)));
             el.addAttribute(new Attribute("priority", String.valueOf(priority)));
             el.addAttribute(new Attribute("frequency", String.valueOf(frequency)));
@@ -191,7 +187,7 @@ public class TaskListImpl implements TaskList {
             
     		elements.put(id, el);
     		
-            Util.debug("Created task with parent " + parentTaskId);
+            Util.debug("Created (recurring?) task with parent " + parentTaskId);
     		return new TaskImpl(el, this);
     	}
     

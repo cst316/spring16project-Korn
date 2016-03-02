@@ -251,7 +251,8 @@ public class AgendaPanel extends JPanel {
 										sd, ed, dlg.todoField.getText(), 
 										dlg.priorityCB.getSelectedIndex(),effort, 
 										dlg.descriptionField.getText(),null,
-										false, //#TODO Placeholder value until implemented //Boolean to denote recurrence is working days only 
+										false, //#TODO Placeholder value until implemented //Boolean to denote recurrence is working days only
+										((Integer)dlg.progress.getValue()).intValue(),
 										dlg.cmboRepeatType.getSelectedIndex());
 							}
 							else 

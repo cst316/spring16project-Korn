@@ -30,6 +30,7 @@ public interface TaskList {
     		String description, 
     		String parentTaskId,
     		boolean workDays,
+    		int progress,
     		int type);
     
     void removeTask(Task task);

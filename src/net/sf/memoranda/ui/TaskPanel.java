@@ -512,28 +512,24 @@ public class TaskPanel extends JPanel {
         long effort = Util.getMillisFromHours(dlg.effortField.getText());
 		//XXX Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
         //DANIEL: Set it up to determine if it's recurring or not!
-/*        if(dlg.chkRepeat.isSelected()) {
-        	Task newTask = CurrentProject.getTaskList().createRepeatableTask(
-        			sd, //Start Date
-        			ed, //End Date
-        			dlg.cmboRepeatType.getSelectedIndex(), //Frequency of repetition
-        			dlg.cmboRepeatType.getSelectedIndex(), //Frequency of repeat
-        			dlg.todoField.getText(), //ToD/Title of task
-        			dlg.priorityCB.getSelectedIndex(), //Integer Priority
-        			false, //#TODO Placeholder value until implemented //Boolean to denote recurrence is working days only
-        			effort, //Estimated # of hours of work
-        			dlg.descriptionField.getText(), //Description
-        			null); //Parent Task ID
-        } else { */
-        	Task newTask = CurrentProject.getTaskList().createTask(
-        		sd, //Start Date
-        		ed, //End Date
-        		dlg.todoField.getText(), //ToDo/Title of task
-        		dlg.priorityCB.getSelectedIndex(), //Integer priority
-        		effort, //Estimated # of hours of work
-        		dlg.descriptionField.getText(), //Description
-        		null); //Parent Task ID
-//        }
+        Task newTask;
+		if(dlg.chkRepeat.isSelected())
+		{
+			newTask = CurrentProject.getTaskList().createRepeatingTask(
+					sd, ed, dlg.todoField.getText(), 
+					dlg.priorityCB.getSelectedIndex(),effort, 
+					dlg.descriptionField.getText(),null,
+					false, //#TODO Placeholder value until implemented //Boolean to denote recurrence is working days only
+					((Integer)dlg.progress.getValue()).intValue(),
+					dlg.cmboRepeatType.getSelectedIndex());
+		}
+		else 
+		{
+			newTask = CurrentProject.getTaskList().createTask(
+					sd, ed, dlg.todoField.getText(), 
+					dlg.priorityCB.getSelectedIndex(),effort, 
+					dlg.descriptionField.getText(),null);
+		}
         
 //		CurrentProject.getTaskList().adjustParentTasks(newTask);
 		//#TODO
@@ -576,10 +572,24 @@ public class TaskPanel extends JPanel {
  		else
  			ed = null;
         long effort = Util.getMillisFromHours(dlg.effortField.getText());
-		Task newTask = CurrentProject.getTaskList().createTask(
-				sd, ed, dlg.todoField.getText(), 
-				dlg.priorityCB.getSelectedIndex(),effort, 
-				dlg.descriptionField.getText(),parentTaskId);
+        Task newTask;
+		if(dlg.chkRepeat.isSelected())
+		{
+			newTask = CurrentProject.getTaskList().createRepeatingTask(
+					sd, ed, dlg.todoField.getText(), 
+					dlg.priorityCB.getSelectedIndex(),effort, 
+					dlg.descriptionField.getText(),null,
+					false, //#TODO Placeholder value until implemented //Boolean to denote recurrence is working days only
+					((Integer)dlg.progress.getValue()).intValue(),
+					dlg.cmboRepeatType.getSelectedIndex());
+		}
+		else 
+		{
+			newTask = CurrentProject.getTaskList().createTask(
+					sd, ed, dlg.todoField.getText(), 
+					dlg.priorityCB.getSelectedIndex(),effort, 
+					dlg.descriptionField.getText(),null);
+		}
         newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
 //		CurrentProject.getTaskList().adjustParentTasks(newTask);
 
