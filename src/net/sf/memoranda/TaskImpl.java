@@ -14,6 +14,7 @@ import java.util.Calendar;
 
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.date.CurrentDate;
+import net.sf.memoranda.ui.AgendaPanel;
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -34,6 +35,7 @@ public class TaskImpl implements Task, Comparable {
     public TaskImpl(Element taskElement, TaskList tl) {
         _element = taskElement;
         _tl = tl;
+       
     }
 
     public Element getContent() {

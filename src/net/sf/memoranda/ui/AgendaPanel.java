@@ -6,21 +6,18 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
@@ -28,14 +25,12 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import javax.swing.JOptionPane;
 
 import net.sf.memoranda.CurrentProject;
 import net.sf.memoranda.EventNotificationListener;
 import net.sf.memoranda.EventsManager;
 import net.sf.memoranda.EventsScheduler;
 import net.sf.memoranda.History;
-import net.sf.memoranda.HistoryItem;
 import net.sf.memoranda.NoteList;
 import net.sf.memoranda.Project;
 import net.sf.memoranda.ProjectListener;
@@ -48,7 +43,6 @@ import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.date.CurrentDate;
 import net.sf.memoranda.date.DateListener;
 import net.sf.memoranda.util.AgendaGenerator;
-import net.sf.memoranda.util.Context;
 import net.sf.memoranda.util.CurrentStorage;
 import net.sf.memoranda.util.Local;
 import net.sf.memoranda.util.Util;
@@ -77,8 +71,10 @@ public class AgendaPanel extends JPanel {
 	static String gotoTask = null;
 
 	boolean isActive = true;
+	private static int refreshCount = 0;
 
 	public AgendaPanel(DailyItemsPanel _parentPanel) {
+		this.setRefreshCount(0);
 		try {
 			parentPanel = _parentPanel;
 			jbInit();
@@ -86,6 +82,13 @@ public class AgendaPanel extends JPanel {
 			new ExceptionDialog(ex);
 			ex.printStackTrace();
 		}
+	}
+	public static void setRefreshCount(int i) {
+		refreshCount = i;
+		
+	}
+	public static int getRefreshCount(){
+		return refreshCount;
 	}
 	void jbInit() throws Exception {
 		expandedTasks = new ArrayList();
@@ -398,8 +401,9 @@ public class AgendaPanel extends JPanel {
     }
 
 	public static void refresh(CalendarDate date) {
+		setRefreshCount(getRefreshCount() + 1);
 		viewer.setText(AgendaGenerator.getAgenda(date,expandedTasks));
-		SwingUtilities.invokeLater(new Runnable() {
+		SwingUtilities.invokeLater(new Runnable(){
 			public void run() {
 				refreshProjButtons();
 				if(gotoTask != null) {
@@ -444,7 +448,6 @@ public class AgendaPanel extends JPanel {
 	//		//taskTable.updateUI();
 	//	}
 
-	//    class PopupListener extends MouseAdapter {
 	//
 	//        public void mouseClicked(MouseEvent e) {
 	//        	System.out.println("mouse clicked!");
