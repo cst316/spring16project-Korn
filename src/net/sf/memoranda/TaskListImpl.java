@@ -155,6 +155,7 @@ public class TaskListImpl implements TaskList {
     		boolean workDays,
     		int progress,
     		int frequency) {
+    		assert(Task.REPEAT_FREQUENCIES_INDEX[frequency]==frequency);
     		Element el = new Element("task");
             el.addAttribute(new Attribute("startDate", startDate.toString()));
             if (endDate != null)
@@ -187,7 +188,8 @@ public class TaskListImpl implements TaskList {
             
     		elements.put(id, el);
     		
-            Util.debug("Created (recurring?) task with parent " + parentTaskId);
+            Util.debug("Created task with parent " + parentTaskId + 
+            		" and recurance " + Task.REPEAT_FREQUENCIES_LIST[frequency]);
     		return new TaskImpl(el, this);
     	}
     

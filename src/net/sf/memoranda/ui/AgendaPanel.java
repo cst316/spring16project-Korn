@@ -263,7 +263,7 @@ public class AgendaPanel extends JPanel {
 										dlg.descriptionField.getText(),null);
 							}
 //							CurrentProject.getTaskList().adjustParentTasks(newTask);
-							newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
+							newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());							
 					        CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
 					        TaskTable.tableChanged();
 					        parentPanel.updateIndicators();
