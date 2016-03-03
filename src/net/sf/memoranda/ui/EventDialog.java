@@ -174,6 +174,11 @@ public class EventDialog extends JDialog implements WindowListener {
         repeatPanel.add(minutelyRepeatRB, gbc);
         minutelyRepeatRB.setText("Every");
         minuteSpin.setPreferredSize(new Dimension(50, 24));
+        minutelyRepeatRB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                minutelyRepeatRB_actionPerformed(e);
+            }
+        });
 
         gbc = new GridBagConstraints();
         gbc.gridx = 1; gbc.gridy = 1;
@@ -197,6 +202,11 @@ public class EventDialog extends JDialog implements WindowListener {
         repeatPanel.add(hourlyRepeatRB, gbc);
         hourlyRepeatRB.setText("Every");
         hourSpin.setPreferredSize(new Dimension(50, 24));
+        hourlyRepeatRB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                hourlyRepeatRB_actionPerformed(e);
+            }
+        });
 
         gbc = new GridBagConstraints();
         gbc.gridx = 1; gbc.gridy = 2;
@@ -491,6 +501,8 @@ public class EventDialog extends JDialog implements WindowListener {
     void disableElements() {
         dayOfMonthSpin.setEnabled(false);
         daySpin.setEnabled(false);
+        minuteSpin.setEnabled(false);
+        hourSpin.setEnabled(false);
         weekdaysCB.setEnabled(false);
         //startDate.setEnabled(false);
         //setStartDateB.setEnabled(false);
@@ -552,11 +564,12 @@ public class EventDialog extends JDialog implements WindowListener {
     public void hourlyRepeatRB_actionPerformed(ActionEvent e) {
         disableElements();
         hourSpin.setEnabled(true);
-        weekdaysCB.setEnabled(true);
+        //weekdaysCB.setEnabled(true);
         //startDate.setEnabled(true);
         //setStartDateB.setEnabled(true);
         lblSince.setEnabled(true);
         enableEndDateCB.setEnabled(true);
+        workingDaysOnlyCB.setEnabled(true);
         startDate.getModel().setValue(
                 startCalFrame.cal.get().getCalendar().getTime());
     }
@@ -564,11 +577,12 @@ public class EventDialog extends JDialog implements WindowListener {
     public void minutelyRepeatRB_actionPerformed(ActionEvent e) {
         disableElements();
         minuteSpin.setEnabled(true);
-        weekdaysCB.setEnabled(true);
+        //weekdaysCB.setEnabled(true);
         //startDate.setEnabled(true);
         //setStartDateB.setEnabled(true);
         lblSince.setEnabled(true);
         enableEndDateCB.setEnabled(true);
+        workingDaysOnlyCB.setEnabled(true);
         startDate.getModel().setValue(
                 startCalFrame.cal.get().getCalendar().getTime());
     }
