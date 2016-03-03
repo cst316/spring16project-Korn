@@ -1,6 +1,5 @@
 package net.sf.memoranda.test;
 
-
 import static org.junit.Assert.*;
 import net.sf.memoranda.EventsManager;
 import net.sf.memoranda.EventsScheduler;
@@ -21,7 +20,6 @@ public class testMinute {
 
 	@Before
 	public void setUp() throws Exception {
-		
 	}
 
 	@Test
@@ -31,18 +29,17 @@ public class testMinute {
 
 	@Test
 	public void testEventMinute() {
-		int repeatType=5;
-		EventDialog dialog =new EventDialog(App.getFrame(), Local.getString("New event"));
-		CalendarDate startDate=CalendarDate.today();
-		CalendarDate endDate= CalendarDate.tomorrow();
-		int period=(Integer) dialog.dayOfMonthSpin.getModel().getValue();
-		int hour=5;
-		int minute=12;
-		String text="hello";
-		boolean workDays= dialog.workingDaysOnlyCB.isSelected();
+		int repeatType = 6;
+		EventDialog dialog = new EventDialog(App.getFrame(), Local.getString("New event"));
+		CalendarDate startDate = CalendarDate.today();
+		CalendarDate endDate = CalendarDate.tomorrow();
+		int period = (Integer) dialog.dayOfMonthSpin.getModel().getValue();
+		int hour = 5;
+		int minute = 12;
+		String text = "hello";
+		boolean workDays = dialog.workingDaysOnlyCB.isSelected();
 		EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour, minute, text, workDays);
 		assertNotNull(EventsScheduler.getScheduledEvents());
-		
 	}
 
 }
