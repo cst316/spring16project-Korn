@@ -13,9 +13,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-/**
- * Created by Duke on 3/2/2016.
- */
 public class TestHour {
 
     @BeforeClass
@@ -25,11 +22,6 @@ public class TestHour {
     @Before
     public void setUp() throws Exception {
 
-    }
-
-    @Test
-    public void testInit() {
-        fail("Not yet implemented");
     }
 
     @Test
@@ -45,6 +37,5 @@ public class TestHour {
         boolean workDays = dialog.workingDaysOnlyCB.isSelected();
         EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour, minute, text, workDays);
         assertNotNull(EventsScheduler.getScheduledEvents());
-
     }
 }

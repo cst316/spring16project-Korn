@@ -23,11 +23,6 @@ public class TestMinute {
 	}
 
 	@Test
-	public void testInit() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testEventMinute() {
 		int repeatType = 6;
 		EventDialog dialog = new EventDialog(App.getFrame(), Local.getString("New event"));
