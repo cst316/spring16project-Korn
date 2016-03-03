@@ -32,15 +32,18 @@ public class TestMinute {
 		EventDialog dialog = new EventDialog(App.getFrame(), Local.getString("New event"));
 		CalendarDate startDate = CalendarDate.today();
 		CalendarDate endDate = CalendarDate.tomorrow();
-		int period = (Integer) dialog.dayOfMonthSpin.getModel().getValue();
+		int period = 1;
 		int hour = 5;
 		int minute = 12;
 		String text = "hello";
 		boolean workDays = dialog.workingDaysOnlyCB.isSelected();
-		Vector events= (Vector)EventsManager.getActiveEvents();
-		Event event= (Event) events.get(0);
 		EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour, minute, text, workDays);
-		assertNotNull(EventsScheduler.getScheduledEvents());
+		Vector events= (Vector)EventsManager.getActiveEvents();
+		Event event= (Event) events.get(events.size()-1);
+		
+		EventsScheduler.eventMinute(event);
+		assertEquals(1, event.getPeriod());
+		EventsScheduler.getScheduledEvents().get(events.size()-1).;
 		
 	}
 

@@ -241,7 +241,9 @@ public class EventsScheduler {
 
         return firstEvent;
     }
-
+    public static int counter(){
+    	return _timers.size();
+    }
     public static void addListener(EventNotificationListener enl) {
         _listeners.add(enl);
     }
