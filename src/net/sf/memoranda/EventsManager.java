@@ -140,9 +140,9 @@ public class EventsManager {
 		String text,
 		boolean workDays) {
 		Element el = new Element("event");
-		Element rep = _root.getFirstChildElement("repeatable");
+		Element rep = _root.getFirstChildElement("repeatableEvents");
 		if (rep == null) {
-			rep = new Element("repeatable");
+			rep = new Element("repeatableEvents");
 			_root.appendChild(rep);
 		}
 		el.addAttribute(new Attribute("repeat-type", String.valueOf(type)));
@@ -162,7 +162,7 @@ public class EventsManager {
 
 	public static Collection getRepeatableEvents() {
 		Vector v = new Vector();
-		Element rep = _root.getFirstChildElement("repeatable");
+		Element rep = _root.getFirstChildElement("repeatableEvents");
 		if (rep == null)
 			return v;
 		Elements els = rep.getChildElements("event");

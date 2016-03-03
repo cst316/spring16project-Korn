@@ -344,6 +344,7 @@ public class ProjectsPanel extends JPanel implements ExpandablePanel {
 	void ppNewProject_actionPerformed(ActionEvent e) {
 		ProjectDialog.newProject();
 		prjTablePanel.updateUI();
+		AgendaPanel.refresh(CalendarDate.today());
 	}
 
 	void ppDeleteProject_actionPerformed(ActionEvent e) {
@@ -397,6 +398,7 @@ public class ProjectsPanel extends JPanel implements ExpandablePanel {
 		prjTablePanel.projectsTable.clearSelection();
 		prjTablePanel.updateUI();
 		setMenuEnabled(false);
+		AgendaPanel.refresh(CalendarDate.today());
 	}
 
 	void ppProperties_actionPerformed(ActionEvent e) {
@@ -486,5 +488,6 @@ public class ProjectsPanel extends JPanel implements ExpandablePanel {
 		prjTablePanel.projectsTable.clearSelection();
 		prjTablePanel.updateUI();
 		setMenuEnabled(false);
+		AgendaPanel.refresh(CalendarDate.today());
 	}
 }
