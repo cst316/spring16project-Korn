@@ -1,6 +1,10 @@
 package net.sf.memoranda.test;
 
 import static org.junit.Assert.*;
+
+import java.util.Vector;
+
+import net.sf.memoranda.Event;
 import net.sf.memoranda.EventsManager;
 import net.sf.memoranda.EventsScheduler;
 import net.sf.memoranda.date.CalendarDate;
@@ -33,6 +37,8 @@ public class TestMinute {
 		int minute = 12;
 		String text = "hello";
 		boolean workDays = dialog.workingDaysOnlyCB.isSelected();
+		Vector events= (Vector)EventsManager.getActiveEvents();
+		Event event= (Event) events.get(0);
 		EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour, minute, text, workDays);
 		assertNotNull(EventsScheduler.getScheduledEvents());
 		
