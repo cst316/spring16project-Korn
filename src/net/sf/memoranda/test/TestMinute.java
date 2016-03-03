@@ -18,33 +18,51 @@ import org.junit.Test;
 
 public class TestMinute {
 
+	int repeatType, period, hour, minute;
+	String text;
+	CalendarDate startDate, endDate;
+	EventDialog dialog;
+	boolean workDays;
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
 
 	@Before
 	public void setUp() throws Exception {
+		repeatType = 6;
+		dialog = new EventDialog(App.getFrame(), Local.getString("New event"));
+		startDate = CalendarDate.today();
+		endDate = CalendarDate.tomorrow();
+		period = 1;
+		hour = 5;
+		minute = 12;
+		text = "hello";
+		workDays = dialog.workingDaysOnlyCB.isSelected();
 	}
 
 	@Test
-	public void testEventMinute() {
-		int repeatType = 6;
-		EventDialog dialog = new EventDialog(App.getFrame(), Local.getString("New event"));
-		CalendarDate startDate = CalendarDate.today();
-		CalendarDate endDate = CalendarDate.tomorrow();
-		int period = 1;
-		int hour = 5;
-		int minute = 12;
-		String text = "hello";
-		boolean workDays = dialog.workingDaysOnlyCB.isSelected();
+	public void testEventMinutePeriod() {
 		EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour, minute, text, workDays);
 		Vector events= (Vector)EventsManager.getActiveEvents();
-		Event event= (Event) events.get(events.size()-1);
-		
+		Event event= (Event) events.get(events.size() - 1);
 		EventsScheduler.eventMinute(event);
+
+		// ensures time we set to timer is the same
 		assertEquals(1, event.getPeriod());
-		EventsScheduler.getScheduledEvents().get(events.size()-1);
-		
+	}
+
+	@Test
+	public void testEventMinuteExists() {
+		int beforeAdded = EventsScheduler.counter();
+		EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour, minute, text, workDays);
+		Vector events= (Vector)EventsManager.getActiveEvents();
+		Event event= (Event) events.get(events.size() - 1);
+		EventsScheduler.eventMinute(event);
+		int afterAdded = EventsScheduler.counter();
+
+		// ensures that event was added to the timer vector
+		assertNotEquals(beforeAdded, afterAdded);
 	}
 
 }
