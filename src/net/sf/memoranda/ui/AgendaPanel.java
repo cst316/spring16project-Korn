@@ -26,6 +26,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import net.sf.memoranda.ui.AppFrame;
 import net.sf.memoranda.CurrentProject;
 import net.sf.memoranda.EventNotificationListener;
 import net.sf.memoranda.EventsManager;
@@ -55,6 +56,7 @@ public class AgendaPanel extends JPanel {
 	JToolBar toolBar = new JToolBar();
 	JButton historyForwardB = new JButton();
 	static JButton removeProjB = new JButton();
+	static JButton newProjB = new JButton();
 	JButton newTaskB = new JButton();
 	JButton subTaskB = new JButton();
 	JButton export = new JButton();
@@ -62,7 +64,8 @@ public class AgendaPanel extends JPanel {
 	String[] priorities = {"Highest","High","Medium","Low","Lowest"};
 	 static JScrollPane scrollPane = new JScrollPane();
 	DailyItemsPanel parentPanel = null;
-	static RemoveProjAction removeProjAction = new RemoveProjAction();
+	public static RemoveProjAction removeProjAction = new RemoveProjAction();
+	public static NewProjAction newProjAction = new NewProjAction();
 
 	//	JPopupMenu agendaPPMenu = new JPopupMenu();
 	//	JCheckBoxMenuItem ppShowActiveOnlyChB = new JCheckBoxMenuItem();
@@ -285,6 +288,16 @@ public class AgendaPanel extends JPanel {
 		historyForwardB.setMaximumSize(new Dimension(24, 24));
 		historyForwardB.setText("");
 		
+		newProjB.setAction(AgendaPanel.newProjAction);
+		newProjB.setPreferredSize(new Dimension(24 ,24));
+		newProjB.setRequestFocusEnabled(false);
+		newProjB.setToolTipText(Local.getString("Removes the currently active project"));
+		newProjB.setMinimumSize(new Dimension(24, 24));
+		newProjB.setMaximumSize(new Dimension(24, 24));
+		newProjB.setText("");
+		newProjB.setBorderPainted(false);
+		newProjB.setFocusable(false);
+
 		removeProjB.setAction(AgendaPanel.removeProjAction);
 		removeProjB.setPreferredSize(new Dimension(24 ,24));
 		removeProjB.setRequestFocusEnabled(false);
@@ -296,7 +309,7 @@ public class AgendaPanel extends JPanel {
 		removeProjB.setFocusable(false);
 		
 		newTaskB.setIcon(
-		            new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/todo_new.png")));
+		            new ImageIcon(AppFrame.class.getResource("resources/icons/todo_new.png")));
 		        newTaskB.setEnabled(true);
 		        newTaskB.setMaximumSize(new Dimension(24, 24));
 		        newTaskB.setMinimumSize(new Dimension(24, 24));
@@ -322,6 +335,7 @@ public class AgendaPanel extends JPanel {
 		toolBar.add(historyBackB, null);
 		toolBar.add(historyForwardB, null);
 		toolBar.addSeparator(new Dimension(8, 24));
+		toolBar.add(newProjB, null);
 		toolBar.add(removeProjB, null);
 		toolBar.addSeparator(new Dimension(8, 24));
 		toolBar.add(newTaskB, null);
@@ -379,11 +393,30 @@ public class AgendaPanel extends JPanel {
 		//		toggleShowActiveOnly_actionPerformed(null);		
 	}
 	
-	static class RemoveProjAction extends AbstractAction {
+	//Event listener class adding a new project.
+	public static class NewProjAction extends AbstractAction {
+		
+        public  NewProjAction() {
+            super(Local.getString("Create Project"), 
+            new ImageIcon(AppFrame.class.getResource("resources/icons/newproject.png")));
+            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK));
+            setEnabled(true);
+            refresh(CurrentDate.get());
+            
+        }
+        
+        public void actionPerformed(ActionEvent e) {
+        	App.getFrame().projectsPanel.ppNewProject_actionPerformed(e);
+
+		}
+    }
+	
+	//Event listener class for the Delete Project button on the agenda panel.
+	public static class RemoveProjAction extends AbstractAction {
 		
         public  RemoveProjAction() {
             super(Local.getString("Delete Project"), 
-            new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/event_remove.png")));
+            new ImageIcon(AppFrame.class.getResource("resources/icons/removeproject.png")));
             putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK));
             if(!CurrentProject.get().getTitle().equals("Default Project") || 
             		ProjectManager.getActiveProjectsNumber() > 1) 
@@ -416,6 +449,7 @@ public class AgendaPanel extends JPanel {
 
 		Util.debug("Summary updated.");
 	}
+	
 	 static void refreshProjButtons() {
 		//Refreshes delete project button.
 		if(!CurrentProject.get().getTitle().equals("Default Project") || 

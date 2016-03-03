@@ -165,6 +165,7 @@
 	<target name="clean">
 		<!-- Delete the ${build} directory tree -->
 		<delete dir="${build.dir}"/>
+		<delete dir="${build.junitreport.dir}"/>
 		<!--<delete dir="${dist.dir}"/>-->
 	</target>
     
