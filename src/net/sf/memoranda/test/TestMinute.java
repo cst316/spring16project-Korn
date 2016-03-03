@@ -40,6 +40,7 @@ public class TestMinute {
 		boolean workDays = dialog.workingDaysOnlyCB.isSelected();
 		EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour, minute, text, workDays);
 		assertNotNull(EventsScheduler.getScheduledEvents());
+		
 	}
 
 }

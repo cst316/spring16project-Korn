@@ -57,11 +57,11 @@ public class EventsScheduler {
 */           
             	 EventTimer timer=null;
             	if (event.getRepeat() == EventsManager.REPEAT_MINUTELY) {
-            		eventMinute(event,timer);
+            		eventMinute(event);
             	}
             	
             	else if (event.getRepeat() == EventsManager.REPEAT_HOURLY) {
-            		eventHour(event,timer);
+            		eventHour(event);
             	}
                 else {
                     timer = new EventTimer(event);
@@ -144,11 +144,12 @@ public class EventsScheduler {
         }, midnight);
         notifyChanged();
     }
-    public static void eventMinute(Event event, EventTimer timer ){
+    public static void eventMinute(Event event){
     	Calendar calendar = new GregorianCalendar(Local.getCurrentLocale());
         // replace with event.getStartDate() when includes minute & hour
         CalendarDate date = CalendarDate.today();
         int minutes, hours;
+        EventTimer timer;
     	
 	
         // get remaining minutes from now until next cycle
@@ -178,11 +179,12 @@ public class EventsScheduler {
         }
     }
     
-    public static void eventHour(Event event, EventTimer timer){
+    public static void eventHour(Event event){
     	Calendar calendar = new GregorianCalendar(Local.getCurrentLocale());
         // replace with event.getStartDate() when includes minute & hour
         CalendarDate date = CalendarDate.today();
         int hours, day;
+        EventTimer timer;
     	
     	
             // get remaining minutes from now until next cycle
