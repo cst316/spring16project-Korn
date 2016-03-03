@@ -16,7 +16,7 @@ import static org.junit.Assert.fail;
 /**
  * Created by Duke on 3/2/2016.
  */
-public class testHour {
+public class TestHour {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {

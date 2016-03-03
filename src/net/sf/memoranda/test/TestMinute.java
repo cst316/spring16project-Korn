@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class testMinute {
+public class TestMinute {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {

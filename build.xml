@@ -17,6 +17,8 @@
 	<property name="main.class" value="net.sf.memoranda.Start"/>
 	<property name="jarname" value="${name}.jar"/>
 	<property name="dist.dir" value="${basedir}/dist"/>
+	<property name="junit4.jar" value="lib/junit-4.10.jar"/>
+	<property name="build.junitreport.dir" value="$/{build}/junitreport"/>
 	<!-- compile options -->
 	<property name="debug" value="off"/>
 	<property name="debuglevel" value="lines,vars,source"/>
@@ -149,6 +151,7 @@
 	<target name="clean">
 		<!-- Delete the ${build} directory tree -->
 		<delete dir="${build.dir}"/>
+		<delete dir="${build.junitreport.dir}"/>
 		<!--<delete dir="${dist.dir}"/>-->
 	</target>
     
@@ -174,4 +177,25 @@
 			<classpath refid="classpath"/>
 		</java> -->
 	</target>
+	
+	<target name="junit" depends="compile"
+				description="Runs Junit tests for classes starts with Test, and generates report.">
+		<!-- First, clean the junit directory. -->
+		 <delete dir="${build.junitreport.dir}"/>
+               <mkdir dir="${build.junitreport.dir}"/> 
+               <!-- Run the tests -->
+               <echo message="JUnit testing is running..."/>
+               <junit printsummary="withOutAndErr" haltonfailure="no" fork="on">      
+                       <classpath>  
+                              <path refid="classpath"/>
+                       </classpath>
+                       <formatter type="plain"/>
+                       <batchtest todir="${build.junitreport.dir}">
+                               <fileset dir="${source.dir}">
+                                      <include name="**/*Test.java"/>
+                              </fileset>
+                       </batchtest>
+               </junit>
+               <echo message="JUnit results in ${build.junitreport.dir}"/>
+    </target>
 </project>
