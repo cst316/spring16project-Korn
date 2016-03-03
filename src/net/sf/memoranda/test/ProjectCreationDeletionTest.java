@@ -9,6 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import net.sf.memoranda.CurrentProject;
+import net.sf.memoranda.Project;
 import net.sf.memoranda.ProjectManager;
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.ui.AgendaPanel;
@@ -54,6 +55,26 @@ public class ProjectCreationDeletionTest {
 		assertTrue(allProj+1 == ProjectManager.getAllProjectsNumber());
 	}
 
+	/**
+	 * Test creating a project with an empty name.
+	 */
+	@Test
+	public void testNoNamedProject() {
+		ProjectManager.createProject("5", "", null, CalendarDate.tomorrow());
+		assertTrue(allProj+1 == ProjectManager.getAllProjectsNumber());
+	}
+	
+	/**
+	 * Test End date is before start date.
+	 */
+	@Test
+	public void testEndAfterStart() {
+		ProjectManager.createProject("6", "Basic Test", CalendarDate.tomorrow(), CalendarDate.today());
+		assertTrue(allProj+1 == ProjectManager.getAllProjectsNumber());
+		Project testPrj = ProjectManager.getProject("6");
+		assertTrue(testPrj.getEndDate().equals(testPrj.getStartDate()));
+	}
+	
 	/**
 	 * Tests an appropriate project deletion.
 	 */

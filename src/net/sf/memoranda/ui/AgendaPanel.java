@@ -30,6 +30,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.JOptionPane;
 
+import net.sf.memoranda.ui.AppFrame;
 import net.sf.memoranda.CurrentProject;
 import net.sf.memoranda.EventNotificationListener;
 import net.sf.memoranda.EventsManager;
@@ -305,7 +306,7 @@ public class AgendaPanel extends JPanel {
 		removeProjB.setFocusable(false);
 		
 		newTaskB.setIcon(
-		            new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/todo_new.png")));
+		            new ImageIcon(AppFrame.class.getResource("resources/icons/todo_new.png")));
 		        newTaskB.setEnabled(true);
 		        newTaskB.setMaximumSize(new Dimension(24, 24));
 		        newTaskB.setMinimumSize(new Dimension(24, 24));
@@ -394,7 +395,7 @@ public class AgendaPanel extends JPanel {
 		
         public  NewProjAction() {
             super(Local.getString("Create Project"), 
-            new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/newproject.png")));
+            new ImageIcon(AppFrame.class.getResource("resources/icons/newproject.png")));
             putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK));
             setEnabled(true);
             refresh(CurrentDate.get());
@@ -412,7 +413,7 @@ public class AgendaPanel extends JPanel {
 		
         public  RemoveProjAction() {
             super(Local.getString("Delete Project"), 
-            new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/removeproject.png")));
+            new ImageIcon(AppFrame.class.getResource("resources/icons/removeproject.png")));
             putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK));
             if(!CurrentProject.get().getTitle().equals("Default Project") || 
             		ProjectManager.getActiveProjectsNumber() > 1) 
