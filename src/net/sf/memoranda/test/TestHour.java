@@ -1,5 +1,6 @@
 package net.sf.memoranda.test;
 
+import net.sf.memoranda.Event;
 import net.sf.memoranda.EventsManager;
 import net.sf.memoranda.EventsScheduler;
 import net.sf.memoranda.date.CalendarDate;
@@ -10,10 +11,17 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import java.util.Vector;
+
+import static org.junit.Assert.*;
 
 public class TestHour {
+
+    int repeatType, period, hour, minute;
+    String text;
+    CalendarDate startDate, endDate;
+    EventDialog dialog;
+    boolean workDays;
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -21,21 +29,38 @@ public class TestHour {
 
     @Before
     public void setUp() throws Exception {
-
+        repeatType = 5;
+        dialog = new EventDialog(App.getFrame(), Local.getString("New event"));
+        startDate = CalendarDate.today();
+        endDate = CalendarDate.tomorrow();
+        period = 1;
+        hour = 5;
+        minute = 12;
+        text = "hello";
+        workDays = dialog.workingDaysOnlyCB.isSelected();
     }
 
     @Test
-    public void testEventHour() {
-        int repeatType = 5;
-        EventDialog dialog = new EventDialog(App.getFrame(), Local.getString("New event"));
-        CalendarDate startDate = CalendarDate.today();
-        CalendarDate endDate = CalendarDate.tomorrow();
-        int period=  (Integer) dialog.dayOfMonthSpin.getModel().getValue();
-        int hour = 10;
-        int minute = 0;
-        String text = "hello";
-        boolean workDays = dialog.workingDaysOnlyCB.isSelected();
+    public void testEventHourPeriod() {
         EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour, minute, text, workDays);
-        assertNotNull(EventsScheduler.getScheduledEvents());
+        Vector events= (Vector)EventsManager.getActiveEvents();
+        Event event= (Event) events.get(events.size() - 1);
+        EventsScheduler.eventMinute(event);
+
+        // ensures time we set to timer is the same
+        assertEquals(1, event.getPeriod());
+    }
+
+    @Test
+    public void testEventHourExists() {
+        int beforeAdded = EventsScheduler.counter();
+        EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour, minute, text, workDays);
+        Vector events= (Vector)EventsManager.getActiveEvents();
+        Event event= (Event) events.get(events.size() - 1);
+        EventsScheduler.eventMinute(event);
+        int afterAdded = EventsScheduler.counter();
+
+        // ensures that event was added to the timer vector
+        assertFalse(beforeAdded == afterAdded);
     }
 }

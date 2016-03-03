@@ -62,7 +62,7 @@ public class TestMinute {
 		int afterAdded = EventsScheduler.counter();
 
 		// ensures that event was added to the timer vector
-		assertNotEquals(beforeAdded, afterAdded);
+		assertFalse(beforeAdded == afterAdded);
 	}
 
 }
