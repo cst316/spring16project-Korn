@@ -43,7 +43,7 @@ public class TestMinute {
 		
 		EventsScheduler.eventMinute(event);
 		assertEquals(1, event.getPeriod());
-		EventsScheduler.getScheduledEvents().get(events.size()-1).;
+		EventsScheduler.getScheduledEvents().get(events.size()-1);
 		
 	}
 
