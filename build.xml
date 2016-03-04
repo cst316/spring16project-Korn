@@ -22,6 +22,7 @@
 	<property name="tests.checkstyle.dir"  value="${tests.dir}/checkstyle"/>
 	<property name="jarname"               value="${name}.jar"/>
 	<property name="dist.dir"              value="${basedir}/dist"/>
+	
 	<!-- compile options -->
 	<property name="debug"       value="off"/>
 	<property name="debuglevel"  value="lines,vars,source"/>
@@ -269,5 +270,4 @@
 		    <fileset dir="${source.dir}" includes="**/*.java"/>
 		</checkstyle>
 	</target>
-	
 </project>
