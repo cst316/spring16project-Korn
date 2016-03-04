@@ -196,6 +196,76 @@ public class EventsManager {
                 continue;
             // ---
             /*
+	public static Event createEvent(
+		CalendarDate date,
+		int hh,
+		int mm,
+		String text) {
+		Element el = new Element("event");
+		el.addAttribute(new Attribute("id", Util.generateId()));
+		el.addAttribute(new Attribute("hour", String.valueOf(hh)));
+		el.addAttribute(new Attribute("min", String.valueOf(mm)));
+		el.appendChild(text);
+		Day d = getDay(date);
+		if (d == null)
+			d = createDay(date);
+		d.getElement().appendChild(el);
+		return new EventImpl(el);
+	}
+
+	public static Event createRepeatableEvent(
+		int type,
+		CalendarDate startDate,
+		CalendarDate endDate,
+		int period,
+		int hh,
+		int mm,
+		String text,
+		boolean workDays) {
+		Element el = new Element("event");
+		Element rep = _root.getFirstChildElement("repeatableEvents");
+		if (rep == null) {
+			rep = new Element("repeatableEvents");
+			_root.appendChild(rep);
+		}
+		el.addAttribute(new Attribute("repeat-type", String.valueOf(type)));
+		el.addAttribute(new Attribute("id", Util.generateId()));
+		el.addAttribute(new Attribute("hour", String.valueOf(hh)));
+		el.addAttribute(new Attribute("min", String.valueOf(mm)));
+		el.addAttribute(new Attribute("startDate", startDate.toString()));
+		if (endDate != null)
+			el.addAttribute(new Attribute("endDate", endDate.toString()));
+		el.addAttribute(new Attribute("period", String.valueOf(period)));
+		// new attribute for wrkin days - ivanrise
+		el.addAttribute(new Attribute("workingDays",String.valueOf(workDays)));
+		el.appendChild(text);
+		rep.appendChild(el);
+		return new EventImpl(el);
+	}
+
+	public static Collection getRepeatableEvents() {
+		Vector v = new Vector();
+		Element rep = _root.getFirstChildElement("repeatableEvents");
+		if (rep == null)
+			return v;
+		Elements els = rep.getChildElements("event");
+		for (int i = 0; i < els.size(); i++)
+			v.add(new EventImpl(els.get(i)));
+		return v;
+	}
+
+	public static Collection getRepeatableEventsForDate(CalendarDate date) {
+		Vector reps = (Vector) getRepeatableEvents();
+		Vector v = new Vector();
+		for (int i = 0; i < reps.size(); i++) {
+			Event ev = (Event) reps.get(i);
+			
+			// --- ivanrise
+			// ignore this event if it's a 'only working days' event and today is weekend.
+			if(ev.getWorkingDays() && (date.getCalendar().get(Calendar.DAY_OF_WEEK) == 1 ||
+				date.getCalendar().get(Calendar.DAY_OF_WEEK) == 7)) continue;
+			// ---
+			/*
 			 * /if ( ((date.after(ev.getStartDate())) &&
 			 * (date.before(ev.getEndDate()))) ||
 			 * (date.equals(ev.getStartDate()))

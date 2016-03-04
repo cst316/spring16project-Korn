@@ -68,7 +68,8 @@ public class EventImpl implements Event, Comparable {
      * @see net.sf.memoranda.Event#isRepeatable()
      */
     public boolean isRepeatable() {
-        return getStartDate() != null;
+    	Attribute a = _elem.getAttribute("repeat-type");
+        return a != null;
     }
     /**
      * @see net.sf.memoranda.Event#getStartDate()

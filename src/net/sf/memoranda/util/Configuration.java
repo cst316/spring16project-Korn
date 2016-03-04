@@ -64,8 +64,11 @@ public class Configuration {
 
   public static Object get(String key) {
     if ((config.get(key)) == null) {
-        /*DEBUG*///System.out.println("Configuration: Key '"+key+"' not found.");
+        System.out.println("Configuration: Key '"+key+"' not found.");
         return "";
+    }
+    if(key == "BASE_FONT_SIZE" && config.get(key).toString() ==""){
+    	config.put("BASE_FONT_SIZE", "16");
     }
     return config.get(key);
   }

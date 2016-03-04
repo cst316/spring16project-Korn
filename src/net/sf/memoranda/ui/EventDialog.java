@@ -330,7 +330,7 @@ public class EventDialog extends JDialog implements WindowListener {
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(weekdaysCB, gbc);
         enableEndDateCB.setHorizontalAlignment(SwingConstants.RIGHT);
-        enableEndDateCB.setText(Local.getString("Till"));
+        enableEndDateCB.setText(Local.getString("End Date"));
         enableEndDateCB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 enableEndDateCB_actionPerformed(e);
@@ -367,9 +367,9 @@ public class EventDialog extends JDialog implements WindowListener {
 		workingDaysOnlyCB.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		gbc = new GridBagConstraints();
-        gbc.gridx = 4; gbc.gridy = 4;
+        gbc.gridx = 4; gbc.gridy = 5;
 		gbc.gridwidth = 2;
-        gbc.insets = new Insets(5, 0, 5, 5);
+        gbc.insets = new Insets(5, 0, 5, -25);
         gbc.anchor = GridBagConstraints.EAST;
 		repeatPanel.add(workingDaysOnlyCB, gbc);
 		// -------------------------------------

@@ -7,3 +7,4 @@ README.txt
 .DS_Store
 /classes/
 build.number
+*.jar

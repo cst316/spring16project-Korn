@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import net.sf.memoranda.date.CalendarDate;
+import net.sf.memoranda.ui.AgendaPanel;
 import net.sf.memoranda.util.Util;
 import nu.xom.Attribute;
 import nu.xom.Document;
@@ -106,7 +107,8 @@ public class TaskListImpl implements TaskList {
     public Task createTask(CalendarDate startDate, CalendarDate endDate, String text, int priority, long effort, String description, String parentTaskId) {
         Element el = new Element("task");
         el.addAttribute(new Attribute("startDate", startDate.toString()));
-        el.addAttribute(new Attribute("endDate", endDate != null? endDate.toString():""));
+        if (endDate != null)
+			el.addAttribute(new Attribute("endDate", endDate.toString()));
 		String id = Util.generateId();
         el.addAttribute(new Attribute("id", id));
         el.addAttribute(new Attribute("progress", "0"));
@@ -132,10 +134,65 @@ public class TaskListImpl implements TaskList {
 		elements.put(id, el);
 		
         Util.debug("Created task with parent " + parentTaskId);
-        
-        return new TaskImpl(el, this);
+        TaskImpl ret = new TaskImpl(el, this);
+        AgendaPanel.refresh(ret.getStartDate());
+        return ret;
     }
 	
+    public Task createRepeatableTask(
+    		CalendarDate startDate,
+    		CalendarDate endDate,
+    		int period,
+    		int type,
+    		int hh,
+    		int mm,
+    		String text,
+    		int priority,    		
+    		boolean workDays,
+    		long effort, String description, String parentTaskId) {
+    		Element el = new Element("task");
+    		Element rep = _root.getFirstChildElement("repeatableTasks");
+    		if (rep == null) {
+    			rep = new Element("repeatableTasks");
+    			_root.appendChild(rep);
+    		}
+            el.addAttribute(new Attribute("startDate", startDate.toString()));
+            if (endDate != null)
+    			el.addAttribute(new Attribute("endDate", endDate.toString()));
+            String id = Util.generateId();
+            el.addAttribute(new Attribute("id", id));
+            el.addAttribute(new Attribute("progress", "0"));
+            el.addAttribute(new Attribute("effort", String.valueOf(effort)));
+            el.addAttribute(new Attribute("priority", String.valueOf(priority)));
+
+            el.addAttribute(new Attribute("repeat-type", String.valueOf(type)));
+    		el.addAttribute(new Attribute("period", String.valueOf(period)));
+    		// new attribute for wrkin days - ivanrise
+    		el.addAttribute(new Attribute("workingDays",String.valueOf(workDays)));
+
+    		
+            Element txt = new Element("text");
+            txt.appendChild(text);
+            el.appendChild(txt);
+
+            Element desc = new Element("description");
+            desc.appendChild(description);
+            el.appendChild(desc);
+
+            if (parentTaskId == null) {
+                _root.appendChild(el);
+            }
+            else {
+                Element parent = getTaskElement(parentTaskId);
+                parent.appendChild(el);
+            }
+            
+    		elements.put(id, el);
+    		
+            Util.debug("Created task with parent " + parentTaskId);
+    		return new TaskImpl(el, this);
+    	}
+    
 	/**
      * @see net.sf.memoranda.TaskList#removeTask(import net.sf.memoranda.Task)
      */

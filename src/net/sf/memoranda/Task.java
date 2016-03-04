@@ -19,28 +19,23 @@ import net.sf.memoranda.date.CalendarDate;
 public interface Task {
     
     public static final int SCHEDULED = 0;
-
     public static final int ACTIVE = 1;
-
     public static final int COMPLETED = 2;
-
     public static final int FROZEN = 4;
-
-    public static final int FAILED = 5;
-    
-    public static final int LOCKED = 6;
-    
-    public static final int DEADLINE = 7;
-    
-    public static final int PRIORITY_LOWEST = 0;
-    
-    public static final int PRIORITY_LOW = 1;
-    
-    public static final int PRIORITY_NORMAL = 2;
-    
-    public static final int PRIORITY_HIGH = 3;
-    
+    public static final int FAILED = 5;    
+    public static final int LOCKED = 6;    
+    public static final int DEADLINE = 7;    
+    public static final int PRIORITY_LOWEST = 0;    
+    public static final int PRIORITY_LOW = 1;    
+    public static final int PRIORITY_NORMAL = 2;    
+    public static final int PRIORITY_HIGH = 3;    
     public static final int PRIORITY_HIGHEST = 4;
+	public static final int NO_REPEAT = 0;
+	public static final int REPEAT_DAILY = 1;
+	public static final int REPEAT_WEEKLY = 2;
+	public static final int REPEAT_MONTHLY = 3;
+	public static final int REPEAT_YEARLY = 4;
+
     
     CalendarDate getStartDate();
     void setStartDate(CalendarDate date);
@@ -86,4 +81,9 @@ public interface Task {
 	long getRate();
     
     nu.xom.Element getContent();
+    
+    int getRepeat();
+    int getPeriod();
+    boolean isRepeatable();
+
 }
