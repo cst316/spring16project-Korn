@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class TestMinute {
+public class MinutleyEventTest {
 
 	int repeatType, period, hour, minute;
 	String text;
@@ -24,10 +24,7 @@ public class TestMinute {
 	EventDialog dialog;
 	boolean workDays;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
+// sets up the variable to create a new repeatable event
 	@Before
 	public void setUp() throws Exception {
 		repeatType = 6;
@@ -40,12 +37,15 @@ public class TestMinute {
 		text = "hello";
 		workDays = dialog.workingDaysOnlyCB.isSelected();
 	}
-
+// creates a new repeatableMinute test and compares the period of when the notify panel will pop up
 	@Test
 	public void testEventMinutePeriod() {
 		EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour, minute, text, workDays);
+		// all current events
 		Vector events= (Vector)EventsManager.getActiveEvents();
+		//gets the event we created
 		Event event= (Event) events.get(events.size() - 1);
+		// sends to eventMinute and gets the current time and checks when the next notify pop will pop up.
 		EventsScheduler.eventMinute(event);
 
 		// ensures time we set to timer is the same

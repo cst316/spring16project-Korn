@@ -15,7 +15,7 @@ import java.util.Vector;
 
 import static org.junit.Assert.*;
 
-public class TestHour {
+public class HourlyEventTest {
 
     int repeatType, period, hour, minute;
     String text;
@@ -23,11 +23,8 @@ public class TestHour {
     EventDialog dialog;
     boolean workDays;
 
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-    }
-
     @Before
+ // creates a new repeatableHour test and compares the period of when the notify panel will pop up
     public void setUp() throws Exception {
         repeatType = 5;
         dialog = new EventDialog(App.getFrame(), Local.getString("New event"));
@@ -43,8 +40,11 @@ public class TestHour {
     @Test
     public void testEventHourPeriod() {
         EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour, minute, text, workDays);
+        //all current events
         Vector events= (Vector)EventsManager.getActiveEvents();
+        //gets the new event that was just created
         Event event= (Event) events.get(events.size() - 1);
+     // sends to eventMinute and gets the current time and checks when the next notify pop will pop up.
         EventsScheduler.eventMinute(event);
 
         // ensures time we set to timer is the same
