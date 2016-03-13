@@ -40,7 +40,8 @@ public class CalendarDate {
         _month = month;
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, _year);
-        cal.set(Calendar.MONTH, _month);cal.getTime();
+        cal.set(Calendar.MONTH, _month);
+        cal.getTime();
         int dmax = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         if (day <= dmax)
           _day = day;
@@ -133,21 +134,28 @@ public class CalendarDate {
             Date d = (Date) object;
             return this.equals(new CalendarDate(d));
         }
+
         return super.equals(object);
     }
 
     public boolean equals(CalendarDate date) {
-        if (date == null) return false;
+        if (date == null)
+            return false;
+
         return ((date.getDay() == getDay()) && (date.getMonth() == getMonth()) && (date.getYear() == getYear()));
     }
 
     public boolean before(CalendarDate date) {
-        if (date == null) return true;
+        if (date == null)
+            return true;
+
         return this.getCalendar().before(date.getCalendar());
     }
 
     public boolean after(CalendarDate date) {
-        if (date == null) return true;
+        if (date == null)
+            return true;
+
         return this.getCalendar().after(date.getCalendar());
     }
 

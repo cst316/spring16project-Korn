@@ -65,10 +65,15 @@ public class ProjectImpl implements Project {
      * @see net.sf.memoranda.Project#setEndDate(net.sf.memoranda.util.CalendarDate)
      */
     public void setEndDate(CalendarDate date) {
+    	CalendarDate start = (getStartDate() == null ? CalendarDate.tomorrow() : getStartDate());
+    	
         if (date != null)
-            setAttr("endDate", date.toString());
-        else if (_root.getAttribute("endDate") != null)
-            setAttr("endDate", null);
+        	if (date.before(start))
+            	setAttr("endDate", start.toString());
+        	else
+        		setAttr("endDate", date.toString());
+    	else if(_root.getAttribute("endDate") != null)
+    		setAttr("endDate", null);
     }
 
     /**

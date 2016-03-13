@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import net.sf.memoranda.date.CalendarDate;
+import net.sf.memoranda.ui.AgendaPanel;
 import net.sf.memoranda.util.Util;
 import nu.xom.Attribute;
 import nu.xom.Document;
@@ -140,8 +141,9 @@ public class TaskListImpl implements TaskList {
 		elements.put(id, el);
 		
         Util.debug("Created task with parent " + parentTaskId);
-        
-        return new TaskImpl(el, this);
+        TaskImpl ret = new TaskImpl(el, this);
+        AgendaPanel.refresh(ret.getStartDate());
+        return ret;
     }
 	
     public Task createRepeatingTask(
