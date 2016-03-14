@@ -81,17 +81,15 @@ public class TaskDialog extends JDialog {
     JLabel jLabel6 = new JLabel();
     JButton setStartDateB = new JButton();
     JPanel jPanel1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-    JPanel jPanelRecurrence = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    JPanel jPanelRecurrence = new JPanel(new GridLayout(0,1));
+    JPanel jPanelRecurrenceChk = new JPanel(new GridLayout(1,0));
+    JPanel jPanelRecurrenceToggle = new JPanel(new GridLayout(1,0));
     JLabel jLabelRecr = new JLabel();
     JLabel jLabel2 = new JLabel();
     JSpinner startDate;
     JSpinner endDate;
-//    JSpinner endDate = new JSpinner(new SpinnerDateModel());
     JButton setEndDateB = new JButton();
-    //JPanel jPanel3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    JPanel jPanel3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JPanel jPanelEffort = new JPanel(new FlowLayout(FlowLayout.LEFT));
-//    JPanel jPanelNotes = new JPanel(new FlowLayout(FlowLayout.LEFT));
     
     JButton setNotifB = new JButton();
     JComboBox<?> priorityCB = new JComboBox<Object>(priority);
@@ -169,13 +167,12 @@ public class TaskDialog extends JDialog {
 				chkRepeat_actionPerformed(e);
 			}
 		});
+		jPanelRecurrenceToggle.setVisible(false);
+        chkWorkingDays.setSelected(false);
+        chkWorkingDays.setVisible(true);
+        chkWorkingDays.setText("Working Days Only");
 		cmboRepeatType.setSelectedIndex(0);
-		cmboRepeatType.setVisible(false);
-		cmboRepeatType.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cmboRepeatType_actionPerformed(e);
-			}
-		});
+		cmboRepeatType.setVisible(true);
 		
         okB.setMaximumSize(new Dimension(100, 26));
         okB.setMinimumSize(new Dimension(100, 26));
@@ -380,20 +377,18 @@ public class TaskDialog extends JDialog {
 
         jPanel2.add(jPanel4, null);
         jPanel4.add(priorityCB, null);
-        jPanel2.add(jPanel3, null);
 
-        jPanel2.add(jPanelRecurrence, null);
-        jPanelRecurrence.add(jLabelRecr, null);
-        jPanelRecurrence.add(chkRepeat, null);
-        jPanelRecurrence.add(cmboRepeatType, null);
-        chkWorkingDays.setText("Working Days Only");
-        jPanelRecurrence.add(chkWorkingDays, null);
+        jPanel2.add(jPanelRecurrence, null); 
+        jPanelRecurrence.add(jPanelRecurrenceChk, null);
+        jPanelRecurrence.add(jPanelRecurrenceToggle,null);
+        jPanelRecurrenceChk.add(jLabelRecr, null);
+        jPanelRecurrenceToggle.add(cmboRepeatType, null);
+        jPanelRecurrenceChk.add(chkRepeat, null);
+        jPanelRecurrenceToggle.add(chkWorkingDays, null);
         chkWorkingDays.setHorizontalTextPosition(SwingConstants.LEADING);
-        chkWorkingDays.setSelected(false);
-        chkWorkingDays.setVisible(false);
         
-        jPanel3.add(setNotifB, null);
-        
+        jPanel4.add(setNotifB, null);
+                
         jLabelProgress.setText(Local.getString("Progress"));
         jPanelProgress.add(jLabelProgress, null);
         jPanelProgress.add(progress, null);
@@ -459,23 +454,9 @@ public class TaskDialog extends JDialog {
 	}
 
 	void chkRepeat_actionPerformed(ActionEvent e) {
-		cmboRepeatType.setVisible(chkRepeat.isSelected());
-		cmboRepeatType_actionPerformed(e);		
-		chkWorkingDays.setVisible(chkRepeat.isSelected());
+		jPanelRecurrenceToggle.setVisible(chkRepeat.isSelected());
 	}
-	//#TODO
-	void cmboRepeatType_actionPerformed(ActionEvent e) {
-		
-		if (false) { 
-			if (chkRepeat.isSelected()) {
-				Date currentEndDate = (Date) endDate.getModel().getValue();
-				Date currentStartDate = (Date) startDate.getModel().getValue();
-				if (currentEndDate.getTime() < currentStartDate.getTime()) {
-					endDate.getModel().setValue(currentStartDate);
-				}
-			}
-		}
-	}
+
 	
     void setStartDateB_actionPerformed(ActionEvent e) {
         startCalFrame.setLocation(setStartDateB.getLocation());
