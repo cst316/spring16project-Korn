@@ -10,7 +10,7 @@ package net.sf.memoranda;
 
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.util.Local;
-import sun.util.resources.cldr.aa.CalendarData_aa_DJ;
+//import sun.util.resources.cldr.aa.CalendarData_aa_DJ;
 
 import java.util.*;
 
