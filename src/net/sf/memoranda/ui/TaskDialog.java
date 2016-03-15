@@ -65,7 +65,7 @@ public class TaskDialog extends JDialog {
     JTextField todoField = new JTextField();
     
     // added by rawsushi
-    JSpinner effortField = new JSpinner(new SpinnerNumberModel(0, 0, 100, 5));
+    JTextField effortField = new JTextField();
     JTextArea descriptionField = new JTextArea();
     JScrollPane descriptionScrollPane = new JScrollPane(descriptionField);
     

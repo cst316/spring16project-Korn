@@ -251,25 +251,14 @@ public class AgendaPanel extends JPanel {
 					        long effort = Util.getMillisFromHours(dlg.effortField.getText());
 							//XXX Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
 					        Task newTask;
-							if(dlg.chkRepeat.isSelected())
-							{
-								newTask = CurrentProject.getTaskList().createRepeatingTask(
-										sd, ed, dlg.todoField.getText(), 
-										dlg.priorityCB.getSelectedIndex(),effort, 
-										dlg.descriptionField.getText(),null,
-										false, //#TODO Placeholder value until implemented //Boolean to denote recurrence is working days only
-										((Integer)dlg.progress.getValue()).intValue(),
-										dlg.cmboRepeatType.getSelectedIndex());
-							}
-							else 
-							{
-								newTask = CurrentProject.getTaskList().createTask(
-										sd, ed, dlg.todoField.getText(), 
-										dlg.priorityCB.getSelectedIndex(),effort, 
-										dlg.descriptionField.getText(),null);
-							}
-//							CurrentProject.getTaskList().adjustParentTasks(newTask);
-							newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());							
+					    	newTask = CurrentProject.getTaskList().createRepeatingTask(
+									sd, ed, dlg.todoField.getText(), 
+									dlg.priorityCB.getSelectedIndex(),effort, 
+									dlg.descriptionField.getText(),null,
+									false, //#TODO Placeholder value until implemented //Boolean to denote recurrence is working days only
+									((Integer)dlg.progress.getValue()).intValue(),
+									dlg.cmboRepeatType.getSelectedIndex());
+					    	newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());							
 					        CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
 					        TaskTable.tableChanged();
 					        parentPanel.updateIndicators();
