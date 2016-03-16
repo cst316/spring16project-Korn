@@ -40,7 +40,7 @@ public class TestAgendaRefresh {
 		AgendaPanel.setRefreshCount(0);
 		
 	}
-/*	
+
 	@Test
 	public void testNewProjectRefresh() {
 		CalendarDate startDate = new CalendarDate(1, 2, 4);
@@ -73,24 +73,24 @@ public class TestAgendaRefresh {
 		assert(AgendaPanel.getRefreshCount() == 5);
 	}
 	
-	@Test
-	public void testNewTaskRefresh() {
-		AgendaPanel.setRefreshCount(0);
-		CalendarDate startDate = new CalendarDate(1, 2, 4);
-		CalendarDate endDate = new CalendarDate(3,4,4);
-		CurrentProject.getTaskList().createTask(startDate, endDate, "task",4,4, "", "1");
-		CurrentProject.getTaskList().createTask(startDate, endDate, "task1",4,4, "", "1");
-		CurrentProject.getTaskList().createTask(startDate, endDate, "task2",4,4, "", "1");
-		CurrentProject.getTaskList().createTask(startDate, endDate, "task3",4,4, "", "1");
-		CurrentProject.getTaskList().createTask(startDate, endDate, "task4",4,4, "", "1");
-		CurrentProject.getTaskList().createTask(startDate, endDate, "task5",4,4, "", "1");
-		assert(AgendaPanel.getRefreshCount() == 6);
-
-	}
+//	@Test
+//	public void testNewTaskRefresh() {
+//		AgendaPanel.setRefreshCount(0);
+//		CalendarDate startDate = new CalendarDate(1, 2, 4);
+//		CalendarDate endDate = new CalendarDate(3,4,4);
+//		CurrentProject.getTaskList().createTask(startDate, endDate, "task",4,4, "", "1");
+//		CurrentProject.getTaskList().createTask(startDate, endDate, "task1",4,4, "", "1");
+//		CurrentProject.getTaskList().createTask(startDate, endDate, "task2",4,4, "", "1");
+//		CurrentProject.getTaskList().createTask(startDate, endDate, "task3",4,4, "", "1");
+//		CurrentProject.getTaskList().createTask(startDate, endDate, "task4",4,4, "", "1");
+//		CurrentProject.getTaskList().createTask(startDate, endDate, "task5",4,4, "", "1");
+//		assert(AgendaPanel.getRefreshCount() == 6);
+//
+//	}
 	
 	@Test
 	public void testDateChangeRefresh() {
 		//fail("Not yet implemented");
 	}
-*/
+
 }
