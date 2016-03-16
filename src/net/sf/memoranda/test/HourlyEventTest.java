@@ -48,7 +48,7 @@ public class HourlyEventTest {
         EventsScheduler.eventMinute(event);
 
         // ensures time we set to timer is the same
-        assertEquals(1, event.getPeriod());
+        assertTrue(1 == event.getPeriod());
     }
 
     @Test
