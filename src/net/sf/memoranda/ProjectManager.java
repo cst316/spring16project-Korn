@@ -103,7 +103,12 @@ public class ProjectManager {
         el.addAttribute(new Attribute("id", id));
         _root.appendChild(el);
         Project prj = new ProjectImpl(el);
-        prj.setTitle(title);
+        if(title.length() < 1 || title.equals(null)) {
+        	prj.setTitle("Unknown");
+        }
+        else {
+        	prj.setTitle(title);
+        }
         prj.setStartDate(startDate);
         prj.setEndDate(endDate);
         CurrentStorage.get().createProjectStorage(prj);

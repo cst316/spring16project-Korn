@@ -174,6 +174,11 @@ public class EventDialog extends JDialog implements WindowListener {
         repeatPanel.add(minutelyRepeatRB, gbc);
         minutelyRepeatRB.setText("Every");
         minuteSpin.setPreferredSize(new Dimension(50, 24));
+        minutelyRepeatRB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                minutelyRepeatRB_actionPerformed(e);
+            }
+        });
 
         gbc = new GridBagConstraints();
         gbc.gridx = 1; gbc.gridy = 1;
@@ -197,6 +202,11 @@ public class EventDialog extends JDialog implements WindowListener {
         repeatPanel.add(hourlyRepeatRB, gbc);
         hourlyRepeatRB.setText("Every");
         hourSpin.setPreferredSize(new Dimension(50, 24));
+        hourlyRepeatRB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                hourlyRepeatRB_actionPerformed(e);
+            }
+        });
 
         gbc = new GridBagConstraints();
         gbc.gridx = 1; gbc.gridy = 2;
@@ -320,7 +330,7 @@ public class EventDialog extends JDialog implements WindowListener {
         gbc.anchor = GridBagConstraints.WEST;
         repeatPanel.add(weekdaysCB, gbc);
         enableEndDateCB.setHorizontalAlignment(SwingConstants.RIGHT);
-        enableEndDateCB.setText(Local.getString("Till"));
+        enableEndDateCB.setText(Local.getString("End Date"));
         enableEndDateCB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 enableEndDateCB_actionPerformed(e);
@@ -357,9 +367,9 @@ public class EventDialog extends JDialog implements WindowListener {
 		workingDaysOnlyCB.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		gbc = new GridBagConstraints();
-        gbc.gridx = 4; gbc.gridy = 4;
+        gbc.gridx = 4; gbc.gridy = 5;
 		gbc.gridwidth = 2;
-        gbc.insets = new Insets(5, 0, 5, 5);
+        gbc.insets = new Insets(5, 0, 5, -25);
         gbc.anchor = GridBagConstraints.EAST;
 		repeatPanel.add(workingDaysOnlyCB, gbc);
 		// -------------------------------------
@@ -491,6 +501,8 @@ public class EventDialog extends JDialog implements WindowListener {
     void disableElements() {
         dayOfMonthSpin.setEnabled(false);
         daySpin.setEnabled(false);
+        minuteSpin.setEnabled(false);
+        hourSpin.setEnabled(false);
         weekdaysCB.setEnabled(false);
         startDate.setEnabled(false);
         setStartDateB.setEnabled(false);
@@ -551,28 +563,32 @@ public class EventDialog extends JDialog implements WindowListener {
 
     public void hourlyRepeatRB_actionPerformed(ActionEvent e) {
         disableElements();
-        weekdaysCB.setEnabled(true);
+        hourSpin.setEnabled(true);
         startDate.setEnabled(true);
         setStartDateB.setEnabled(true);
         lblSince.setEnabled(true);
         enableEndDateCB.setEnabled(true);
+        workingDaysOnlyCB.setEnabled(true);
         startDate.getModel().setValue(
                 startCalFrame.cal.get().getCalendar().getTime());
     }
 
     public void minutelyRepeatRB_actionPerformed(ActionEvent e) {
         disableElements();
-        weekdaysCB.setEnabled(true);
+        minuteSpin.setEnabled(true);
         startDate.setEnabled(true);
         setStartDateB.setEnabled(true);
         lblSince.setEnabled(true);
         enableEndDateCB.setEnabled(true);
+        workingDaysOnlyCB.setEnabled(true);
         startDate.getModel().setValue(
                 startCalFrame.cal.get().getCalendar().getTime());
     }
 
     public void noRepeatRB_actionPerformed(ActionEvent e) {
         disableElements();
+        startDate.setEnabled(false);
+        setStartDateB.setEnabled(false);
     }
 
     void okB_actionPerformed(ActionEvent e) {

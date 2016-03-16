@@ -14,6 +14,7 @@ import java.util.Calendar;
 
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.date.CurrentDate;
+import net.sf.memoranda.ui.AgendaPanel;
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -34,6 +35,7 @@ public class TaskImpl implements Task, Comparable {
     public TaskImpl(Element taskElement, TaskList tl) {
         _element = taskElement;
         _tl = tl;
+       
     }
 
     public Element getContent() {
@@ -386,6 +388,25 @@ public class TaskImpl implements Task, Comparable {
 			if (subTasks.get(i).getAttribute("id").getValue().equals(id))
 				return true;
 		return false;
+	}
+
+	@Override
+	public int getRepeat() {
+        Attribute a = _element.getAttribute("repeat-type");
+        if (a != null) return new Integer(a.getValue()).intValue();
+        return 0;
+	}
+	
+	public int getPeriod() {
+    Attribute a = _element.getAttribute("period");
+    if (a != null) return new Integer(a.getValue()).intValue();
+    return 0;
+	}
+
+	@Override
+	public boolean isRepeatable() {
+    	Attribute a = _element.getAttribute("repeat-type");
+        return a != null;
 	}
 
 	
