@@ -59,17 +59,12 @@ public class TaskDialog extends JDialog {
     public boolean CANCELLED = true;
     Border border3;
     Border border4;
-//    Border border5;
-//    Border border6;
     JPanel jPanel2 = new JPanel(new GridLayout(2, 2));
     JTextField todoField = new JTextField();
     
-    // added by rawsushi
     JTextField effortField = new JTextField();
     JTextArea descriptionField = new JTextArea();
     JScrollPane descriptionScrollPane = new JScrollPane(descriptionField);
-    
-//    Border border7;
     Border border8;
     CalendarFrame startCalFrame = new CalendarFrame();///
     CalendarFrame endCalFrame = new CalendarFrame();
@@ -111,9 +106,9 @@ public class TaskDialog extends JDialog {
 	CalendarDate endDateMin = startDateMin;
 	CalendarDate endDateMax = startDateMax;
 	private final JPanel panel = new JPanel();
-	private final JCheckBox checkBox = new JCheckBox();
+	private final JCheckBox chkEndDateRpt = new JCheckBox();
 	private final JLabel lblEndRepeat = new JLabel();
-	private final JButton button = new JButton();
+	private final JButton setEndDateRptB = new JButton();
 	private final JPanel panel_1 = new JPanel();
 	private final JPanel panel_3 = new JPanel();
 	private final JPanel panel_4 = new JPanel();
@@ -322,8 +317,14 @@ public class TaskDialog extends JDialog {
         		chkEndDate_actionPerformed(e);
         	}
         });
+        chkEndDateRpt.addActionListener(new java.awt.event.ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		chkEndDateRpt_actionPerformed(e);
+        	}
+        });
         endDateRpt.setEditor(new JSpinner.DateEditor(endDateRpt, sdf.toPattern()));
         chkEndDate_actionPerformed(null);
+		chkEndDateRpt_actionPerformed(null);
         endDate.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
             	// it's an ugly hack so that the spinner can increase day by day
@@ -399,7 +400,7 @@ public class TaskDialog extends JDialog {
         jPanel2.add(jPanelRepeat, null);
         jPanelRepeat.add(cmboRepeatType);
         cmboRepeatType.setSelectedIndex(0);
-        cmboRepeatType.setVisible(true);
+        cmboRepeatType.setEnabled(true);
         cmboRepeatType.addActionListener(new java.awt.event.ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		cmboRepeatType_actionPerformed(e);
@@ -445,17 +446,17 @@ public class TaskDialog extends JDialog {
                         
                         priorityCB.setSelectedItem(Local.getString("Normal"));
         jPanel2.add(jPanelRepeatToggle);
-        jPanelRepeatToggle.setVisible(false);
+        jPanelRepeatToggle.setEnabled(false);
         chkWorkingDays.setHorizontalAlignment(SwingConstants.CENTER);
         jPanelRepeatToggle.add(chkWorkingDays);
         chkWorkingDays.setSelected(false);
-        chkWorkingDays.setVisible(true);
+        chkWorkingDays.setEnabled(true);
         chkWorkingDays.setText("Working Days Only");
         chkWorkingDays.setHorizontalTextPosition(SwingConstants.LEADING);
-        checkBox.setSelected(false);
+        chkEndDateRpt.setSelected(false);
         jPanelRepeatToggle.add(panel);
         
-        panel.add(checkBox);
+        panel.add(chkEndDateRpt);
         lblEndRepeat.setText("End Repeat");
         lblEndRepeat.setMaximumSize(new Dimension(270, 16));
         lblEndRepeat.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -466,12 +467,12 @@ public class TaskDialog extends JDialog {
         endDateRpt.setBorder(border8);
         
         panel.add(endDateRpt);         
-        button.setText("");
-        button.setPreferredSize(new Dimension(24, 24));
-        button.setMinimumSize(new Dimension(24, 24));
-        button.setEnabled(false);
+        setEndDateRptB.setText("");
+        setEndDateRptB.setPreferredSize(new Dimension(24, 24));
+        setEndDateRptB.setMinimumSize(new Dimension(24, 24));
+        setEndDateRptB.setEnabled(false);
         
-        panel.add(button);
+        panel.add(setEndDateRptB);
         startCalFrame.cal.addSelectionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (ignoreStartChanged)
@@ -517,7 +518,7 @@ public class TaskDialog extends JDialog {
         this.dispose();
     }
 	
-	void chkEndDate_actionPerformed(ActionEvent e) {
+    void chkEndDate_actionPerformed(ActionEvent e) {
 		endDate.setEnabled(chkEndDate.isSelected());
 		setEndDateB.setEnabled(chkEndDate.isSelected());
 		jLabel2.setEnabled(chkEndDate.isSelected());
@@ -529,9 +530,20 @@ public class TaskDialog extends JDialog {
 			}
 		}
 	}
-
+    void chkEndDateRpt_actionPerformed(ActionEvent e) {
+		endDateRpt.setEnabled(chkEndDateRpt.isSelected());
+		setEndDateRptB.setEnabled(chkEndDateRpt.isSelected());
+		lblEndRepeat.setEnabled(chkEndDateRpt.isSelected());
+		if(chkEndDateRpt.isSelected()) {
+			Date currentEndDate = (Date) endDate.getModel().getValue();
+			Date currentStartDate = (Date) startDate.getModel().getValue();
+			if(currentEndDate.getTime() < currentStartDate.getTime()) {
+				endDate.getModel().setValue(currentStartDate);
+			}
+		}
+	}
 	void cmboRepeatType_actionPerformed(ActionEvent e) {
-		jPanelRepeatToggle.setVisible(cmboRepeatType.getSelectedIndex()!=0);
+		jPanelRepeatToggle.setEnabled(cmboRepeatType.getSelectedIndex()!=0);
 	}
 
 	
