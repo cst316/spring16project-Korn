@@ -104,7 +104,7 @@ public class TaskListImpl implements TaskList {
         return filterActiveTasks(allTasks,date);
     }
 
-    public Task createTask(
+/*    public Task createTask(
     		CalendarDate startDate, 
     		CalendarDate endDate, 
     		String text, 
@@ -145,8 +145,8 @@ public class TaskListImpl implements TaskList {
         AgendaPanel.refresh(ret.getStartDate());
         return ret;
     }
-	
-    public Task createRepeatingTask(
+*/	
+    public Task createTask(
     		CalendarDate startDate,
     		CalendarDate endDate,
     		String text,

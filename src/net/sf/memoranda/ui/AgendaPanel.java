@@ -251,7 +251,7 @@ public class AgendaPanel extends JPanel {
 					        long effort = Util.getMillisFromHours(dlg.effortField.getText());
 							//XXX Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
 					        Task newTask;
-					    	newTask = CurrentProject.getTaskList().createRepeatingTask(
+					    	newTask = CurrentProject.getTaskList().createTask(
 									sd, ed, dlg.todoField.getText(), 
 									dlg.priorityCB.getSelectedIndex(),effort, 
 									dlg.descriptionField.getText(),null,

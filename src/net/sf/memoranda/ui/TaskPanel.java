@@ -509,11 +509,9 @@ public class TaskPanel extends JPanel {
  			ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
  		else
  			ed = null;
-        long effort = Util.getMillisFromHours(dlg.effortField.getText());
-		//XXX Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
-        //DANIEL: Set it up to determine if it's recurring or not!
-        Task newTask;
-		newTask = CurrentProject.getTaskList().createRepeatingTask(
+ 		Task newTask;
+ 		long effort = Util.getMillisFromHours(dlg.effortField.getText());
+    	newTask = CurrentProject.getTaskList().createTask(
 				sd, ed, dlg.todoField.getText(), 
 				dlg.priorityCB.getSelectedIndex(),effort, 
 				dlg.descriptionField.getText(),null,
@@ -560,7 +558,7 @@ public class TaskPanel extends JPanel {
  			ed = null;
         long effort = Util.getMillisFromHours(dlg.effortField.getText());
         Task newTask;
-		newTask = CurrentProject.getTaskList().createRepeatingTask(
+		newTask = CurrentProject.getTaskList().createTask(
 				sd, ed, dlg.todoField.getText(), 
 				dlg.priorityCB.getSelectedIndex(),effort, 
 				dlg.descriptionField.getText(),null,
