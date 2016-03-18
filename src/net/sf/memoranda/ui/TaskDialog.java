@@ -68,12 +68,14 @@ public class TaskDialog extends JDialog {
     Border border8;
     CalendarFrame startCalFrame = new CalendarFrame();///
     CalendarFrame endCalFrame = new CalendarFrame();
+    CalendarFrame endCalRptFrame = new CalendarFrame();
     String[] priority = {Local.getString("Lowest"), Local.getString("Low"),
         Local.getString("Normal"), Local.getString("High"),
         Local.getString("Highest")};
     boolean ignoreStartChanged = false;
     boolean ignoreEndChanged = false;
-    JPanel jPanel4 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    boolean ignoreRptEndChanged = false;
+        JPanel jPanel4 = new JPanel(new FlowLayout(FlowLayout.CENTER));
     JPanel jPanel6 = new JPanel();
     JLabel jLabel6 = new JLabel();
     JButton setStartDateB = new JButton();
@@ -359,25 +361,21 @@ public class TaskDialog extends JDialog {
             	SpinnerDateModel sdm = new SpinnerDateModel((Date)endDateRpt.getModel().getValue(),null,null,Calendar.DAY_OF_WEEK);
             	endDateRpt.setModel(sdm);
             	
-                if (ignoreEndChanged)
+                if (ignoreRptEndChanged )
                     return;
-                ignoreEndChanged = true;
+                ignoreRptEndChanged  = true;
                 Date sd = (Date) startDate.getModel().getValue();
                 Date ed = (Date) endDateRpt.getModel().getValue();				
 				if (ed.before(sd)) {
                     endDateRpt.getModel().setValue(ed);
                     ed = sd;
                 }
-				if ((endDateMax != null) && ed.after(endDateMax.getDate())) {
-					endDateRpt.getModel().setValue(endDateMax.getDate());
-                    ed = endDateMax.getDate();
-				}
-                if ((endDateMin != null) && ed.before(endDateMin.getDate())) {
-                    endDateRpt.getModel().setValue(endDateMin.getDate());
-                    ed = endDateMin.getDate();
+				if ((startDateMin != null) && ed.before(startDateMin.getDate())) {
+                    startDate.getModel().setValue(startDateMin.getDate());
+                    ed = startDateMin.getDate();
                 }
-				endCalFrame.cal.set(new CalendarDate(ed));
-                ignoreEndChanged = false;
+				endCalRptFrame.cal.set(new CalendarDate(ed));
+				ignoreRptEndChanged  = false;
             }
         });
         setEndDateB.setMinimumSize(new Dimension(24, 24));
@@ -388,6 +386,16 @@ public class TaskDialog extends JDialog {
         setEndDateB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setEndDateB_actionPerformed(e);
+            }
+        });
+        setEndDateRptB.setMinimumSize(new Dimension(24, 24));
+        setEndDateRptB.setPreferredSize(new Dimension(24, 24));
+        setEndDateRptB.setText("");
+        setEndDateRptB.setIcon(
+            new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/calendar.png")));
+        setEndDateRptB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	setEndDateRptB_actionPerformed(e);
             }
         });
 		jPanel6.add(jPanel1);
@@ -488,6 +496,14 @@ public class TaskDialog extends JDialog {
                 endDate.getModel().setValue(endCalFrame.cal.get().getCalendar().getTime());
             }
         });
+        
+        endCalRptFrame.cal.addSelectionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (ignoreEndChanged)
+                    return;
+                endDateRpt.getModel().setValue(endCalRptFrame.cal.get().getCalendar().getTime());
+            }
+        });
     }
 
 	public void setStartDate(CalendarDate d) {
@@ -548,7 +564,8 @@ public class TaskDialog extends JDialog {
 
 	
     void setStartDateB_actionPerformed(ActionEvent e) {
-        startCalFrame.setLocation(setStartDateB.getLocation());
+    	startCalFrame.hide();
+    	startCalFrame.setLocation(setStartDateB.getLocation());
         startCalFrame.setSize(200, 200);
         this.getLayeredPane().add(startCalFrame);
         startCalFrame.show();
@@ -556,10 +573,19 @@ public class TaskDialog extends JDialog {
     }
 
     void setEndDateB_actionPerformed(ActionEvent e) {
-        endCalFrame.setLocation(setEndDateB.getLocation());
+    	endCalFrame.hide();
+    	endCalFrame.setLocation(setEndDateB.getLocation());
         endCalFrame.setSize(200, 200);
         this.getLayeredPane().add(endCalFrame);
         endCalFrame.show();
+    }
+    
+    void setEndDateRptB_actionPerformed(ActionEvent e) {
+    	endCalRptFrame.hide();
+    	endCalRptFrame.setLocation(setEndDateRptB.getLocation());
+    	endCalRptFrame.setSize(200, 200);
+        this.getLayeredPane().add(endCalRptFrame);
+        endCalRptFrame.show();
     }
     
     void setNotifB_actionPerformed(ActionEvent e) {
