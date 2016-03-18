@@ -65,7 +65,7 @@ public class TaskImpl implements Task, Comparable {
 		Project pr = this._tl.getProject();
 		if (pr.getEndDate() != null)
 			return pr.getEndDate();
-		return this.getStartDate();
+		return this.getStartDate().dayBefore();
         
     }
 
@@ -142,12 +142,10 @@ public class TaskImpl implements Task, Comparable {
      */
     public int getStatus(CalendarDate date) {
         CalendarDate start = getStartDate();
-        CalendarDate end;
-        boolean noEnd = false;
+        CalendarDate end = null;
         try {
 			end = getEndDate();
 		} catch (NullPointerException e) {
-			noEnd = true;
 			end = null;
 		}
         if (isFrozen())
@@ -158,7 +156,7 @@ public class TaskImpl implements Task, Comparable {
 		{
 			return Task.SCHEDULED;
 		}
-        else if (noEnd)
+        else if (end==null || end.before(start))
         {
         	return Task.ACTIVE;
         }
