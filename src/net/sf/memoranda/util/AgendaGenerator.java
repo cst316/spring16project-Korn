@@ -223,8 +223,13 @@ public class AgendaGenerator {
 		    }                    
 		}
 =======*/
-		
-		if (t.getEndDate().equals(date))
+		if (t.getEndDate().before(t.getStartDate()))
+		{
+			s += "<p><font color=\"#006600\"><b>"
+					+ Local.getString("No Deadline")
+					+ ".</b></font></p>";
+		}
+		else if (t.getEndDate().equals(date))
 			s += "<p><font color=\"#FF9900\"><b>"
 					+ Local.getString("Should be done today")
 					+ ".</b></font></p>";

@@ -51,7 +51,12 @@ public class TaskImpl implements Task, Comparable {
     }
 
     public CalendarDate getEndDate() {
-		String ed = _element.getAttribute("endDate").getValue();
+		String ed;
+		try {
+			ed = _element.getAttribute("endDate").getValue();
+		} catch (NullPointerException e) {
+			ed = "";
+		}
 		if (ed != "")
 			return new CalendarDate(_element.getAttribute("endDate").getValue());
 		Task parent = this.getParentTask();
@@ -60,7 +65,7 @@ public class TaskImpl implements Task, Comparable {
 		Project pr = this._tl.getProject();
 		if (pr.getEndDate() != null)
 			return pr.getEndDate();
-		return this.getStartDate();
+		return this.getStartDate().dayBefore();
         
     }
 
@@ -137,23 +142,32 @@ public class TaskImpl implements Task, Comparable {
      */
     public int getStatus(CalendarDate date) {
         CalendarDate start = getStartDate();
-        CalendarDate end = getEndDate();
+        CalendarDate end = null;
+        try {
+			end = getEndDate();
+		} catch (NullPointerException e) {
+			end = null;
+		}
         if (isFrozen())
             return Task.FROZEN;
         if (isCompleted())
-                return Task.COMPLETED;
-        
-		if (date.inPeriod(start, end)) {
+        	return Task.COMPLETED;
+        if(date.before(start)) 
+		{
+			return Task.SCHEDULED;
+		}
+        else if (end==null || end.before(start))
+        {
+        	return Task.ACTIVE;
+        }
+        else if (date.inPeriod(start, end)) 
+        {
             if (date.equals(end))
                 return Task.DEADLINE;
             else
                 return Task.ACTIVE;
         }
-		else if(date.before(start)) {
-				return Task.SCHEDULED;
-		}
-		
-		if(start.after(end)) {
+		else if(start.after(end)) {
 			return Task.ACTIVE;
 		}
 
