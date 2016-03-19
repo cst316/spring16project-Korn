@@ -83,7 +83,7 @@ public class TaskListImpl implements TaskList {
     		return getAllRootTasks();
     	}
     	else {
-            Element task = getTaskElement(taskId);
+            Element task = (Element) getTaskElement(taskId);
             if (task == null)
                 return new Vector();
             Elements subTasks = task.getChildElements("task");
@@ -158,12 +158,28 @@ public class TaskListImpl implements TaskList {
     		int progress,
     		int frequency) {
     		assert(Task.REPEAT_FREQUENCIES_INDEX[frequency]==frequency);
-    		Element el = new Element("task");
+    		Element taskElem = new Element("task");
+    		String id = Util.generateId();
+            taskElem.addAttribute(new Attribute("id", id));
+    		Task t = new TaskImpl(taskElem, this);
+    		t.setStartDate(startDate);
+    		t.setEndDate(endDate);
+    		t.setText(text);
+    		t.setPriority(priority);
+    		t.setEffort(effort);
+    		t.setDescription(description);
+    		t.setParentTask(parentTaskId, _root);
+    		t.setWorkingDaysOnly(workDays);
+    		t.setProgress(progress);
+    		t.setFrequency(frequency);
+    		
+/*    		Element el = new Element("task");
             el.addAttribute(new Attribute("startDate", startDate.toString()));
             if (endDate != null)
     			el.addAttribute(new Attribute("endDate", endDate.toString()));
-            String id = Util.generateId();
-            el.addAttribute(new Attribute("id", id));
+ //           else
+ //           	el.addAttribute(new Attribute("endDate", startDate.toString()));
+
             el.addAttribute(new Attribute("progress", String.valueOf(progress)));
             el.addAttribute(new Attribute("effort", String.valueOf(effort)));
             el.addAttribute(new Attribute("priority", String.valueOf(priority)));
@@ -193,6 +209,8 @@ public class TaskListImpl implements TaskList {
             Util.debug("Created task with parent " + parentTaskId + 
             		" and recurance " + Task.REPEAT_FREQUENCIES_LIST[frequency]);
     		return new TaskImpl(el, this);
+*/ 
+    		return t;
     	}
     
 	/**
@@ -205,14 +223,14 @@ public class TaskListImpl implements TaskList {
             _root.removeChild(task.getContent());            
         }
         else {
-            Element parentNode = getTaskElement(parentTaskId);
+            Element parentNode = (Element) getTaskElement(parentTaskId);
             parentNode.removeChild(task.getContent());
         }
 		elements.remove(task.getID());
     }
 
     public boolean hasSubTasks(String id) {
-        Element task = getTaskElement(id);
+        Element task = (Element) getTaskElement(id);
         if (task == null) return false;
         if(task.getChildElements("task").size() > 0) {
             return true;
@@ -224,11 +242,11 @@ public class TaskListImpl implements TaskList {
 
     public Task getTask(String id) {
         Util.debug("Getting task " + id);          
-        return new TaskImpl(getTaskElement(id), this);          
+        return new TaskImpl((Element) getTaskElement(id), this);          
     }
     
     public boolean hasParentTask(String id) {
-    	Element t = getTaskElement(id);
+    	Element t = (Element) getTaskElement(id);
     	
     	Node parentNode = t.getParent();
     	if (parentNode instanceof Element) {
@@ -371,7 +389,7 @@ public class TaskListImpl implements TaskList {
     /*
      * private methods below this line
      */
-    private Element getTaskElement(String id) {
+    public Object getTaskElement(String id) {
                
 		/*Nodes nodes = XQueryUtil.xquery(_doc, "//task[@id='" + id + "']");
         if (nodes.size() > 0) {

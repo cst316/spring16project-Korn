@@ -77,6 +77,8 @@ public interface Task {
     Task getParentTask();
     String getParentId();
     
+    void setParentTask(String parentTaskId, Object root);
+    
     void freeze();
     void unfreeze();
 	long getRate();
@@ -86,5 +88,8 @@ public interface Task {
     int getRepeat();
     int getPeriod();
     boolean isRepeatable();
+    
+    void setWorkingDaysOnly(boolean workDaysOnly);
+    void setFrequency(int frequency);
 
 }

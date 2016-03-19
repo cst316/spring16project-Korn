@@ -15,6 +15,7 @@ import java.util.Calendar;
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.date.CurrentDate;
 import net.sf.memoranda.ui.AgendaPanel;
+import net.sf.memoranda.util.Util;
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -70,9 +71,11 @@ public class TaskImpl implements Task, Comparable {
     }
 
     public void setEndDate(CalendarDate date) {
-		if (date == null)
+		if (date == null) {
 			setAttr("endDate", "");
-		setAttr("endDate", date.toString());
+		} else {
+			setAttr("endDate", date.toString());
+		}
     }
 
     public long getEffort() {
@@ -112,6 +115,17 @@ public class TaskImpl implements Task, Comparable {
 		if (parent != null)
 			return parent.getID();
 		return null;
+	}
+	
+	public void setParentTask(String parentTaskId, Object root) {
+        if (parentTaskId == null) {
+        	Element rootEl = (Element) root;
+            rootEl.appendChild(_element);
+        }
+        else {
+    		Element parent = (Element) _tl.getTaskElement(parentTaskId);
+            parent.appendChild(_element);
+        }
 	}
 
     public String getDescription() {
@@ -219,8 +233,11 @@ public class TaskImpl implements Task, Comparable {
      * @see net.sf.memoranda.Task#setText()
      */
     public void setText(String s) {
-        _element.getFirstChildElement("text").removeChildren();
-        _element.getFirstChildElement("text").appendChild(s);
+    	Element txt = new Element("text");
+        txt.appendChild(s);
+        _element.appendChild(txt);
+//        _element.getFirstChildElement("text").removeChildren();
+//        _element.getFirstChildElement("text").appendChild(s);
     }
 
     /**
@@ -422,6 +439,16 @@ public class TaskImpl implements Task, Comparable {
     	Attribute a = _element.getAttribute("repeat-type");
         return a != null;
 	}
-
+	
+	// TODO update once working days implementation is ready.
+    public void setWorkingDaysOnly(boolean workDaysOnly) {
+    	if(workDaysOnly){
+    		_element.addAttribute(new Attribute("workingDays",String.valueOf(workDaysOnly)));
+    	}
+    }
+    
+    public void setFrequency(int frequency) {
+        _element.addAttribute(new Attribute("frequency", String.valueOf(frequency)));
+    }
 	
 }
