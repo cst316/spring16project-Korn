@@ -4,24 +4,26 @@
  * select project
  * @author Jordan Partridge
  */
+
 package net.sf.memoranda.ui;
+
+import net.sf.memoranda.util.Local;
 
 import java.awt.event.ActionEvent;
 
 
-import net.sf.memoranda.util.Local;
 
-public class TaskReportDialog extends javax.swing.JDialog{
+public class TaskReportDialog extends javax.swing.JDialog {
 
-    public boolean CANCELLED = true;
+  public boolean cancelled = true;
+  private javax.swing.JPanel panel;
+  
+  public TaskReportDialog(java.awt.Frame parent, String title) {
+    super(parent, title, true);
+    initComponents1();
+  }
 
-	private javax.swing.JPanel panel;
-	public TaskReportDialog(java.awt.Frame parent, String title){
-		super(parent, title, true);
-		initComponents1();
-	}
-
-	private void initComponents1() {
+  private void initComponents1() {
 		// TODO Auto-generated method stub
 		 panel = new javax.swing.JPanel();
 		 this.add(panel);
