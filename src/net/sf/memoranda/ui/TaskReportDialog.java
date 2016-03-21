@@ -9,7 +9,10 @@ package net.sf.memoranda.ui;
 
 import net.sf.memoranda.util.Local;
 
+import java.awt.Container;
 import java.awt.event.ActionEvent;
+
+import javax.swing.JPanel;
 
 
 
@@ -24,80 +27,76 @@ public class TaskReportDialog extends javax.swing.JDialog {
   }
 
   private void initComponents1() {
-		// TODO Auto-generated method stub
-		 panel = new javax.swing.JPanel();
-		 this.add(panel);
-		 
-	}
-	 
-    private void initComponents() {//GEN-BEGIN:initComponents
-        jPanel2 = new javax.swing.JPanel();
-        okB = new javax.swing.JButton();
-        cancelB = new javax.swing.JButton();
-        filePanel = new javax.swing.JPanel();
-        //fileChooser = new javax.swing.JFileChooser();
-        optionsPanel = new javax.swing.JPanel();
-        encPanel = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        usetemplChB = new javax.swing.JCheckBox();
-        xhtmlChB = new javax.swing.JCheckBox();
-        templPanel = new javax.swing.JPanel();
-        templF = new javax.swing.JTextField();
-        templF.setEditable(false);
-        templBrowseB = new javax.swing.JButton();
-        numentChB = new javax.swing.JCheckBox();
-        jPanel6 = new javax.swing.JPanel();
+    panel = new javax.swing.JPanel();
+    this.add(panel);
+  } 
+  
+  private void initComponents() {
+    taskReportPanel = new javax.swing.JPanel();
+    btnOk = new javax.swing.JButton();
+    btnCancel = new javax.swing.JButton();
+    optionsPanel = new javax.swing.JPanel();
+    encPanel = new javax.swing.JPanel();
+    jLabel2 = new javax.swing.JLabel();
+    usetemplChB = new javax.swing.JCheckBox();
+    xhtmlChB = new javax.swing.JCheckBox();
+    templPanel = new javax.swing.JPanel();
+    templF = new javax.swing.JTextField();
+    templF.setEditable(false);
+    templBrowseB = new javax.swing.JButton();
+    numentChB = new javax.swing.JCheckBox();
+    JPanel jPanel6 = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setModal(true);
-        jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-
-        okB.setText(Local.getString("Save"));
-        okB.setPreferredSize(new java.awt.Dimension(90, 25));
-        okB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                CANCELLED = false;
-                dispose();
-            }
+    setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+    setModal(true);
+    
+    btnOk.setText(Local.getString("Save"));
+    btnOk.setPreferredSize(new java.awt.Dimension(90, 25));
+    btnOk.addActionListener(new java.awt.event.ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+          cancelled = false;
+          dispose();
+      }
         });
-        okB.setEnabled(false);
-        jPanel2.add(okB);
+    btnOk.setEnabled(false);
+    JPanel jpanel2 = new JPanel();
+    jpanel2.add(btnOk);
 
-        cancelB.setText(Local.getString("Cancel"));
-        cancelB.setPreferredSize(new java.awt.Dimension(90, 25));
-        cancelB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {                
-                dispose();
-            }
+    btnCancel.setText(Local.getString("Cancel"));
+    btnCancel.setPreferredSize(new java.awt.Dimension(90, 25));
+    btnCancel.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent event) {                
+        dispose();
+      }
         });
-        jPanel2.add(cancelB);
+    jpanel2.add(btnCancel);
 
-        getContentPane().add(jPanel2, java.awt.BorderLayout.SOUTH);
+    getContentPane().add(jpanel2, java.awt.BorderLayout.SOUTH);
 
-        filePanel.setLayout(new java.awt.BorderLayout());
+    filePanel.setLayout(new java.awt.BorderLayout());
 
  
         
         
 
-        filePanel.add(fileChooser, java.awt.BorderLayout.CENTER);
+    filePanel.add(fileChooser, java.awt.BorderLayout.CENTER);
 
-        optionsPanel.setLayout(new java.awt.GridLayout(3, 2, 5, 0));
+    optionsPanel.setLayout(new java.awt.GridLayout(3, 2, 5, 0));
 
-        optionsPanel.setBorder(new javax.swing.border.EmptyBorder(new java.awt.Insets(5, 5, 5, 5)));
-        encPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
+    optionsPanel.setBorder(new javax.swing.border.EmptyBorder(new java.awt.Insets(5, 5, 5, 5)));
+    encPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
-        jLabel2.setText(Local.getString("Encoding")+":");
-        encPanel.add(jLabel2);
+    jLabel2.setText(Local.getString("Encoding") + ":");
+    encPanel.add(jLabel2);
 
    
-        usetemplChB.setText(Local.getString("Use template")+":");
-        usetemplChB.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        usetemplChB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {                
-                if (usetemplChB.isSelected()) {
-                    templF.setEnabled(true);
-                    templBrowseB.setEnabled(true);
+    usetemplChB.setText(Local.getString("Use template") + ":");
+    usetemplChB.setMargin(new java.awt.Insets(0, 0, 0, 0));
+    usetemplChB.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(ActionEvent event) {
+        if (usetemplChB.isSelected()) {
+          templF.setEnabled(true);
+          templBrowseB.setEnabled(true);
                 }
                 else {
                     templF.setEnabled(false);
@@ -130,46 +129,41 @@ public class TaskReportDialog extends javax.swing.JDialog {
         numentChB.setText("Use numeric entities");
         optionsPanel.add(numentChB);
 
-        jPanel6.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+      jPanel6.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        optionsPanel.add(jPanel6);
+      optionsPanel.add(jPanel6);
 
-        filePanel.add(optionsPanel, java.awt.BorderLayout.SOUTH);
+      filePanel.add(optionsPanel, java.awt.BorderLayout.SOUTH);
 
-        getContentPane().add(filePanel, java.awt.BorderLayout.CENTER);
-        getRootPane().setDefaultButton(okB);
-        pack();
-    }//GEN-END:initComponents
+      getContentPane().add(filePanel, java.awt.BorderLayout.CENTER);
+      getRootPane().setDefaultButton(btnOk);
+      pack();
+  }
 
-    private void xhtmlChBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xhtmlChBActionPerformed
+  private void xhtmlChBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xhtmlChBActionPerformed
         // TODO add your handling code here:
-    }
+   }
 
-    private void chooserActionPerformed() {//GEN-FIRST:event_chooserActionPerformed
-        okB.setEnabled(fileChooser.getSelectedFile() != null);            
-    }
+  private void chooserActionPerformed() {//GEN-FIRST:event_chooserActionPerformed
+    btnOk.setEnabled(fileChooser.getSelectedFile() != null);            
+  }
    
     
-    private javax.swing.JButton cancelB;
-    private javax.swing.JFileChooser fileChooser;
+  private javax.swing.JButton btnCancel;
+  private javax.swing.JFileChooser fileChooser;
     
-    private javax.swing.JPanel encPanel;
-    private javax.swing.JPanel filePanel;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel6;
-    public javax.swing.JCheckBox numentChB;
-    private javax.swing.JButton okB;
-    private javax.swing.JPanel optionsPanel;
-    private javax.swing.JButton templBrowseB;
-    public javax.swing.JTextField templF;
-    private javax.swing.JPanel templPanel;
-    public javax.swing.JCheckBox usetemplChB;
-    public javax.swing.JCheckBox xhtmlChB;
-    // End of variables declaration//GEN-END:variables
+  private javax.swing.JPanel encPanel;
+  private javax.swing.JPanel filePanel;
+  private javax.swing.JLabel jLabel2;
+  private javax.swing.JPanel taskReportPanel;
+  public javax.swing.JCheckBox numentChB;
+  private javax.swing.JButton btnOk;
+  private javax.swing.JPanel optionsPanel;
+  private javax.swing.JButton templBrowseB;
+  public javax.swing.JTextField templF;
+  private javax.swing.JPanel templPanel;
+  public javax.swing.JCheckBox usetemplChB;
+  public javax.swing.JCheckBox xhtmlChB;
     
 }
-
-		
-	
 
