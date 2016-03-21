@@ -34,7 +34,7 @@ public class TaskListImpl implements TaskList {
 
     private Project _project = null;
     private Document _doc = null;
-    private Element _root = null;
+    static Element _root = null;
 	
 	/*
 	 * Hastable of "task" XOM elements for quick searching them by ID's
@@ -440,6 +440,19 @@ public class TaskListImpl implements TaskList {
     	else {
     		return false;
     	}
+    }
+    public static Collection getRepeatableTasks(){
+    	Vector vector= new Vector();
+    	Element repeatable= _root.getFirstChildElement("repeatable");
+    	
+    	if (repeatable==null){
+    		vector=null;
+    	}
+    	else{
+    	Elements elements= repeatable.getChildElements("task");
+    	}
+    	
+    	return vector;
     }
 
     /*
