@@ -1,7 +1,9 @@
 /*
  * file: TaskReportDialog.java
  * purpose: This dialog will be used to generate a detailed task report from a 
- * select project
+ * select project.
+ * The goal is to be able to specify specific tasks within a range of dates and show status of indivu
+ * 
  * @author Jordan Partridge
  */
 
