@@ -6,117 +6,130 @@
  * @author Alex V. Alishevskikh, alex@openmechanics.net
  * Copyright (c) 2003 Memoranda Team. http://memoranda.sf.net
  */
+
 package net.sf.memoranda;
 
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
-
 import net.sf.memoranda.date.CalendarDate;
-import net.sf.memoranda.ui.AgendaPanel;
 import net.sf.memoranda.util.Util;
 import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
-import nu.xom.Nodes;
+
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Vector;
 //import nu.xom.converters.*;
 //import org.apache.xerces.dom.*;
 //import nux.xom.xquery.XQueryUtil;
 
-/**
+/** TaskListImp the implementation of TaskList.
  * 
  */
 /*$Id: TaskListImpl.java,v 1.14 2006/07/03 11:59:19 alexeya Exp $*/
 public class TaskListImpl implements TaskList {
 
-    private Project _project = null;
-    private Document _doc = null;
-    static Element _root = null;
-	
-	/*
-	 * Hastable of "task" XOM elements for quick searching them by ID's
-	 * (ID => element) 
-	 */
-	private Hashtable elements = new Hashtable();
+  private Project project = null;
+  private Document document = null;
+  static Element root = null;
+  
+  /*
+   * Hastable of "task" XOM elements for quick searching them by ID's
+   * (ID => element) 
+   */
+  private Hashtable<String, Element> elements = new Hashtable<String, Element>();
     
-    /**
-     * Constructor for TaskListImpl.
-     */
-    public TaskListImpl(Document doc, Project prj) {
-        _doc = doc;
-        _root = _doc.getRootElement();
-        _project = prj;
-		buildElements(_root);
-    }
+  /**
+   * Constructor for TaskListImpl.
+   */
+  public TaskListImpl(Document doc, Project prj) {
+    document = doc;
+    root = document.getRootElement();
+    project = prj;
+    buildElements(root);
+  }
+  
+  /**
+   * Constructs Task list for Project prj.
+   * @param prj
+   *     given project task list is associated with.
+   */
     
-    public TaskListImpl(Project prj) {            
-            _root = new Element("tasklist");
-            _doc = new Document(_root);
-            _project = prj;
+  public TaskListImpl(Project prj) {            
+    root = new Element("tasklist");
+    document = new Document(root);
+    project = prj;
+  }
+  
+  /**
+   * Returns project.
+   * @return project
+   */
+  
+  public Project getProject() {
+    return project;
+  }
+  
+  /*
+   * Build the hashtable recursively
+   */
+  
+  private void buildElements(Element parent) {
+    Elements els = parent.getChildElements("task");
+    for (int i = 0; i < els.size(); i++) {
+      Element el = els.get(i);
+      elements.put(el.getAttribute("id").getValue(), el);
+      buildElements(el);
     }
-    
-	public Project getProject() {
-		return _project;
-	}
-		
-	/*
-	 * Build the hashtable recursively
-	 */
-	private void buildElements(Element parent) {
-		Elements els = parent.getChildElements("task");
-		for (int i = 0; i < els.size(); i++) {
-			Element el = els.get(i);
-			elements.put(el.getAttribute("id").getValue(), el);
-			buildElements(el);
-		}
-	}
-	
-    /**
-     * All methods to obtain list of tasks are consolidated under getAllSubTasks and getActiveSubTasks.
-     * If a root task is required, just send a null taskId
-     */
-    public Collection getAllSubTasks(String taskId) {
-    	if ((taskId == null) || (taskId.length() == 0)) {
-    		return getAllRootTasks();
-    	}
-    	else {
-            Element task = (Element) getTaskElement(taskId);
-            if (task == null)
-                return new Vector();
-            Elements subTasks = task.getChildElements("task");
-            return convertToTaskObjects(subTasks);    	    		
-    	}
-    }
-    
-    public Collection getTopLevelTasks() {
-        return getAllRootTasks();
-    }
+  }
 
-    /**
-     * All methods to obtain list of tasks are consolidated under getAllSubTasks and getActiveSubTasks.
-     * If a root task is required, just send a null taskId
-     */
-    public Collection getActiveSubTasks(String taskId,CalendarDate date) {
-        Collection allTasks = getAllSubTasks(taskId);        
-        return filterActiveTasks(allTasks,date);
+  /**
+    * All methods to obtain list of tasks are consolidated under
+    *  getAllSubTasks and getActiveSubTasks.
+    * If a root task is required, just send a null taskId
+    */
+  public Collection<Task> getAllSubTasks(String taskId) {
+    if ((taskId == null) || (taskId.length() == 0)) {
+      return getAllRootTasks();
+    } else {
+      Element task = (Element) getTaskElement(taskId);
+      if (task == null) {
+        return new Vector<Task>();
+      }
+      Elements subTasks = task.getChildElements("task");
+      return convertToTaskObjects(subTasks);
     }
+  }
+    
+  public Collection<Task> getTopLevelTasks() {
+    return getAllRootTasks();
+  }
 
-/*    public Task createTask(
-    		CalendarDate startDate, 
-    		CalendarDate endDate, 
-    		String text, 
-    		int priority, 
-    		long effort, 
-    		String description, 
-    		String parentTaskId) {
+  /**
+    * All methods to obtain list of tasks are consolidated under
+    *  getAllSubTasks and getActiveSubTasks.
+    * If a root task is required, just send a null taskId
+    */
+  public Collection<Task> getActiveSubTasks(String taskId,CalendarDate date) {
+    Collection<Task> allTasks = getAllSubTasks(taskId);        
+    return filterActiveTasks(allTasks,date);
+  }
+
+  /*    public Task createTask(
+       CalendarDate startDate, 
+       CalendarDate endDate, 
+       String text, 
+       int priority, 
+       long effort, 
+       String description, 
+       String parentTaskId) {
         Element el = new Element("task");
         el.addAttribute(new Attribute("startDate", startDate.toString()));
         if (endDate != null)
-			el.addAttribute(new Attribute("endDate", endDate.toString()));
-		String id = Util.generateId();
+        el.addAttribute(new Attribute("endDate", endDate.toString()));
+        String id = Util.generateId();
         el.addAttribute(new Attribute("id", id));
         el.addAttribute(new Attribute("progress", "0"));
         el.addAttribute(new Attribute("effort", String.valueOf(effort)));
@@ -138,56 +151,67 @@ public class TaskListImpl implements TaskList {
             parent.appendChild(el);
         }
         
-		elements.put(id, el);
-		
+        elements.put(id, el);
         Util.debug("Created task with parent " + parentTaskId);
         TaskImpl ret = new TaskImpl(el, this);
         AgendaPanel.refresh(ret.getStartDate());
         return ret;
-    }
-*/	
-    public Task createTask(
-    		CalendarDate startDate,
-    		CalendarDate endDate,
-    		String text,
-    		int priority,    
-    		long effort, 
-    		String description, 
-    		String parentTaskId,		
-    		boolean workDays,
-    		int progress,
-    		int frequency) {
-    		assert(Task.REPEAT_FREQUENCIES_INDEX[frequency]==frequency);
-    		Element taskElem = new Element("task");
-    		String id = Util.generateId();
-            taskElem.addAttribute(new Attribute("id", id));
-    		Task t = new TaskImpl(taskElem, this);
-    		t.setStartDate(startDate);
-    		t.setEndDate(endDate);
-    		t.setText(text);
-    		t.setPriority(priority);
-    		t.setEffort(effort);
-    		t.setDescription(description);
-    		t.setParentTask(parentTaskId, _root);
-    		t.setWorkingDaysOnly(workDays);
-    		t.setProgress(progress);
-    		t.setFrequency(frequency);
-    		
-/*    		Element el = new Element("task");
-            el.addAttribute(new Attribute("startDate", startDate.toString()));
-            if (endDate != null)
-    			el.addAttribute(new Attribute("endDate", endDate.toString()));
- //           else
- //           	el.addAttribute(new Attribute("endDate", startDate.toString()));
+    }*/
+ 
+  /*
+   * (non-Javadoc)
+   * @see net.sf.memoranda.TaskList#createTask(net.sf.memoranda.date.CalendarDate,
+   *  net.sf.memoranda.date.CalendarDate, java.lang.String,
+   *   int, long, java.lang.String, java.lang.String, boolean, int, int)
+   */
+  /**
+   *  Create task adds a task to the task list.
+   *  @param startDate
+   *    The date the task begins
+   *  @param endDate
+   *   the date the task ends
+   */
+  public Task createTask(
+      CalendarDate startDate,
+      CalendarDate endDate,
+      String text,
+      int priority,    
+      long effort, 
+      String description, 
+      String parentTaskId,
+      boolean workDays,
+      int progress,
+      int frequency) {
+      assert (Task.REPEAT_FREQUENCIES_INDEX [frequency] == frequency);
+    Element taskElem = new Element("task");
+    String id = Util.generateId();
+    taskElem.addAttribute(new Attribute("id", id));
+    Task task = new TaskImpl(taskElem, this);
+    task.setStartDate(startDate);
+    task.setEndDate(endDate);
+    task.setText(text);
+    task.setPriority(priority);
+    task.setEffort(effort);
+    task.setDescription(description);
+    task.setParentTask(parentTaskId, root);
+    task.setWorkingDaysOnly(workDays);
+    task.setProgress(progress);
+    task.setFrequency(frequency);
+    /* Element el = new Element("task");
+         el.addAttribute(new Attribute("startDate", startDate.toString()));
+            if (endDate != null) {
+              el.addAttribute(new Attribute("endDate", endDate.toString()));
+             else
+             }
+               el.addAttribute(new Attribute("endDate", startDate.toString()));
 
             el.addAttribute(new Attribute("progress", String.valueOf(progress)));
             el.addAttribute(new Attribute("effort", String.valueOf(effort)));
             el.addAttribute(new Attribute("priority", String.valueOf(priority)));
             el.addAttribute(new Attribute("frequency", String.valueOf(frequency)));
-    		// new attribute for wrkin days - ivanrise
-    		el.addAttribute(new Attribute("workingDays",String.valueOf(workDays)));
+            new attribute for wrkin days - ivanrise
+            el.addAttribute(new Attribute("workingDays",String.valueOf(workDays)));
 
-    		
             Element txt = new Element("text");
             txt.appendChild(text);
             el.appendChild(txt);
@@ -204,75 +228,83 @@ public class TaskListImpl implements TaskList {
                 parent.appendChild(el);
             }
             
-    		elements.put(id, el);
-    		
+           elements.put(id, el);
+           
             Util.debug("Created task with parent " + parentTaskId + 
-            		" and recurance " + Task.REPEAT_FREQUENCIES_LIST[frequency]);
-    		return new TaskImpl(el, this);
-*/ 
-    		return t;
-    	}
+            " and recurance " + Task.REPEAT_FREQUENCIES_LIST[frequency]);
+            return new TaskImpl(el, this);*/ 
+    return task;
+  }
     
-	/**
-     * @see net.sf.memoranda.TaskList#removeTask(import net.sf.memoranda.Task)
-     */
+  /**
+   * @see net.sf.memoranda.TaskList#removeTask(import net.sf.memoranda.Task)
+   */
 
-    public void removeTask(Task task) {
-        String parentTaskId = task.getParentId();
-        if (parentTaskId == null) {
-            _root.removeChild(task.getContent());            
-        }
-        else {
-            Element parentNode = (Element) getTaskElement(parentTaskId);
-            parentNode.removeChild(task.getContent());
-        }
-		elements.remove(task.getID());
+  public void removeTask(Task task) {
+    String parentTaskId = task.getParentId();
+    if (parentTaskId == null) {
+      root.removeChild(task.getContent());            
+    } else {
+      Element parentNode = (Element) getTaskElement(parentTaskId);
+      parentNode.removeChild(task.getContent());
     }
+    elements.remove(task.getID());
+  }
 
-    public boolean hasSubTasks(String id) {
-        Element task = (Element) getTaskElement(id);
-        if (task == null) return false;
-        if(task.getChildElements("task").size() > 0) {
-            return true;
-        }
-        else {
-            return false;
-        }
+  
+  /**
+   * check for subtasks.
+   * @param id
+   *   id of the item being checked.
+   */
+  public boolean hasSubTasks(String id) {
+    Element task = (Element) getTaskElement(id);
+    if (task == null) {
+      return false; 
     }
+    if (task.getChildElements("task").size() > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-    public Task getTask(String id) {
-        Util.debug("Getting task " + id);          
-        return new TaskImpl((Element) getTaskElement(id), this);          
-    }
+  public Task getTask(String id) {
+    Util.debug("Getting task " + id);          
+    return new TaskImpl((Element) getTaskElement(id), this);          
+  }
     
-    public boolean hasParentTask(String id) {
-    	Element t = (Element) getTaskElement(id);
-    	
-    	Node parentNode = t.getParent();
-    	if (parentNode instanceof Element) {
-    	    Element parent = (Element) parentNode;
-        	if (parent.getLocalName().equalsIgnoreCase("task")) {
-        	    return true;
-        	}
-        	else {
-        	    return false;
-        	}
-    	}
-    	else {
-    	    return false;
-    	}
-    }
+  /**
+   * Checks for parent task.
+   * @param id
+   *   id of the item being checked.
+   */
+  public boolean hasParentTask(String id) {
+    Element element = (Element) getTaskElement(id);
 
-    /**
-     * @see net.sf.memoranda.TaskList#getXMLContent()
-     */	 
-    public Document getXMLContent() {
-        return _doc;
+    Node parentNode = element.getParent();
+    if (parentNode instanceof Element) {
+      Element parent = (Element) parentNode;
+      if (parent.getLocalName().equalsIgnoreCase("task")) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
     }
+  }
+
+  /**
+   * @see net.sf.memoranda.TaskList#getXMLContent()
+   */
+  public Document getXMLContent() {
+    return document;
+  }
     
     /**
      * Recursively calculate total effort based on subtasks for every node in the task tree
-     * The values are saved as they are calculated as well
+     * The values are saved as they are calculated as well.
      * 
      * @param t
      * @return
@@ -280,9 +312,9 @@ public class TaskListImpl implements TaskList {
     public long calculateTotalEffortFromSubTasks(Task t) {
         long totalEffort = 0;
         if (hasSubTasks(t.getID())) {
-            Collection subTasks = getAllSubTasks(t.getID());
-            for (Iterator iter = subTasks.iterator(); iter.hasNext();) {
-            	Task e = (Task) iter.next();
+            Collection<Task> subTasks = getAllSubTasks(t.getID());
+            for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
+            	Task e = iter.next();
             	totalEffort = totalEffort + calculateTotalEffortFromSubTasks(e);
             }
             t.setEffort(totalEffort);
@@ -302,9 +334,9 @@ public class TaskListImpl implements TaskList {
     public CalendarDate getEarliestStartDateFromSubTasks(Task t) {
         CalendarDate d = t.getStartDate();
         if (hasSubTasks(t.getID())) {
-	        Collection subTasks = getAllSubTasks(t.getID());
-	        for (Iterator iter = subTasks.iterator(); iter.hasNext();) {
-	        	Task e = (Task) iter.next();
+	        Collection<Task> subTasks = getAllSubTasks(t.getID());
+	        for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
+	        	Task e = iter.next();
 	        	CalendarDate dd = getEarliestStartDateFromSubTasks(e);
 	        	if(dd.before(d)) {
 	        	    d = dd;
@@ -327,9 +359,9 @@ public class TaskListImpl implements TaskList {
     public CalendarDate getLatestEndDateFromSubTasks(Task t) {
         CalendarDate d = t.getEndDate();
         if (hasSubTasks(t.getID())) {
-	        Collection subTasks = getAllSubTasks(t.getID());
-	        for (Iterator iter = subTasks.iterator(); iter.hasNext();) {
-	        	Task e = (Task) iter.next();
+	        Collection<Task> subTasks = getAllSubTasks(t.getID());
+	        for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
+	        	Task e = iter.next();
 	        	CalendarDate dd = getLatestEndDateFromSubTasks(e);
 	        	if(dd.after(d)) {
 	        	    d = dd;
@@ -356,9 +388,9 @@ public class TaskListImpl implements TaskList {
         long expendedEffort = 0; // milliseconds
         long totalEffort = 0; // milliseconds
         if (hasSubTasks(t.getID())) {
-            Collection subTasks = getAllSubTasks(t.getID());
-            for (Iterator iter = subTasks.iterator(); iter.hasNext();) {
-            	Task e = (Task) iter.next();
+            Collection<Task> subTasks = getAllSubTasks(t.getID());
+            for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
+            	Task e = iter.next();
             	long[] subTaskCompletion = calculateCompletionFromSubTasks(e);
             	expendedEffort = expendedEffort + subTaskCompletion[0];
             	totalEffort = totalEffort + subTaskCompletion[1];
@@ -400,20 +432,20 @@ public class TaskListImpl implements TaskList {
             Util.debug("Task " + id + " cannot be found in project " + _project.getTitle());
             return null;
         } */
-		Element el = (Element)elements.get(id);
+		Element el = elements.get(id);
 		if (el == null) {
-			Util.debug("Task " + id + " cannot be found in project " + _project.getTitle());
+			Util.debug("Task " + id + " cannot be found in project " + project.getTitle());
 		}
 		return el;
     }
     
-    private Collection getAllRootTasks() {
-        Elements tasks = _root.getChildElements("task");
+    private Collection<Task> getAllRootTasks() {
+        Elements tasks = root.getChildElements("task");
         return convertToTaskObjects(tasks);    	    		
     }
     
-    private Collection convertToTaskObjects(Elements tasks) {
-        Vector v = new Vector();
+    private Collection<Task> convertToTaskObjects(Elements tasks) {
+        Vector<Task> v = new Vector<Task>();
 
         for (int i = 0; i < tasks.size(); i++) {
             Task t = new TaskImpl(tasks.get(i), this);
@@ -422,10 +454,10 @@ public class TaskListImpl implements TaskList {
         return v;
     }
 
-    private Collection filterActiveTasks(Collection tasks,CalendarDate date) {
-        Vector v = new Vector();
-        for (Iterator iter = tasks.iterator(); iter.hasNext();) {
-            Task t = (Task) iter.next();
+    private Collection<Task> filterActiveTasks(Collection<Task> tasks,CalendarDate date) {
+        Vector<Task> v = new Vector<Task>();
+        for (Iterator<Task> iter = tasks.iterator(); iter.hasNext();) {
+            Task t = iter.next();
             if(isActive(t,date)) {
                 v.add(t);
             }
@@ -443,7 +475,7 @@ public class TaskListImpl implements TaskList {
     }
     public static Collection getRepeatableTasks(){
     	Vector vector= new Vector();
-    	Element repeatable= _root.getFirstChildElement("repeatable");
+    	Element repeatable= root.getFirstChildElement("repeatable");
     	
     	if (repeatable==null){
     		vector=null;
