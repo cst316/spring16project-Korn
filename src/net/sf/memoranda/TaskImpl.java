@@ -455,5 +455,16 @@ public class TaskImpl implements Task, Comparable {
     public void setFrequency(int frequency) {
         _element.addAttribute(new Attribute("frequency", String.valueOf(frequency)));
     }
+    
+    public boolean getWorkingDaysOnly(){
+		boolean workingDays=false;
+		Attribute a= _element.getAttribute("workingDays");
+		if(a!=null&& a.getValue().equals("true")){
+			workingDays=true;
+			
+		}
+		return workingDays;
+	}
 	
 }
+	

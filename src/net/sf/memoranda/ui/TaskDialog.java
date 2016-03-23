@@ -458,10 +458,11 @@ public class TaskDialog extends JDialog {
         chkWorkingDays.setHorizontalAlignment(SwingConstants.CENTER);
         jPanelRepeatToggle.add(chkWorkingDays);
         chkWorkingDays.setSelected(false);
-        chkWorkingDays.setEnabled(true);
+        chkWorkingDays.setEnabled(false);
         chkWorkingDays.setText("Working Days Only");
         chkWorkingDays.setHorizontalTextPosition(SwingConstants.LEADING);
         chkEndDateRpt.setSelected(false);
+        chkEndDateRpt.setEnabled(false);
         jPanelRepeatToggle.add(panel);
         
         panel.add(chkEndDateRpt);
@@ -473,6 +474,7 @@ public class TaskDialog extends JDialog {
         panel.add(lblEndRepeat);
         endDateRpt.setPreferredSize(new Dimension(80, 24));
         endDateRpt.setBorder(border8);
+        endDateRpt.setEnabled(false);
         
         panel.add(endDateRpt);         
         setEndDateRptB.setText("");
@@ -560,6 +562,8 @@ public class TaskDialog extends JDialog {
 	}
 	void cmboRepeatType_actionPerformed(ActionEvent e) {
 		jPanelRepeatToggle.setEnabled(cmboRepeatType.getSelectedIndex()!=0);
+		chkWorkingDays.setEnabled(cmboRepeatType.getSelectedIndex()!=0);
+		chkEndDateRpt.setEnabled(cmboRepeatType.getSelectedIndex()!=0);
 	}
 
 	

@@ -17,6 +17,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -30,7 +31,15 @@ import java.util.Vector;
  */
 /*$Id: TaskListImpl.java,v 1.14 2006/07/03 11:59:19 alexeya Exp $*/
 public class TaskListImpl implements TaskList {
-
+	
+	
+  public static final int NO_REPEAT = 0;
+  public static final int REPEAT_DAILY = 1;
+  public static final int REPEAT_WEEKLY = 2;
+  public static final int REPEAT_MONTHLY = 3;
+  public static final int REPEAT_YEARLY = 4;
+  
+  
   private Project project = null;
   private Document document = null;
   static Element root = null;
@@ -495,16 +504,55 @@ public class TaskListImpl implements TaskList {
    * @return repeatableTasks
    */
   
-  public static Collection<Task> getRepeatableTasks() {
-    Vector<Task> vector = new Vector<Task>();
-    Element repeatable = root.getFirstChildElement("repeatable");
-
-    if (repeatable == null) {
-      vector = null;
-    } /* else {
-    }  */
-    return vector;
+  public  Collection<Task> getRepeatableTasks(){
+  	Vector vector= new Vector();
+  	Element repeatable= root.getFirstChildElement("repeatable");
+  	
+  	if (repeatable==null){
+  		vector=null;
+  	}
+  	else{
+	    	Elements elements= repeatable.getChildElements("task");
+	    	for(int i=0;i< elements.size();i++){
+	    		vector.add(new TaskImpl(elements.get(i),this));
+	    	}
+  	}
+  	
+  	return vector;
   }
+  public Collection getRepeatableTaskforDate(CalendarDate date){
+  	Vector repeatableTasks= (Vector) getRepeatableTasks();
+  	Vector vector= new Vector();
+  	
+  	for(int i=0; i< repeatableTasks.size();i++){
+  		Task task= (Task) repeatableTasks.get(i);
+  	
+	    	/*if(task.getWorkingDaysOnly()&&
+	    			((date.getCalendar().get(Calendar.DAY_OF_WEEK)==Calendar.SUNDAY)
+	    			||(date.getCalendar().get(Calendar.DAY_OF_WEEK)==Calendar.SATURDAY))){
+	    		
+	    		
+	    	}*/
+  		if(date.inPeriod(task.getStartDate(), task.getEndDate())){
+  			if(task.getRepeat()== REPEAT_WEEKLY){
+  				if(date.getCalendar().get(Calendar.DAY_OF_WEEK)==task.getPeriod());
+  					vector.add(task);
+  				
+  			}
+  			else if(task.getRepeat()==REPEAT_MONTHLY){
+  				if(date.getCalendar().get(Calendar.DAY_OF_MONTH)==task.getPeriod());
+  					vector.add(task);
+  			}
+  			else if(task.getRepeat()==REPEAT_YEARLY){
+  				if(date.getCalendar().get(Calendar.DAY_OF_YEAR)==task.getPeriod());
+  					vector.add(task);
+  			}
+  		}
+  	}
+  	
+  return vector;
+}
+  
 
 /*
  * deprecated methods below
