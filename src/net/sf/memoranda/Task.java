@@ -91,5 +91,6 @@ public interface Task {
     
     void setWorkingDaysOnly(boolean workDaysOnly);
     void setFrequency(int frequency);
+    public boolean getWorkingDaysOnly();
 
 }
