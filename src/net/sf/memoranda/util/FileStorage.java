@@ -301,7 +301,7 @@ public class FileStorage implements Storage {
                 + prj.getID()
                 + File.separator
                 + ".tasklist");
-        Document tasklistDoc = tasklist.getXMLContent();
+        Document tasklistDoc = tasklist.getXmlContent();
         //tasklistDoc.setDocType(TaskListVersioning.getCurrentDocType());
         saveDocument(tasklistDoc,JN_DOCPATH + prj.getID() + File.separator + ".tasklist");
     }

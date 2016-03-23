@@ -306,124 +306,132 @@ public class TaskListImpl implements TaskList {
   }
 
   /**
-   * @see net.sf.memoranda.TaskList#getXMLContent()
+   * @see net.sf.memoranda.TaskList#getXmlContent()
    */
-  public Document getXMLContent() {
+  
+  public Document getXmlContent() {
     return document;
   }
     
-    /**
-     * Recursively calculate total effort based on subtasks for every node in the task tree
-     * The values are saved as they are calculated as well.
-     * 
-     * @param t
-     * @return
-     */
-    public long calculateTotalEffortFromSubTasks(Task t) {
-        long totalEffort = 0;
-        if (hasSubTasks(t.getID())) {
-            Collection<Task> subTasks = getAllSubTasks(t.getID());
-            for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
-            	Task e = iter.next();
-            	totalEffort = totalEffort + calculateTotalEffortFromSubTasks(e);
-            }
-            t.setEffort(totalEffort);
-            return totalEffort;            
-        }
-        else {
-            return t.getEffort();
-        }
+  /**
+    * Recursively calculate total effort based on subtasks for every node in the task tree
+    * The values are saved as they are calculated as well.
+    * 
+    * @param task
+    *  task to calculate effort for.
+    * @return
+    *   total effort from given task
+    */  
+  public long calculateTotalEffortFromSubTasks(Task task) {
+    long totalEffort = 0;
+    if (hasSubTasks(task.getID())) {
+      Collection<Task> subTasks = getAllSubTasks(task.getID());
+      for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
+        Task iteratedTask = iter.next();
+        totalEffort = totalEffort + calculateTotalEffortFromSubTasks(iteratedTask);
+      }
+      task.setEffort(totalEffort);
+      return totalEffort;            
+    } else {
+      return task.getEffort();
     }
+  }
 
-    /**
-     * Looks through the entire sub task tree and corrects any inconsistencies in start dates
-     * 
-     * @param t
-     * @return
-     */
-    public CalendarDate getEarliestStartDateFromSubTasks(Task t) {
-        CalendarDate d = t.getStartDate();
-        if (hasSubTasks(t.getID())) {
-	        Collection<Task> subTasks = getAllSubTasks(t.getID());
-	        for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
-	        	Task e = iter.next();
-	        	CalendarDate dd = getEarliestStartDateFromSubTasks(e);
-	        	if(dd.before(d)) {
-	        	    d = dd;
-	        	}
-	        }
-	        t.setStartDate(d);
-	        return d;
+  /**
+    * Looks through the entire sub task tree and corrects any inconsistencies in start dates.
+    * 
+    * @param task
+    *   parent task used to check subtasks. 
+    * @return
+    *    earliest start date.
+    */
+  public CalendarDate getEarliestStartDateFromSubTasks(Task task) {
+    CalendarDate startDate = task.getStartDate();
+    if (hasSubTasks(task.getID())) {
+      Collection<Task> subTasks = getAllSubTasks(task.getID());
+      for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
+        Task iteratedTask = iter.next();
+        CalendarDate dd = getEarliestStartDateFromSubTasks(iteratedTask);
+        if (dd.before(startDate)) {
+          startDate = dd;        
         }
-        else {
-            return t.getStartDate();
-        }
+      }
+      task.setStartDate(startDate);
+      return startDate;
+    } else {
+      return task.getStartDate();
     }
+  }
 
-    /**
-     * Looks through the entire sub task tree and corrects any inconsistencies in start dates
-     * 
-     * @param t
-     * @return
-     */
-    public CalendarDate getLatestEndDateFromSubTasks(Task t) {
-        CalendarDate d = t.getEndDate();
-        if (hasSubTasks(t.getID())) {
-	        Collection<Task> subTasks = getAllSubTasks(t.getID());
-	        for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
-	        	Task e = iter.next();
-	        	CalendarDate dd = getLatestEndDateFromSubTasks(e);
-	        	if(dd.after(d)) {
-	        	    d = dd;
-	        	}
-	        }
-	        t.setEndDate(d);
-	        return d;
+  /**
+   * Looks through the entire sub task tree and corrects any inconsistencies in start dates.
+   * 
+   * @param task
+   *   task to be checked for latest End date.
+   * @return
+   *   latest end date.
+   */
+  public CalendarDate getLatestEndDateFromSubTasks(Task task) {
+    CalendarDate date = task.getEndDate();
+    if (hasSubTasks(task.getID())) {
+      Collection<Task> subTasks = getAllSubTasks(task.getID());
+      for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
+        Task iteratorTask = iter.next();
+        CalendarDate dd = getLatestEndDateFromSubTasks(iteratorTask);
+        if (dd.after(date)) {
+          date = dd;
         }
-        else {
-            return t.getEndDate();
-        }
+      }
+      task.setEndDate(date);
+      return date;
+    } else {
+      return task.getEndDate();
     }
+  }
     
-    /**
-     * Looks through the entire sub task tree and calculates progress on all parent task nodes
-     * 
-     * @param t
-     * @return long[] of size 2. First long is expended effort in milliseconds, 2nd long is total effort in milliseconds
-     */
-    public long[] calculateCompletionFromSubTasks(Task t) {
-//        Util.debug("Task " + t.getText());
+  /**
+   * Looks through the entire sub task tree and calculates progress on all parent task nodes
+   * 
+   * @param task
+   *  task used to complete subtasks.
+   * @return long[] 
+   *     of size 2. First long is expended effort in milliseconds,
+   *       2nd long is total effort in milliseconds
+   */
+  public long[] calculateCompletionFromSubTasks(Task task) {
+    /* Util.debug("Task " + t.getText()); */
         
-        long[] res = new long[2];
-        long expendedEffort = 0; // milliseconds
-        long totalEffort = 0; // milliseconds
-        if (hasSubTasks(t.getID())) {
-            Collection<Task> subTasks = getAllSubTasks(t.getID());
-            for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
-            	Task e = iter.next();
-            	long[] subTaskCompletion = calculateCompletionFromSubTasks(e);
-            	expendedEffort = expendedEffort + subTaskCompletion[0];
-            	totalEffort = totalEffort + subTaskCompletion[1];
-            }
+    long[] res = new long[2];
+    long expendedEffort = 0; // milliseconds
+    long totalEffort = 0; // milliseconds
+    if (hasSubTasks(task.getID())) {
+      Collection<Task> subTasks = getAllSubTasks(task.getID());
+      for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
+        Task iterTask = iter.next();
+        long[] subTaskCompletion = calculateCompletionFromSubTasks(iterTask);
+        expendedEffort = expendedEffort + subTaskCompletion[0];
+        totalEffort = totalEffort + subTaskCompletion[1];
+      }
             
-            int thisProgress = (int) Math.round((((double)expendedEffort / (double)totalEffort) * 100));
-            t.setProgress(thisProgress);
+      int thisProgress = (int) Math.round((((double)expendedEffort 
+          / (double)totalEffort) * 100));
+      task.setProgress(thisProgress);
 
-//            Util.debug("Expended Effort: "+ expendedEffort);
-//            Util.debug("Total Effort: "+ totalEffort);
-//            Util.debug("Progress: "+ t.getProgress());
+      /*          Util.debug("Expended Effort: "+ expendedEffort);
+                  Util.debug("Total Effort: "+ totalEffort);
+                  Util.debug("Progress: "+ t.getProgress());   */
 
             res[0] = expendedEffort;
             res[1] = totalEffort;
             return res;            
         }
         else {
-            long eff = t.getEffort();
+            long eff = task.getEffort();
             // if effort was not filled in, it is assumed to be "1 hr" for the purpose of calculation
             if (eff == 0) {
                 eff = 1;
             }
-            res[0] = Math.round((double)(t.getProgress()* eff) / 100d); 
+            res[0] = Math.round((double)(task.getProgress()* eff) / 100d); 
             res[1] = eff;
             return res;
         }
@@ -431,9 +439,8 @@ public class TaskListImpl implements TaskList {
     /*
      * private methods below this line
      */
-    public nu.xom.Element getTaskElement(String id) {
-               
-		/*Nodes nodes = XQueryUtil.xquery(_doc, "//task[@id='" + id + "']");
+    public nu.xom.Element getTaskElement(String id) {               
+    /*Nodes nodes = XQueryUtil.xquery(_doc, "//task[@id='" + id + "']");
         if (nodes.size() > 0) {
             Element el = (Element) nodes.get(0);
             return el;            
@@ -442,89 +449,91 @@ public class TaskListImpl implements TaskList {
             Util.debug("Task " + id + " cannot be found in project " + _project.getTitle());
             return null;
         } */
-		Element el = elements.get(id);
-		if (el == null) {
-			Util.debug("Task " + id + " cannot be found in project " + project.getTitle());
-		}
-		return el;
+    Element el = elements.get(id);
+    if (el == null) {
+      Util.debug("Task " + id + " cannot be found in project " + project.getTitle());
     }
+    return el;
+  }
     
-    private Collection<Task> getAllRootTasks() {
-        Elements tasks = root.getChildElements("task");
-        return convertToTaskObjects(tasks);    	    		
-    }
+  private Collection<Task> getAllRootTasks() {
+    Elements tasks = root.getChildElements("task");
+    return convertToTaskObjects(tasks);
+  }
     
-    private Collection<Task> convertToTaskObjects(Elements tasks) {
-        Vector<Task> v = new Vector<Task>();
+  private Collection<Task> convertToTaskObjects(Elements tasks) {
+    Vector<Task> vector = new Vector<Task>();
 
-        for (int i = 0; i < tasks.size(); i++) {
-            Task t = new TaskImpl(tasks.get(i), this);
-            v.add(t);
-        }
-        return v;
+    for (int i = 0; i < tasks.size(); i++) {
+      Task task = new TaskImpl(tasks.get(i), this);
+      vector.add(task);
     }
+    return vector;
+  }
 
-    private Collection<Task> filterActiveTasks(Collection<Task> tasks,CalendarDate date) {
-        Vector<Task> v = new Vector<Task>();
-        for (Iterator<Task> iter = tasks.iterator(); iter.hasNext();) {
-            Task t = iter.next();
-            if(isActive(t,date)) {
-                v.add(t);
-            }
-        }
-        return v;
+  private Collection<Task> filterActiveTasks(Collection<Task> tasks,CalendarDate date) {
+    Vector<Task> vector = new Vector<Task>();
+    for (Iterator<Task> iter = tasks.iterator(); iter.hasNext();) {
+      Task iteratorTask = iter.next();
+      if (isActive(iteratorTask,date)) {
+        vector.add(iteratorTask);
+      }
     }
+    return vector;
+  }
 
-    private boolean isActive(Task t,CalendarDate date) {
-    	if ((t.getStatus(date) == Task.ACTIVE) || (t.getStatus(date) == Task.DEADLINE) || (t.getStatus(date) == Task.FAILED)) {
-    		return true;
-    	}
-    	else {
-    		return false;
-    	}
+  private boolean isActive(Task task,CalendarDate date) {
+    if ((task.getStatus(date) == Task.ACTIVE) || (task.getStatus(date) == Task.DEADLINE)
+        || (task.getStatus(date) == Task.FAILED)) {
+      return true;
+    } else {
+      return false;
     }
-    public static Collection getRepeatableTasks(){
-    	Vector vector= new Vector();
-    	Element repeatable= root.getFirstChildElement("repeatable");
-    	
-    	if (repeatable==null){
-    		vector=null;
-    	}
-    	else{
-    	Elements elements= repeatable.getChildElements("task");
-    	}
-    	
-    	return vector;
-    }
+  }
+  /**
+   * Returns a collection of repeatable Tasks.
+   * @return repeatableTasks
+   */
+  
+  public static Collection<Task> getRepeatableTasks() {
+    Vector<Task> vector = new Vector<Task>();
+    Element repeatable = root.getFirstChildElement("repeatable");
 
-    /*
-     * deprecated methods below
-     * 
-     */
+    if (repeatable == null) {
+      vector = null;
+    } /* else {
+    }  */
+    return vector;
+  }
+
+/*
+ * deprecated methods below
+ * 
+ */
                     
-//    public void adjustParentTasks(Task t) {
-//    	if ((t.getParent() == null) || (t.getParent().equals(""))){
-//    		return;
-//    	}
-//    	else {
-//    		Task p = getTask(t.getParent());
-//    		
-//    		long totalEffort = calculateTotalEffortFromSubTasks(p);
-//    		
-//    		if(totalEffort > p.getEffort()) {
-//    			p.setEffort(totalEffort);
-//    		}
-//    		if(t.getStartDate().before(p.getStartDate())) {
-//    			p.setStartDate(t.getStartDate());
-//    		}
-//    		if(t.getEndDate().after(p.getEndDate())) {
-//    			p.setEndDate(t.getEndDate());
-//    		}
-//    		
-//        	if (!((p.getParent() == null) || (p.getParent().equals("")))){
-//        		// still has parent, go up the tree
-//        		adjustParentTasks(p);
-//        	}    		
-//    	}
-//    }
+/*    public void adjustParentTasks(Task t) { 
+    if ((t.getParent() == null) || (t.getParent().equals(""))){
+      return;
+    } else {
+       Task p = getTask(t.getParent());
+
+       long totalEffort = calculateTotalEffortFromSubTasks(p);
+
+       if(totalEffort > p.getEffort()) {
+         p.setEffort(totalEffort);
+       }
+       if(t.getStartDate().before(p.getStartDate())) {
+          p.setStartDate(t.getStartDate());
+       }
+       if (t.getEndDate().after(p.getEndDate())) {
+         p.setEndDate(t.getEndDate());
+       }
+
+       if (!((p.getParent() == null) || (p.getParent().equals("")))){
+       // still has parent, go up the tree
+         adjustParentTasks(p);
+         }
+    }
+    }
+} */
 }
