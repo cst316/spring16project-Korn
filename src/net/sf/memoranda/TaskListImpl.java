@@ -48,7 +48,7 @@ public class TaskListImpl implements TaskList {
    * Hastable of "task" XOM elements for quick searching them by ID's
    * (ID => element) 
    */
-  private Hashtable<String, nu.xom.Element> elements = new Hashtable<String, Element>();
+  private Hashtable<String, Element> elements = new Hashtable<String, Element>();
     
   /**
    * Constructor for TaskListImpl.
@@ -191,7 +191,7 @@ public class TaskListImpl implements TaskList {
       boolean workDays,
       int progress,
       int frequency) {
-    assert (Task.REPEAT_FREQUENCIES_INDEX [frequency] == frequency);
+      assert (Task.REPEAT_FREQUENCIES_INDEX [frequency] == frequency);
     Element taskElem = new Element("task");
     String id = Util.generateId();
     taskElem.addAttribute(new Attribute("id", id));
@@ -202,21 +202,10 @@ public class TaskListImpl implements TaskList {
     task.setPriority(priority);
     task.setEffort(effort);
     task.setDescription(description);
-    if (parentTaskId == null) {
-        root.appendChild(taskElem);
-    }
-    else {
-        Element parent = getTaskElement(parentTaskId);
-        parent.appendChild(taskElem);
-    }
-    //task.setParentTask(parentTaskId, root);
+    task.setParentTask(parentTaskId, root);
     task.setWorkingDaysOnly(workDays);
     task.setProgress(progress);
     task.setFrequency(frequency);
-    elements.put(id, task.getContent());
-    
-    return task;
-    
     /* Element el = new Element("task");
          el.addAttribute(new Attribute("startDate", startDate.toString()));
             if (endDate != null) {
@@ -253,6 +242,7 @@ public class TaskListImpl implements TaskList {
             Util.debug("Created task with parent " + parentTaskId + 
             " and recurance " + Task.REPEAT_FREQUENCIES_LIST[frequency]);
             return new TaskImpl(el, this);*/ 
+    return task;
   }
     
   /**
@@ -430,25 +420,28 @@ public class TaskListImpl implements TaskList {
                   Util.debug("Total Effort: "+ totalEffort);
                   Util.debug("Progress: "+ t.getProgress());   */
 
-            res[0] = expendedEffort;
-            res[1] = totalEffort;
-            return res;            
-        }
-        else {
-            long eff = task.getEffort();
-            // if effort was not filled in, it is assumed to be "1 hr" for the purpose of calculation
-            if (eff == 0) {
-                eff = 1;
-            }
-            res[0] = Math.round((double)(task.getProgress()* eff) / 100d); 
-            res[1] = eff;
-            return res;
-        }
-    }    
-    /*
-     * private methods below this line
-     */
-    public nu.xom.Element getTaskElement(String id) {               
+      res[0] = expendedEffort;
+      res[1] = totalEffort;
+      return res;            
+    } else {
+      long eff = task.getEffort();
+      // if effort was not filled in, it is assumed to be "1 hr" for the purpose of calculation
+      if (eff == 0) {
+        eff = 1;
+      }
+      res[0] = Math.round((double)(task.getProgress() * eff) / 100d); 
+      res[1] = eff;
+      return res;
+    }
+  }    
+
+  /**
+   *  get Task element method.
+   *  @param id - id of the task
+   *  @return taskElement the contents of the task
+   */
+  public Object getTaskElement(String id) {
+               
     /*Nodes nodes = XQueryUtil.xquery(_doc, "//task[@id='" + id + "']");
         if (nodes.size() > 0) {
             Element el = (Element) nodes.get(0);

@@ -66,21 +66,16 @@ public class TaskImpl implements Task, Comparable {
 		Project pr = this._tl.getProject();
 		if (pr.getEndDate() != null)
 			return pr.getEndDate();
-		CalendarDate newdate = this.getStartDate();
-		return new CalendarDate(newdate.getDay(), newdate.getMonth(), newdate.getYear());
-		//return this.getStartDate().dayBefore();
+		return this.getStartDate().dayBefore();
         
     }
 
     public void setEndDate(CalendarDate date) {
-//		if (date == null) {
-//			setAttr("endDate", "");
-//		} else {
-//			setAttr("endDate", date.toString());
-//		}
-    	if(date != null && date.toString() != "") {
-    		setAttr("endDate", date.toString());
-    	}
+		if (date == null) {
+			setAttr("endDate", "");
+		} else {
+			setAttr("endDate", date.toString());
+		}
     }
 
     public long getEffort() {

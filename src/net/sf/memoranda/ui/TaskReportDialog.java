@@ -167,7 +167,3 @@ public class TaskReportDialog extends javax.swing.JDialog{
     // End of variables declaration//GEN-END:variables
     
 }
-
-		
-	
-
