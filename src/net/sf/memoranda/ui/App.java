@@ -138,6 +138,12 @@ public class App {
 
 	}
 
+	public static void openWindow() {
+		if (frame == null)
+			return;
+		frame.setEnabled(true);
+	}
+
 	public static void closeWindow() {
 		if (frame == null)
 			return;

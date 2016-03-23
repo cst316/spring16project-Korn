@@ -1,10 +1,6 @@
 package net.sf.memoranda.ui;
 
-import java.awt.AWTEvent;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -16,32 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.JToolBar;
-import javax.swing.KeyStroke;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.text.html.HTMLDocument;
 
-import net.sf.memoranda.CurrentProject;
-import net.sf.memoranda.History;
-import net.sf.memoranda.Note;
-import net.sf.memoranda.NoteList;
-import net.sf.memoranda.Project;
-import net.sf.memoranda.ProjectListener;
-import net.sf.memoranda.ResourcesList;
-import net.sf.memoranda.TaskList;
+import net.sf.memoranda.*;
 import net.sf.memoranda.date.CurrentDate;
 import net.sf.memoranda.ui.htmleditor.HTMLEditor;
 import net.sf.memoranda.util.Configuration;
@@ -65,8 +39,8 @@ import nu.xom.Elements;
 /*$Id: AppFrame.java,v 1.33 2005/07/05 08:17:24 alexeya Exp $*/
 
 public class AppFrame extends JFrame {
-	
 
+    TrayIcon trayIcon;
     JPanel contentPane;
     JMenuBar menuBar = new JMenuBar();
     JMenu jMenuFile = new JMenu();
@@ -661,8 +635,53 @@ public class AppFrame extends JFrame {
         Context.put("FRAME_HEIGHT", new Integer(this.getHeight()));
         Context.put("FRAME_XPOS", new Integer(this.getLocation().x));
         Context.put("FRAME_YPOS", new Integer(this.getLocation().y));
+        trayIcon = null;
         exitNotify();
         System.exit(0);
+    }
+
+    public void addTray() {
+        trayIcon = null;
+        if (SystemTray.isSupported()) {
+            SystemTray tray = SystemTray.getSystemTray();
+            Image image = Toolkit.getDefaultToolkit().getImage(AppFrame.class.getResource("resources/icons/date.png"));
+
+            ActionListener restoreListener = new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    App.openWindow();
+                    JOptionPane.showMessageDialog(App.getFrame(), "hey i bet you wanted to restore, didn't you");
+                }
+            };
+
+            ActionListener exitListener = new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    doExit();
+                }
+            };
+
+            PopupMenu popup = new PopupMenu();
+
+            MenuItem restoreItem = new MenuItem("Restore");
+            restoreItem.addActionListener(restoreListener);
+            popup.add(restoreItem);
+
+            MenuItem exitItem = new MenuItem("Exit");
+            exitItem.addActionListener(exitListener);
+            popup.add(exitItem);
+
+            // construct a TrayIcon
+            trayIcon = new TrayIcon(image, "Memoranda", popup);
+
+            // set the default double click properties on the icon
+            trayIcon.addActionListener(restoreListener);
+
+            // add tray image
+            try {
+                tray.add(trayIcon);
+            } catch (AWTException e) {
+                System.err.println(e);
+            }
+        }
     }
 
     public void doMinimize() {
@@ -673,6 +692,7 @@ public class AppFrame extends JFrame {
     
     public void doHide() {
     	exitNotify();
+        trayIcon = null;
     	this.dispose();
     }
 
@@ -691,8 +711,10 @@ public class AppFrame extends JFrame {
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
             if (Configuration.get("ON_CLOSE").equals("exit"))
                 doExit();
-            else
+            else {
                 doHide();
+                addTray();
+            }
         }
         else if ((e.getID() == WindowEvent.WINDOW_ICONIFIED)) {
             super.processWindowEvent(new WindowEvent(this,
