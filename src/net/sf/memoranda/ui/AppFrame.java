@@ -642,17 +642,20 @@ public class AppFrame extends JFrame {
 
     public void addTray() {
         trayIcon = null;
+
         if (SystemTray.isSupported()) {
             SystemTray tray = SystemTray.getSystemTray();
             Image image = Toolkit.getDefaultToolkit().getImage(AppFrame.class.getResource("resources/icons/date.png"));
 
+            // Restore window and remove tray icon
             ActionListener restoreListener = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     App.openWindow();
-                    JOptionPane.showMessageDialog(App.getFrame(), "hey i bet you wanted to restore, didn't you");
+                    SystemTray.getSystemTray().remove(trayIcon);
                 }
             };
 
+            // Exit the application
             ActionListener exitListener = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     doExit();

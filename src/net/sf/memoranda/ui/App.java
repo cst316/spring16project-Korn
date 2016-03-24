@@ -141,7 +141,9 @@ public class App {
 	public static void openWindow() {
 		if (frame == null)
 			return;
+		frame.setVisible(true);
 		frame.setEnabled(true);
+		frame.setExtendedState(JFrame.NORMAL);
 	}
 
 	public static void closeWindow() {
