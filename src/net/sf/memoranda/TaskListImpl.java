@@ -40,24 +40,24 @@ public class TaskListImpl implements TaskList {
   public static final int REPEAT_YEARLY = 4;
   
   
-  private Project project = null;
-  private Document document = null;
-  static Element root = null;
+  private Project _project = null;
+  private nu.xom.Document _document = null;
+  static Element _root = null;
   
   /*
    * Hastable of "task" XOM elements for quick searching them by ID's
    * (ID => element) 
    */
-  private Hashtable<String, Element> elements = new Hashtable<String, Element>();
+  private Hashtable<String, nu.xom.Element> elements = new Hashtable<String, Element>();
     
   /**
    * Constructor for TaskListImpl.
    */
   public TaskListImpl(Document doc, Project prj) {
-    document = doc;
-    root = document.getRootElement();
-    project = prj;
-    buildElements(root);
+    _document = doc;
+    _root = _document.getRootElement();
+    _project = prj;
+    buildElements(_root);
   }
   
   /**
@@ -67,9 +67,9 @@ public class TaskListImpl implements TaskList {
    */
     
   public TaskListImpl(Project prj) {            
-    root = new Element("tasklist");
-    document = new Document(root);
-    project = prj;
+    _root = new Element("tasklist");
+    _document = new Document(_root);
+    _project = prj;
   }
   
   /**
@@ -78,7 +78,7 @@ public class TaskListImpl implements TaskList {
    */
   
   public Project getProject() {
-    return project;
+    return _project;
   }
   
   /*
@@ -202,47 +202,54 @@ public class TaskListImpl implements TaskList {
     task.setPriority(priority);
     task.setEffort(effort);
     task.setDescription(description);
-    task.setParentTask(parentTaskId, root);
+//    task.setParentTask(parentTaskId, root);
     task.setWorkingDaysOnly(workDays);
     task.setProgress(progress);
     task.setFrequency(frequency);
-    /* Element el = new Element("task");
-         el.addAttribute(new Attribute("startDate", startDate.toString()));
-            if (endDate != null) {
-              el.addAttribute(new Attribute("endDate", endDate.toString()));
-             else
-             }
-               el.addAttribute(new Attribute("endDate", startDate.toString()));
-
-            el.addAttribute(new Attribute("progress", String.valueOf(progress)));
-            el.addAttribute(new Attribute("effort", String.valueOf(effort)));
-            el.addAttribute(new Attribute("priority", String.valueOf(priority)));
-            el.addAttribute(new Attribute("frequency", String.valueOf(frequency)));
-            new attribute for wrkin days - ivanrise
-            el.addAttribute(new Attribute("workingDays",String.valueOf(workDays)));
-
-            Element txt = new Element("text");
-            txt.appendChild(text);
-            el.appendChild(txt);
-
-            Element desc = new Element("description");
-            desc.appendChild(description);
-            el.appendChild(desc);
-
-            if (parentTaskId == null) {
-                _root.appendChild(el);
-            }
-            else {
-                Element parent = getTaskElement(parentTaskId);
-                parent.appendChild(el);
-            }
-            
-           elements.put(id, el);
-           
-            Util.debug("Created task with parent " + parentTaskId + 
-            " and recurance " + Task.REPEAT_FREQUENCIES_LIST[frequency]);
-            return new TaskImpl(el, this);*/ 
-    return task;
+	if (parentTaskId == null) {
+		_root.appendChild(task.getContent());
+	}
+	else {
+		Element parent = getTaskElement(parentTaskId);
+		parent.appendChild(task.getContent());
+	}
+	
+	elements.put(id, task.getContent());
+	
+    return new TaskImpl(task.getContent(), this);
+//      Element el = new Element("task");
+//      String id = Util.generateId();
+//      el.addAttribute(new Attribute("startDate", startDate.toString()));
+//      if (endDate != null) {
+//    	  el.addAttribute(new Attribute("endDate", endDate.toString()));          }
+//      el.addAttribute(new Attribute("progress", String.valueOf(progress)));
+//      el.addAttribute(new Attribute("effort", String.valueOf(effort)));
+//      el.addAttribute(new Attribute("priority", String.valueOf(priority)));
+//      el.addAttribute(new Attribute("frequency", String.valueOf(frequency)));
+//      //new attribute for wrkin days - ivanrise
+//      el.addAttribute(new Attribute("workingDays",String.valueOf(workDays)));
+//
+//      Element txt = new Element("text");
+//      txt.appendChild(text);
+//      el.appendChild(txt);
+//
+//      Element desc = new Element("description");
+//      desc.appendChild(description);
+//      el.appendChild(desc);
+//
+//      if (parentTaskId == null) {
+//          root.appendChild(el);
+//      }
+//      else {
+//          Element parent = getTaskElement(parentTaskId);
+//          parent.appendChild(el);
+//      }
+//    
+//      elements.put(id, el);
+//   
+//      Util.debug("Created task with parent " + parentTaskId + 
+//    		  " and recurrence " + Task.REPEAT_FREQUENCIES_LIST[frequency]);
+//      return new TaskImpl(el, this);
   }
     
   /**
@@ -252,7 +259,7 @@ public class TaskListImpl implements TaskList {
   public void removeTask(Task task) {
     String parentTaskId = task.getParentId();
     if (parentTaskId == null) {
-      root.removeChild(task.getContent());            
+      _root.removeChild(task.getContent());            
     } else {
       Element parentNode = (Element) getTaskElement(parentTaskId);
       parentNode.removeChild(task.getContent());
@@ -289,7 +296,7 @@ public class TaskListImpl implements TaskList {
    *   id of the item being checked.
    */
   public boolean hasParentTask(String id) {
-    Element element = (Element) getTaskElement(id);
+    Element element = getTaskElement(id);
 
     Node parentNode = element.getParent();
     if (parentNode instanceof Element) {
@@ -309,7 +316,7 @@ public class TaskListImpl implements TaskList {
    */
   
   public Document getXmlContent() {
-    return document;
+	  return _document;
   }
     
   /**
@@ -440,7 +447,7 @@ public class TaskListImpl implements TaskList {
    *  @param id - id of the task
    *  @return taskElement the contents of the task
    */
-  public Object getTaskElement(String id) {
+  public nu.xom.Element getTaskElement(String id) {
                
     /*Nodes nodes = XQueryUtil.xquery(_doc, "//task[@id='" + id + "']");
         if (nodes.size() > 0) {
@@ -453,13 +460,13 @@ public class TaskListImpl implements TaskList {
         } */
     Element el = elements.get(id);
     if (el == null) {
-      Util.debug("Task " + id + " cannot be found in project " + project.getTitle());
+      Util.debug("Task " + id + " cannot be found in project " + _project.getTitle());
     }
     return el;
   }
     
   private Collection<Task> getAllRootTasks() {
-    Elements tasks = root.getChildElements("task");
+    Elements tasks = _root.getChildElements("task");
     return convertToTaskObjects(tasks);
   }
     
@@ -499,7 +506,7 @@ public class TaskListImpl implements TaskList {
   
   public  Collection<Task> getRepeatableTasks(){
   	Vector vector= new Vector();
-  	Element repeatable= root.getFirstChildElement("repeatable");
+  	Element repeatable= _root.getFirstChildElement("repeatable");
   	
   	if (repeatable==null){
   		vector=null;

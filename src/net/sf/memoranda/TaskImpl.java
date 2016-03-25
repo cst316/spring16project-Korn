@@ -117,13 +117,12 @@ public class TaskImpl implements Task, Comparable {
 		return null;
 	}
 	
-	public void setParentTask(String parentTaskId, Object root) {
+	public void setParentTask(String parentTaskId, nu.xom.Element root) {
         if (parentTaskId == null) {
-        	Element rootEl = (Element) root;
-            rootEl.appendChild(_element);
+            root.appendChild(_element);
         }
         else {
-    		Element parent = (Element) _tl.getTaskElement(parentTaskId);
+    		Element parent = _tl.getTaskElement(parentTaskId);
             parent.appendChild(_element);
         }
 	}

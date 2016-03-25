@@ -77,7 +77,7 @@ public interface Task {
     Task getParentTask();
     String getParentId();
     
-    void setParentTask(String parentTaskId, Object root);
+    void setParentTask(String parentTaskId, nu.xom.Element root);
     
     void freeze();
     void unfreeze();
