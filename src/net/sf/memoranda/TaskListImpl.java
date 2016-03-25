@@ -42,7 +42,7 @@ public class TaskListImpl implements TaskList {
   
   private Project _project = null;
   private nu.xom.Document _document = null;
-  static Element _root = null;
+  static nu.xom.Element _root = null;
   
   /*
    * Hastable of "task" XOM elements for quick searching them by ID's
@@ -202,7 +202,7 @@ public class TaskListImpl implements TaskList {
     task.setPriority(priority);
     task.setEffort(effort);
     task.setDescription(description);
-//    task.setParentTask(parentTaskId, root);
+//    task.setParentTask(parentTaskId, _root);
     task.setWorkingDaysOnly(workDays);
     task.setProgress(progress);
     task.setFrequency(frequency);
@@ -213,7 +213,7 @@ public class TaskListImpl implements TaskList {
 		Element parent = getTaskElement(parentTaskId);
 		parent.appendChild(task.getContent());
 	}
-	
+
 	elements.put(id, task.getContent());
 	
     return new TaskImpl(task.getContent(), this);

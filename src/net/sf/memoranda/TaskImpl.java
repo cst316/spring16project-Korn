@@ -27,7 +27,7 @@ import nu.xom.Node;
 /*$Id: TaskImpl.java,v 1.15 2005/12/01 08:12:26 alexeya Exp $*/
 public class TaskImpl implements Task, Comparable {
 
-    private Element _element = null;
+    private nu.xom.Element _element = null;
     private TaskList _tl = null;
 
     /**
