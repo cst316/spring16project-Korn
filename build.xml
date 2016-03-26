@@ -196,7 +196,7 @@
 	<!-- =================================================================== -->
 	<!-- Runs the JUnit Test                                                 -->
 	<!-- =================================================================== -->
-	<target name="junit" depends="compile" description="Runs the JUnit tests">
+	<target name="junit" depends="run" description="Runs the JUnit tests">
 		<delete dir="${test.junit.dir}"/>
 		<delete dir="${test.jacoco.dir}"/>
 		<mkdir dir="${tests.junit.dir}"/>
