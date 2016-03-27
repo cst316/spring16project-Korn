@@ -242,8 +242,7 @@ public class AgendaPanel extends JPanel {
 					        if (dlg.CANCELLED)
 					            return;
 					        CalendarDate sd = new CalendarDate((Date) dlg.startDate.getModel().getValue());
-//					        CalendarDate ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
-					          CalendarDate ed;
+					        CalendarDate ed;
 					 		if(dlg.chkEndDate.isSelected())
 					 			ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
 					 		else
@@ -255,7 +254,7 @@ public class AgendaPanel extends JPanel {
 									sd, ed, dlg.todoField.getText(), 
 									dlg.priorityCB.getSelectedIndex(),effort, 
 									dlg.descriptionField.getText(),null,
-									false, //#TODO Placeholder value until implemented //Boolean to denote recurrence is working days only
+									dlg.chkWorkingDays.isSelected(), //Boolean to denote recurrence is working days only
 									((Integer)dlg.progress.getValue()).intValue(),
 									dlg.cmboRepeatType.getSelectedIndex());
 					    	newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());							
@@ -263,13 +262,6 @@ public class AgendaPanel extends JPanel {
 					        TaskTable.tableChanged();
 					        parentPanel.updateIndicators();
 					        //taskTable.updateUI();	
-					        
-					        
-					        
-
-
-					       
-
 					}
 				}
 			}

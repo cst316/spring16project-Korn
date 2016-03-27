@@ -104,7 +104,7 @@ public class AgendaGenerator {
 				}
 
 				s = s + renderTask(p, date, tl, t, 0,expandedTasks);
-				if(expandedTasks.contains(t.getID())) {
+				if(expandedTasks!=null && expandedTasks.contains(t.getID())) {
 					s = s + expandRecursively(p,date,tl,t,expandedTasks,1);
 				}        		
 			}
