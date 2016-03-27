@@ -28,7 +28,7 @@ public class MinutleyEventTest {
 	@Before
 	public void setUp() throws Exception {
 		repeatType = 6;
-		dialog = new EventDialog(App.getFrame(), Local.getString("New event"));
+		//dialog = new EventDialog(App.getFrame(), Local.getString("New event"));
 		startDate = CalendarDate.today();
 		endDate = CalendarDate.tomorrow();
 		period = 1;
