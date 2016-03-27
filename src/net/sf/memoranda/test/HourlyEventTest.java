@@ -61,6 +61,6 @@ public class HourlyEventTest {
         int afterAdded = EventsScheduler.counter();
 
         // ensures that event was added to the timer vector
-        assertFalse(beforeAdded+1 == afterAdded);
+        assertFalse(beforeAdded == afterAdded);
     }
 }
