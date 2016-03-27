@@ -46,9 +46,9 @@ public class HourlyEventTest {
         Event event= (Event) events.get(events.size() - 1);
      // sends to eventMinute and gets the current time and checks when the next notify pop will pop up.
         EventsScheduler.eventHour(event);
-
+		System.out.println("[DEBUG] " + period +" = "+event.getPeriod());
         // ensures time we set to timer is the same
-        assertEquals(1, event.getPeriod());
+        assertEquals(period, event.getPeriod());
     }
 
     @Test
@@ -60,9 +60,8 @@ public class HourlyEventTest {
         EventsScheduler.eventHour(event);
         int afterAdded = 0;
         afterAdded = EventsScheduler.counter();
-
-
-        // ensures that event was added to the timer vector
+		System.out.println("[DEBUG] " + beforeAdded +" != "+afterAdded);
+		// ensures that event was added to the timer vector
         assertFalse(beforeAdded == afterAdded);
     }
 }
