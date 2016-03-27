@@ -35,7 +35,8 @@ public class MinutleyEventTest {
 		hour = 7;
 		minute = 14;
 		text = "hello";
-		workDays = dialog.workingDaysOnlyCB.isSelected();
+		workDays = false;
+		System.out.println("[DEBUG] Minutely Set Up complete");
 	}
 // creates a new repeatableMinute test and compares the period of when the notify panel will pop up
 	@Test

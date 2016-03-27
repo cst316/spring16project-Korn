@@ -248,7 +248,6 @@ public class EventsScheduler {
         return firstEvent;
     }
     public static int counter(){
-    	System.out.println("count: " +_timers.size());
     	return _timers.size();
     }
     public static void addListener(EventNotificationListener enl) {
