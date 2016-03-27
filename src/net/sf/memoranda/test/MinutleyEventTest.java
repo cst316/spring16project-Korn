@@ -32,8 +32,8 @@ public class MinutleyEventTest {
 		startDate = CalendarDate.today();
 		endDate = CalendarDate.tomorrow();
 		period = 1;
-		hour = 5;
-		minute = 12;
+		hour = 7;
+		minute = 14;
 		text = "hello";
 		workDays = dialog.workingDaysOnlyCB.isSelected();
 	}
@@ -55,7 +55,7 @@ public class MinutleyEventTest {
 	@Test
 	public void testEventMinuteExists() {
 		int beforeAdded = EventsScheduler.counter();
-		EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour, minute, text, workDays);
+		EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour+1, minute+1, text, workDays);
 		Vector events= (Vector)EventsManager.getActiveEvents();
 		Event event= (Event) events.get(events.size() - 1);
 		EventsScheduler.eventMinute(event);

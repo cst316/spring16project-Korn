@@ -54,11 +54,13 @@ public class HourlyEventTest {
     @Test
     public void testEventHourExists() {
         int beforeAdded = EventsScheduler.counter();
-        EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour, minute, text, workDays);
+        EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour+1, minute+1, text, workDays);
         Vector events= (Vector)EventsManager.getActiveEvents();
         Event event= (Event) events.get(events.size() - 1);
         EventsScheduler.eventHour(event);
-        int afterAdded = EventsScheduler.counter();
+        int afterAdded = 0;
+        afterAdded = EventsScheduler.counter();
+
 
         // ensures that event was added to the timer vector
         assertFalse(beforeAdded == afterAdded);
