@@ -434,9 +434,11 @@ public class TaskImpl implements Task, Comparable {
 	}
 
 	@Override
+	// TODO Attribute may not be applicable type depending on setRepeatType implementation.
 	public boolean isRepeatable() {
     	Attribute a = _element.getAttribute("repeat-type");
-        return a != null;
+//        return a != null;
+    	return a != null;
 	}
 	
 	// TODO update once working days implementation is ready.
@@ -445,20 +447,26 @@ public class TaskImpl implements Task, Comparable {
     		_element.addAttribute(new Attribute("workingDays",String.valueOf(workDaysOnly)));
     	}
     }
-    
-    public void setFrequency(int frequency) {
-        _element.addAttribute(new Attribute("frequency", String.valueOf(frequency)));
-    }
+//    
+//    public void setFrequency(int frequency) {
+//        _element.addAttribute(new Attribute("frequency", String.valueOf(frequency)));
+//    }
     
     public boolean getWorkingDaysOnly(){
 		boolean workingDays=false;
 		Attribute a= _element.getAttribute("workingDays");
 		if(a!=null&& a.getValue().equals("true")){
 			workingDays=true;
-			
 		}
 		return workingDays;
 	}
 	
+    public void setRepeatType(int repeatType) {
+    	// TODO
+    }
+    
+	public void setEndRepeat(CalendarDate endRepeat) {
+		// TODO
+	}
 }
 	

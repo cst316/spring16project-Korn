@@ -504,19 +504,28 @@ public class TaskPanel extends JPanel {
             return;
         CalendarDate sd = new CalendarDate((Date) dlg.startDate.getModel().getValue());
         CalendarDate ed;
- 		if(dlg.chkEndDate.isSelected())
+ 		if(dlg.chkEndDate.isSelected()) {
  			ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
- 		else
+ 		} else {
  			ed = null;
+ 		}
+ 		CalendarDate repEnd;
+ 		if(dlg.chkEndDateRpt.isSelected()) {
+ 			repEnd = new CalendarDate((Date) dlg.endDateRpt.getModel().getValue());
+ 		} else {
+ 			repEnd = null;
+ 		}
  		Task newTask;
  		long effort = Util.getMillisFromHours(dlg.effortField.getText());
     	newTask = CurrentProject.getTaskList().createTask(
 				sd, ed, dlg.todoField.getText(), 
-				dlg.priorityCB.getSelectedIndex(),effort, 
+				dlg.priorityCB.getSelectedIndex(),effort,
 				dlg.descriptionField.getText(),null,
 				dlg.chkWorkingDays.isSelected(), //Boolean to denote recurrence is working days only
 				((Integer)dlg.progress.getValue()).intValue(),
-				dlg.cmboRepeatType.getSelectedIndex());
+				dlg.cmboRepeatType.getSelectedIndex(),
+				dlg.chkEndDateRpt.isSelected(),
+				repEnd);
 		newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
         CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
         taskTable.tableChanged();
@@ -550,10 +559,17 @@ public class TaskPanel extends JPanel {
             return;
         CalendarDate sd = new CalendarDate((Date) dlg.startDate.getModel().getValue());
         CalendarDate ed;
- 		if(dlg.chkEndDate.isSelected())
+ 		if(dlg.chkEndDate.isSelected()) {
  			ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
- 		else
+ 		} else {
  			ed = null;
+ 		}
+ 		CalendarDate repEnd;
+ 		if(dlg.chkEndDateRpt.isSelected()) {
+ 			repEnd = new CalendarDate((Date) dlg.endDateRpt.getModel().getValue());
+ 		} else {
+ 			repEnd = null;
+ 		}
         long effort = Util.getMillisFromHours(dlg.effortField.getText());
         Task newTask;
 		newTask = CurrentProject.getTaskList().createTask(
@@ -562,7 +578,9 @@ public class TaskPanel extends JPanel {
 				dlg.descriptionField.getText(),null,
 				dlg.chkWorkingDays.isSelected(), //Boolean to denote recurrence is working days only
 				((Integer)dlg.progress.getValue()).intValue(),
-				dlg.cmboRepeatType.getSelectedIndex());
+				dlg.cmboRepeatType.getSelectedIndex(),
+				dlg.chkEndDateRpt.isSelected(),
+				repEnd);
         newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
 //		CurrentProject.getTaskList().adjustParentTasks(newTask);
 

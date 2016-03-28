@@ -90,7 +90,9 @@ public interface Task {
     boolean isRepeatable();
     
     void setWorkingDaysOnly(boolean workDaysOnly);
-    void setFrequency(int frequency);
-    public boolean getWorkingDaysOnly();
+//    void setFrequency(int frequency);
+    boolean getWorkingDaysOnly();
+	void setRepeatType(int repeatType);
+	void setEndRepeat(CalendarDate endRepeat);
 
 }

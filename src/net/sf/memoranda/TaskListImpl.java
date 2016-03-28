@@ -190,8 +190,10 @@ public class TaskListImpl implements TaskList {
       String parentTaskId,
       boolean workDays,
       int progress,
-      int frequency) {
-      assert (Task.REPEAT_FREQUENCIES_INDEX [frequency] == frequency);
+      int repeatType,
+      boolean chkEndRepeat,
+      CalendarDate endRepeat) {
+      assert (Task.REPEAT_FREQUENCIES_INDEX [repeatType] == repeatType);
     Element taskElem = new Element("task");
     String id = Util.generateId();
     taskElem.addAttribute(new Attribute("id", id));
@@ -202,17 +204,20 @@ public class TaskListImpl implements TaskList {
     task.setPriority(priority);
     task.setEffort(effort);
     task.setDescription(description);
-//    task.setParentTask(parentTaskId, _root);
+    task.setParentTask(parentTaskId, _root);
     task.setWorkingDaysOnly(workDays);
     task.setProgress(progress);
-    task.setFrequency(frequency);
-	if (parentTaskId == null) {
-		_root.appendChild(task.getContent());
-	}
-	else {
-		Element parent = getTaskElement(parentTaskId);
-		parent.appendChild(task.getContent());
-	}
+    task.setRepeatType(repeatType); // 0-none, 1-Daily, 2-Weekly, 3-Monthly, 4-Yearly
+    if(chkEndRepeat) {
+    	task.setEndRepeat(endRepeat);
+    }
+//	if (parentTaskId == null) {
+//		_root.appendChild(task.getContent());
+//	}
+//	else {
+//		Element parent = getTaskElement(parentTaskId);
+//		parent.appendChild(task.getContent());
+//	}
 
 	elements.put(id, task.getContent());
 	

@@ -99,6 +99,7 @@ public class TaskDialog extends JDialog {
 
 	JComboBox<?> cmboRepeatType = new JComboBox<Object>(Task.REPEAT_FREQUENCIES_LIST);
 	public JCheckBox chkWorkingDays = new JCheckBox();
+	JCheckBox chkEndDateRpt = new JCheckBox();
 	JLabel jLabelProgress = new JLabel();
 	JSpinner progress = new JSpinner(new SpinnerNumberModel(0, 0, 100, 5));
 	
@@ -108,7 +109,6 @@ public class TaskDialog extends JDialog {
 	CalendarDate endDateMin = startDateMin;
 	CalendarDate endDateMax = startDateMax;
 	private final JPanel panel = new JPanel();
-	private final JCheckBox chkEndDateRpt = new JCheckBox();
 	private final JLabel lblEndRepeat = new JLabel();
 	private final JButton setEndDateRptB = new JButton();
 	private final JPanel panel_1 = new JPanel();
