@@ -191,7 +191,7 @@ public class TaskListImpl implements TaskList {
       boolean workDays,
       int progress,
       int repeatType,
-      boolean chkEndRepeat,
+      boolean repeatHasEnd,
       CalendarDate endRepeat) {
       assert (Task.REPEAT_FREQUENCIES_INDEX [repeatType] == repeatType);
     Element taskElem = new Element("task");
@@ -208,7 +208,7 @@ public class TaskListImpl implements TaskList {
     task.setWorkingDaysOnly(workDays);
     task.setProgress(progress);
     task.setRepeatType(repeatType); // 0-none, 1-Daily, 2-Weekly, 3-Monthly, 4-Yearly
-    if(chkEndRepeat) {
+    if(repeatHasEnd) {
     	task.setEndRepeat(endRepeat);
     }
 //	if (parentTaskId == null) {
