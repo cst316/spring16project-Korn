@@ -687,6 +687,10 @@ public class AppFrame extends JFrame {
         }
     }
 
+    public boolean trayActive() {
+        return trayIcon != null;
+    }
+
     public void doMinimize() {
         exitNotify();
         App.closeWindow();
