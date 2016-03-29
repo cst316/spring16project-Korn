@@ -208,16 +208,10 @@ public class TaskListImpl implements TaskList {
     task.setWorkingDaysOnly(workDays);
     task.setProgress(progress);
     task.setRepeatType(repeatType); // 0-none, 1-Daily, 2-Weekly, 3-Monthly, 4-Yearly
+    
     if(repeatHasEnd) {
     	task.setEndRepeat(endRepeat);
     }
-//	if (parentTaskId == null) {
-//		_root.appendChild(task.getContent());
-//	}
-//	else {
-//		Element parent = getTaskElement(parentTaskId);
-//		parent.appendChild(task.getContent());
-//	}
 
 	elements.put(id, task.getContent());
 	
@@ -509,53 +503,53 @@ public class TaskListImpl implements TaskList {
    * @return repeatableTasks
    */
   
-  public  Collection<Task> getRepeatableTasks(){
-  	Vector vector= new Vector();
-  	Element repeatable= _root.getFirstChildElement("repeatable");
-  	
-  	if (repeatable==null){
-  		vector=null;
+  public  Collection<Task> getRepeatableTasks() {
+  	Vector vector = new Vector();
+  	Element repeatable = _root.getFirstChildElement("repeatable");
+
+  	if (repeatable == null){
+  		vector = null;
   	}
   	else{
-	    	Elements elements= repeatable.getChildElements("task");
-	    	for(int i=0;i< elements.size();i++){
-	    		vector.add(new TaskImpl(elements.get(i),this));
+	    	Elements elements = repeatable.getChildElements("task");
+	    	for(int i = 0; i< elements.size(); i++){
+	    		vector.add(new TaskImpl(elements.get(i), this));
 	    	}
   	}
-  	
   	return vector;
   }
+  
   public Collection getRepeatableTaskforDate(CalendarDate date){
-  	Vector repeatableTasks= (Vector) getRepeatableTasks();
-  	Vector vector= new Vector();
+  	Vector repeatableTasks = (Vector) getRepeatableTasks();
+  	Vector vector = new Vector();
+
+  	for(int i = 0; i < repeatableTasks.size(); i++){
+  		Task task = (Task) repeatableTasks.get(i);
   	
-  	for(int i=0; i< repeatableTasks.size();i++){
-  		Task task= (Task) repeatableTasks.get(i);
-  	
-	    	/*if(task.getWorkingDaysOnly()&&
-	    			((date.getCalendar().get(Calendar.DAY_OF_WEEK)==Calendar.SUNDAY)
-	    			||(date.getCalendar().get(Calendar.DAY_OF_WEEK)==Calendar.SATURDAY))){
-	    		
-	    		
-	    	}*/
+    	/*if(task.getWorkingDaysOnly()&&
+    			((date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
+    			|| (date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY))){
+    		
+    		
+    	}*/
+  		
   		if(date.inPeriod(task.getStartDate(), task.getEndDate())){
   			if(task.getRepeat()== REPEAT_WEEKLY){
   				if(date.getCalendar().get(Calendar.DAY_OF_WEEK)==task.getPeriod());
   					vector.add(task);
   				
   			}
-  			else if(task.getRepeat()==REPEAT_MONTHLY){
-  				if(date.getCalendar().get(Calendar.DAY_OF_MONTH)==task.getPeriod());
+  			else if(task.getRepeat() == REPEAT_MONTHLY){
+  				if(date.getCalendar().get(Calendar.DAY_OF_MONTH) == task.getPeriod());
   					vector.add(task);
   			}
-  			else if(task.getRepeat()==REPEAT_YEARLY){
-  				if(date.getCalendar().get(Calendar.DAY_OF_YEAR)==task.getPeriod());
+  			else if(task.getRepeat() == REPEAT_YEARLY){
+  				if(date.getCalendar().get(Calendar.DAY_OF_YEAR) == task.getPeriod());
   					vector.add(task);
   			}
   		}
   	}
-  	
-  return vector;
+    return vector;
 }
   
 

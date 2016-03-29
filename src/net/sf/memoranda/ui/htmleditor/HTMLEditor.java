@@ -1692,6 +1692,7 @@ public class HTMLEditor extends JPanel {
 					if (!url.getProtocol().startsWith("http"))
 						path = imagesDir + "/" + url.getFile();
 				} catch (MalformedURLException e1) {
+					System.out.println("The URL provided cannot be resolved.  Please reattempt.");
 				}
 			}
 			try {
