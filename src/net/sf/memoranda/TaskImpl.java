@@ -420,12 +420,12 @@ public class TaskImpl implements Task, Comparable {
 		return false;
 	}
 
-	@Override
-	public int getRepeat() {
-        Attribute a = _element.getAttribute("repeat-type");
-        if (a != null) return new Integer(a.getValue()).intValue();
-        return 0;
-	}
+//	@Override
+//	public int getRepeat() {
+//        Attribute a = _element.getAttribute("repeat-type");
+//        if (a != null) return new Integer(a.getValue()).intValue();
+//        return 0;
+//	}
 	
 	public int getPeriod() {
     Attribute a = _element.getAttribute("period");
@@ -434,14 +434,11 @@ public class TaskImpl implements Task, Comparable {
 	}
 
 	@Override
-	// TODO Attribute may not be applicable type depending on setRepeatType implementation.
 	public boolean isRepeatable() {
-    	Attribute a = _element.getAttribute("repeat-type");
-//        return a != null;
-    	return a != null;
+    	int repType = _element.getAttribute("repeat-type");
+    	return repType != 0;
 	}
 	
-	// TODO update once working days implementation is ready.
     public void setWorkingDaysOnly(boolean workDaysOnly) {
     	if(workDaysOnly){
     		_element.addAttribute(new Attribute("workingDays",String.valueOf(workDaysOnly)));
@@ -462,11 +459,26 @@ public class TaskImpl implements Task, Comparable {
 	}
 	
     public void setRepeatType(int repeatType) {
-    	// TODO
+    	setAttr("repeatType", String.valueOf(repeatType));
+    }
+    
+    public int getRepeatType() {
+    	int repType = (int) _element.getAttribute("repeatType");
+    	if(repType >= 0 && repType <= 4) {
+    		repType = -1;
+    	}
+    	return repType;
     }
     
 	public void setEndRepeat(CalendarDate endRepeat) {
-		// TODO
+		if(endRepeat != null  && isRepeatable()) {
+			setAttr("endRepeat", endRepeat.toString());
+		}
+	}
+	
+	public CalendarDate getEndRepeat() {
+		CalendarDate attr = new CalendarDate(_element.getAttribute("endRepeat"));
+		return attr;
 	}
 }
 	
