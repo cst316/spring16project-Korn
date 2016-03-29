@@ -54,6 +54,8 @@ public interface TaskList {
   
   public long[] calculateCompletionFromSubTasks(Task task);
   
+  Collection getRepeatableTaskforDate(CalendarDate date);
+  
   nu.xom.Element getTaskElement(String id);
 
   nu.xom.Document getXmlContent();

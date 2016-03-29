@@ -519,38 +519,50 @@ public class TaskListImpl implements TaskList {
   	return vector;
   }
   
-  public Collection getRepeatableTaskforDate(CalendarDate date){
+  public Collection getRepeatableTaskforDate(CalendarDate date) {
   	Vector repeatableTasks = (Vector) getRepeatableTasks();
-  	Vector vector = new Vector();
-
-  	for(int i = 0; i < repeatableTasks.size(); i++){
-  		Task task = (Task) repeatableTasks.get(i);
+  	Vector<Task> tasksForDate = new Vector<Task>();
+  	boolean duplicate = false;
+  	Task task;
+  	CalendarDate endRepeat; 
   	
-    	/*if(task.getWorkingDaysOnly()&&
-    			((date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
-    			|| (date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY))){
-    		
-    		
-    	}*/
+  	for(int i = 0; i < repeatableTasks.size(); i++) {
+  		task = (Task) repeatableTasks.get(i);
+  		endRepeat = task.getEndRepeat();
   		
-  		if(date.inPeriod(task.getStartDate(), task.getEndDate())){
-  			if(task.getRepeatType()== REPEAT_WEEKLY){
-  				if(date.getCalendar().get(Calendar.DAY_OF_WEEK)==task.getPeriod());
-  					vector.add(task);
-  				
-  			}
-  			else if(task.getRepeatType() == REPEAT_MONTHLY){
-  				if(date.getCalendar().get(Calendar.DAY_OF_MONTH) == task.getPeriod());
-  					vector.add(task);
-  			}
-  			else if(task.getRepeatType() == REPEAT_YEARLY){
-  				if(date.getCalendar().get(Calendar.DAY_OF_YEAR) == task.getPeriod());
-  					vector.add(task);
+  		//TODO Debunk as duplicate before considering add.
+  		for(int j = 0; j < tasksForDate.size(); j++) {
+  			if(task.equals(tasksForDate.get(j))) {
+  				duplicate = true;
   			}
   		}
+  		
+  		if(!duplicate) {
+	  		if ((date.after(task.getStartDate()) && endRepeat == null) 
+	  				|| (date.inPeriod(task.getStartDate(), endRepeat))) {
+	    		if(!task.getWorkingDaysOnly() || (task.getWorkingDaysOnly() && 
+	    			((date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
+	    			|| (date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)))) {
+	    			if(task.getRepeatType() == REPEAT_DAILY) {
+		    			tasksForDate.add(task);
+		    		} else if (task.getRepeatType() == REPEAT_WEEKLY) {
+		  				if(date.getCalendar().get(Calendar.DAY_OF_WEEK) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_WEEK));
+		  					tasksForDate.add(task);
+		  			} else if(task.getRepeatType() == REPEAT_MONTHLY) {
+		  				if(date.getCalendar().get(Calendar.DAY_OF_MONTH) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_MONTH));
+		  					tasksForDate.add(task);
+		  			} else if(task.getRepeatType() == REPEAT_YEARLY) {
+		  				if(date.getCalendar().get(Calendar.DAY_OF_YEAR) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR));
+		  					tasksForDate.add(task);
+		  			}
+	    		}
+	  		}
+  		} else {
+	  		duplicate = false;
+  		}
   	}
-    return vector;
-}
+    return tasksForDate;
+  }
   
 
 /*

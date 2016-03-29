@@ -450,10 +450,10 @@ public class TaskImpl implements Task, Comparable {
 //    }
     
     public boolean getWorkingDaysOnly(){
-		boolean workingDays=false;
-		Attribute a= _element.getAttribute("workingDays");
-		if(a!=null&& a.getValue().equals("true")){
-			workingDays=true;
+		boolean workingDays = false;
+		Attribute a = _element.getAttribute("workingDays");
+		if(a != null && a.getValue().equals("true")){
+			workingDays = true;
 		}
 		return workingDays;
 	}
