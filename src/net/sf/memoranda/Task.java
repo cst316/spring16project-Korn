@@ -84,15 +84,16 @@ public interface Task {
 	long getRate();
     
     nu.xom.Element getContent();
-    
-    int getRepeat();
+
     int getPeriod();
     boolean isRepeatable();
     
-    void setWorkingDaysOnly(boolean workDaysOnly);
 //    void setFrequency(int frequency);
+    void setWorkingDaysOnly(boolean workDaysOnly);
     boolean getWorkingDaysOnly();
+    int getRepeatType();
 	void setRepeatType(int repeatType);
+	CalendarDate getEndRepeat();
 	void setEndRepeat(CalendarDate endRepeat);
 
 }

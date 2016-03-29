@@ -534,16 +534,16 @@ public class TaskListImpl implements TaskList {
     	}*/
   		
   		if(date.inPeriod(task.getStartDate(), task.getEndDate())){
-  			if(task.getRepeat()== REPEAT_WEEKLY){
+  			if(task.getRepeatType()== REPEAT_WEEKLY){
   				if(date.getCalendar().get(Calendar.DAY_OF_WEEK)==task.getPeriod());
   					vector.add(task);
   				
   			}
-  			else if(task.getRepeat() == REPEAT_MONTHLY){
+  			else if(task.getRepeatType() == REPEAT_MONTHLY){
   				if(date.getCalendar().get(Calendar.DAY_OF_MONTH) == task.getPeriod());
   					vector.add(task);
   			}
-  			else if(task.getRepeat() == REPEAT_YEARLY){
+  			else if(task.getRepeatType() == REPEAT_YEARLY){
   				if(date.getCalendar().get(Calendar.DAY_OF_YEAR) == task.getPeriod());
   					vector.add(task);
   			}
