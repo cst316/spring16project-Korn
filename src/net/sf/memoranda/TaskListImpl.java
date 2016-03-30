@@ -16,9 +16,13 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
+import net.sf.memoranda.EventsManager.Day;
+import net.sf.memoranda.EventsManager.Year;
+import net.sf.memoranda.EventsManager.Month;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
@@ -516,6 +520,24 @@ public class TaskListImpl implements TaskList {
 	}
   	return vector;
   }
+  public Collection<Task> getTaskForDate(CalendarDate date){
+	  Vector vector= new Vector();
+	  Day day= getDay(date);
+	  if(day!=null){
+		  Elements elements=day.getElement().getChildElements("task");
+		  for(int i=0;i<elements.size();i++){
+			  vector.add(new TaskImpl(elements.get(i),this));
+		  } 
+	  }
+	  Collection r= getRepeatableTaskforDate(date);
+	  
+	  if(r.size()>0){
+		  vector.addAll(r);
+	  }
+	  Collections.sort(vector);
+	  
+	  return vector;
+  }
   
   public Collection<Task> getRepeatableTaskforDate(CalendarDate date) {
   	Vector<Task> repeatableTasks = (Vector<Task>) getRepeatableTasks();
@@ -542,7 +564,11 @@ public class TaskListImpl implements TaskList {
 	    			!((date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
 	    			|| (date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)))) {
 	    			if(task.getRepeatType() == REPEAT_DAILY) {
-		    			tasksForDate.add(task);
+	    				int n= date.getCalendar().get(Calendar.DAY_OF_YEAR);
+	    				int ns= task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR);
+	    				if((n-ns)%task.getPeriod()==0){
+	    					tasksForDate.add(task);
+	    				}
 		    		} else if (task.getRepeatType() == REPEAT_WEEKLY) {
 		  				if(date.getCalendar().get(Calendar.DAY_OF_WEEK) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_WEEK));
 		  					tasksForDate.add(task);
@@ -561,6 +587,54 @@ public class TaskListImpl implements TaskList {
   	}
     return tasksForDate;
   }
+  private static Day createDay(CalendarDate date) {
+      Year year = getYear(date.getYear());
+
+      if (year == null)
+          year = createYear(date.getYear());
+
+      Month month = year.getMonth(date.getMonth());
+
+      if (month == null)
+          month = year.createMonth(date.getMonth());
+
+      Day day = month.getDay(date.getDay());
+
+      if (day == null)
+          day = month.createDay(date.getDay());
+
+      return day;
+  }
+
+  private static Year createYear(int year) {
+      Element element = new Element("year");
+      element.addAttribute(new Attribute("year", new Integer(year).toString()));
+      _root.appendChild(element);
+
+      return new Year(element);
+  }
+
+  private static Year getYear(int intYear) {
+      Elements years = _root.getChildElements("year");
+      String year = Integer.toString(intYear);
+      for (int i = 0; i < years.size(); i++)
+          if (years.get(i).getAttribute("year").getValue().equals(year))
+              return new Year(years.get(i));
+      //return createYear(year);
+
+      return null;
+  }
+
+  private static Day getDay(CalendarDate date) {
+      Year y = getYear(date.getYear());
+      if (y == null)
+          return null;
+      Month m = y.getMonth(date.getMonth());
+      if (m == null)
+          return null;
+      return m.getDay(date.getDay());
+  }
+
   
 
 /*

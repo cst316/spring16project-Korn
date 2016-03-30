@@ -414,7 +414,7 @@ public class EventsManager {
             return null;
         }
 
-        private Month createMonth(int m) {
+        public Month createMonth(int m) {
             Element element = new Element("month");
             element.addAttribute(new Attribute("month", new Integer(m).toString()));
             yearElement.appendChild(element);
@@ -462,7 +462,7 @@ public class EventsManager {
             return null;
         }
 
-        private Day createDay(int d) {
+        public Day createDay(int d) {
             Element el = new Element("day");
             el.addAttribute(new Attribute("day", new Integer(d).toString()));
             el.addAttribute(
