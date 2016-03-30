@@ -507,7 +507,7 @@ public class TaskListImpl implements TaskList {
    * @return repeatableTasks
    */
   
-  public  Vector<Task> getRepeatableTasks() {
+  public  Collection<Task> getRepeatableTasks() {
   	Vector<Task> vector = new Vector<Task>();
 	nu.xom.Elements elements = _root.getChildElements("task");
 	Task t;
@@ -520,27 +520,10 @@ public class TaskListImpl implements TaskList {
 	}
   	return vector;
   }
-  public Collection<Task> getTaskForDate(CalendarDate date){
-	  Vector vector= new Vector();
-	  Day day= getDay(date);
-	  if(day!=null){
-		  Elements elements=day.getElement().getChildElements("task");
-		  for(int i=0;i<elements.size();i++){
-			  vector.add(new TaskImpl(elements.get(i),this));
-		  } 
-	  }
-	  Collection r= getRepeatableTaskforDate(date);
-	  
-	  if(r.size()>0){
-		  vector.addAll(r);
-	  }
-	  Collections.sort(vector);
-	  
-	  return vector;
-  }
+  
   
   public Collection<Task> getRepeatableTaskforDate(CalendarDate date) {
-  	Vector<Task> repeatableTasks = getRepeatableTasks();
+  	Vector<Task> repeatableTasks = (Vector<Task>) getRepeatableTasks();
   	Vector<Task> tasksForDate = new Vector<Task>();
   	boolean duplicate = false;
   	Task task;
@@ -570,13 +553,13 @@ public class TaskListImpl implements TaskList {
 	    					tasksForDate.add(task);
 	    				}
 		    		} else if (task.getRepeatType() == REPEAT_WEEKLY) {
-		  				if(date.getCalendar().get(Calendar.DAY_OF_WEEK) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_WEEK))
+		  				if(date.getCalendar().get(Calendar.DAY_OF_WEEK) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_WEEK));
 		  					tasksForDate.add(task);
 		  			} else if(task.getRepeatType() == REPEAT_MONTHLY) {
 		  				if(date.getCalendar().get(Calendar.DAY_OF_MONTH) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_MONTH));
 		  					tasksForDate.add(task);
 		  			} else if(task.getRepeatType() == REPEAT_YEARLY) {
-		  				if(date.getCalendar().get(Calendar.DAY_OF_YEAR) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR))
+		  				if(date.getCalendar().get(Calendar.DAY_OF_YEAR) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR));
 		  					tasksForDate.add(task);
 		  			}
 	    		}
@@ -587,53 +570,7 @@ public class TaskListImpl implements TaskList {
   	}
     return tasksForDate;
   }
-  private static Day createDay(CalendarDate date) {
-      Year year = getYear(date.getYear());
 
-      if (year == null)
-          year = createYear(date.getYear());
-
-      Month month = year.getMonth(date.getMonth());
-
-      if (month == null)
-          month = year.createMonth(date.getMonth());
-
-      Day day = month.getDay(date.getDay());
-
-      if (day == null)
-          day = month.createDay(date.getDay());
-
-      return day;
-  }
-
-  private static Year createYear(int year) {
-      Element element = new Element("year");
-      element.addAttribute(new Attribute("year", new Integer(year).toString()));
-      _root.appendChild(element);
-
-      return new Year(element);
-  }
-
-  private static Year getYear(int intYear) {
-      Elements years = _root.getChildElements("year");
-      String year = Integer.toString(intYear);
-      for (int i = 0; i < years.size(); i++)
-          if (years.get(i).getAttribute("year").getValue().equals(year))
-              return new Year(years.get(i));
-      //return createYear(year);
-
-      return null;
-  }
-
-  private static Day getDay(CalendarDate date) {
-      Year y = getYear(date.getYear());
-      if (y == null)
-          return null;
-      Month m = y.getMonth(date.getMonth());
-      if (m == null)
-          return null;
-      return m.getDay(date.getDay());
-  }
 
   
 

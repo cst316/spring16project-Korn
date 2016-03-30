@@ -47,7 +47,7 @@ public class TaskOperationsTest {
 	public void testRegTaskCreation() {
 		Task t = testTL.createTask(CalendarDate.today(), CalendarDate.tomorrow(), "text property",
 				1, 2, "This is a description!", null, false, 10, 0, false, null);
-		assertTrue(testTL.getTask(t.getID()).equals(t));
+		assertTrue(testTL.getTask(t.getId()).equals(t));
 	}
 
 	@Test
@@ -86,7 +86,7 @@ public class TaskOperationsTest {
 	public void testNoEndDateCreation() {
 		Task t = testTL.createTask(CalendarDate.today(), null, "text property",
 				1, 2, "This is a description!", null, false, 10, 0, false, null);
-		assertTrue(t.equals(testTL.getTask(t.getID())));
+		assertTrue(t.equals(testTL.getTask(t.getId())));
 	}
 	
 	@Test
