@@ -504,23 +504,21 @@ public class TaskListImpl implements TaskList {
    */
   
   public  Collection<Task> getRepeatableTasks() {
-  	Vector vector = new Vector();
-  	Element repeatable = _root.getFirstChildElement("repeatable");
-
-  	if (repeatable == null){
-  		vector = null;
-  	}
-  	else{
-	    	Elements elements = repeatable.getChildElements("task");
-	    	for(int i = 0; i< elements.size(); i++){
-	    		vector.add(new TaskImpl(elements.get(i), this));
-	    	}
-  	}
+  	Vector<Task> vector = new Vector<Task>();
+	nu.xom.Elements elements = _root.getChildElements("task");
+	Task t;
+	
+	for(int i = 0; i< elements.size(); i++){
+		t = getTask(elements.get(i).getAttribute("id").getValue());
+		if(t.isRepeatable()) {
+			vector.add(t);
+		}
+	}
   	return vector;
   }
   
-  public Collection getRepeatableTaskforDate(CalendarDate date) {
-  	Vector repeatableTasks = (Vector) getRepeatableTasks();
+  public Collection<Task> getRepeatableTaskforDate(CalendarDate date) {
+  	Vector<Task> repeatableTasks = (Vector<Task>) getRepeatableTasks();
   	Vector<Task> tasksForDate = new Vector<Task>();
   	boolean duplicate = false;
   	Task task;
@@ -529,10 +527,10 @@ public class TaskListImpl implements TaskList {
   	for(int i = 0; i < repeatableTasks.size(); i++) {
   		task = (Task) repeatableTasks.get(i);
   		endRepeat = task.getEndRepeat();
-  		
-  		//TODO Debunk as duplicate before considering add.
+
   		for(int j = 0; j < tasksForDate.size(); j++) {
-  			if(task.equals(tasksForDate.get(j))) {
+  			if(task.getText().equals(tasksForDate.get(j).getText()) &&
+  					task.getStartDate().equals(tasksForDate.get(j).getStartDate())) {
   				duplicate = true;
   			}
   		}
@@ -541,7 +539,7 @@ public class TaskListImpl implements TaskList {
 	  		if ((date.after(task.getStartDate()) && endRepeat == null) 
 	  				|| (date.inPeriod(task.getStartDate(), endRepeat))) {
 	    		if(!task.getWorkingDaysOnly() || (task.getWorkingDaysOnly() && 
-	    			((date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
+	    			!((date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
 	    			|| (date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)))) {
 	    			if(task.getRepeatType() == REPEAT_DAILY) {
 		    			tasksForDate.add(task);

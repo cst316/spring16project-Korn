@@ -435,7 +435,7 @@ public class TaskImpl implements Task, Comparable {
 
 	@Override
 	public boolean isRepeatable() {
-    	int repType = Integer.getInteger(_element.getAttribute("repeat-type").getValue());
+    	int repType = getRepeatType();//Integer.parseInt(_element.getAttribute("repeatType").getValue());
     	return repType != 0;
 	}
 	
@@ -463,8 +463,8 @@ public class TaskImpl implements Task, Comparable {
     }
     
     public int getRepeatType() {
-    	int repType = Integer.getInteger(_element.getAttribute("repeatType").getValue());
-    	if(repType >= 0 && repType <= 4) {
+    	int repType = Integer.parseInt(_element.getAttribute("repeatType").getValue());
+    	if(repType < 0 || repType > 4) {
     		repType = -1;
     	}
     	return repType;
@@ -473,11 +473,24 @@ public class TaskImpl implements Task, Comparable {
 	public void setEndRepeat(CalendarDate endRepeat) {
 		if(endRepeat != null  && isRepeatable()) {
 			setAttr("endRepeat", endRepeat.toString());
+		} else {
+			setAttr("endRepeat", "");
 		}
 	}
 	
 	public CalendarDate getEndRepeat() {
-		CalendarDate attr = new CalendarDate(_element.getAttribute("endRepeat").getValue());
+		String temp; 
+		try {
+			temp = _element.getAttribute("endRepeat").getValue();
+		} catch (NullPointerException e) {
+			temp = "";
+		}
+		CalendarDate attr;
+		if(temp != "") {
+			attr = new CalendarDate(temp);
+		} else {
+			attr = null;
+		}
 		return attr;
 	}
 }
