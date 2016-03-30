@@ -263,7 +263,7 @@ public class TaskListImpl implements TaskList {
       Element parentNode = (Element) getTaskElement(parentTaskId);
       parentNode.removeChild(task.getContent());
     }
-    elements.remove(task.getID());
+    elements.remove(task.getId());
   }
 
   
@@ -329,8 +329,8 @@ public class TaskListImpl implements TaskList {
     */  
   public long calculateTotalEffortFromSubTasks(Task task) {
     long totalEffort = 0;
-    if (hasSubTasks(task.getID())) {
-      Collection<Task> subTasks = getAllSubTasks(task.getID());
+    if (hasSubTasks(task.getId())) {
+      Collection<Task> subTasks = getAllSubTasks(task.getId());
       for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
         Task iteratedTask = iter.next();
         totalEffort = totalEffort + calculateTotalEffortFromSubTasks(iteratedTask);
@@ -352,8 +352,8 @@ public class TaskListImpl implements TaskList {
     */
   public CalendarDate getEarliestStartDateFromSubTasks(Task task) {
     CalendarDate startDate = task.getStartDate();
-    if (hasSubTasks(task.getID())) {
-      Collection<Task> subTasks = getAllSubTasks(task.getID());
+    if (hasSubTasks(task.getId())) {
+      Collection<Task> subTasks = getAllSubTasks(task.getId());
       for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
         Task iteratedTask = iter.next();
         CalendarDate dd = getEarliestStartDateFromSubTasks(iteratedTask);
@@ -378,8 +378,8 @@ public class TaskListImpl implements TaskList {
    */
   public CalendarDate getLatestEndDateFromSubTasks(Task task) {
     CalendarDate date = task.getEndDate();
-    if (hasSubTasks(task.getID())) {
-      Collection<Task> subTasks = getAllSubTasks(task.getID());
+    if (hasSubTasks(task.getId())) {
+      Collection<Task> subTasks = getAllSubTasks(task.getId());
       for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
         Task iteratorTask = iter.next();
         CalendarDate dd = getLatestEndDateFromSubTasks(iteratorTask);
@@ -409,8 +409,8 @@ public class TaskListImpl implements TaskList {
     long[] res = new long[2];
     long expendedEffort = 0; // milliseconds
     long totalEffort = 0; // milliseconds
-    if (hasSubTasks(task.getID())) {
-      Collection<Task> subTasks = getAllSubTasks(task.getID());
+    if (hasSubTasks(task.getId())) {
+      Collection<Task> subTasks = getAllSubTasks(task.getId());
       for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
         Task iterTask = iter.next();
         long[] subTaskCompletion = calculateCompletionFromSubTasks(iterTask);
