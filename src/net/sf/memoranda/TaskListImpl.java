@@ -267,7 +267,7 @@ public class TaskListImpl implements TaskList {
       Element parentNode = (Element) getTaskElement(parentTaskId);
       parentNode.removeChild(task.getContent());
     }
-    elements.remove(task.getID());
+    elements.remove(task.getId());
   }
 
   
@@ -333,8 +333,8 @@ public class TaskListImpl implements TaskList {
     */  
   public long calculateTotalEffortFromSubTasks(Task task) {
     long totalEffort = 0;
-    if (hasSubTasks(task.getID())) {
-      Collection<Task> subTasks = getAllSubTasks(task.getID());
+    if (hasSubTasks(task.getId())) {
+      Collection<Task> subTasks = getAllSubTasks(task.getId());
       for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
         Task iteratedTask = iter.next();
         totalEffort = totalEffort + calculateTotalEffortFromSubTasks(iteratedTask);
@@ -356,8 +356,8 @@ public class TaskListImpl implements TaskList {
     */
   public CalendarDate getEarliestStartDateFromSubTasks(Task task) {
     CalendarDate startDate = task.getStartDate();
-    if (hasSubTasks(task.getID())) {
-      Collection<Task> subTasks = getAllSubTasks(task.getID());
+    if (hasSubTasks(task.getId())) {
+      Collection<Task> subTasks = getAllSubTasks(task.getId());
       for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
         Task iteratedTask = iter.next();
         CalendarDate dd = getEarliestStartDateFromSubTasks(iteratedTask);
@@ -382,8 +382,8 @@ public class TaskListImpl implements TaskList {
    */
   public CalendarDate getLatestEndDateFromSubTasks(Task task) {
     CalendarDate date = task.getEndDate();
-    if (hasSubTasks(task.getID())) {
-      Collection<Task> subTasks = getAllSubTasks(task.getID());
+    if (hasSubTasks(task.getId())) {
+      Collection<Task> subTasks = getAllSubTasks(task.getId());
       for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
         Task iteratorTask = iter.next();
         CalendarDate dd = getLatestEndDateFromSubTasks(iteratorTask);
@@ -413,8 +413,8 @@ public class TaskListImpl implements TaskList {
     long[] res = new long[2];
     long expendedEffort = 0; // milliseconds
     long totalEffort = 0; // milliseconds
-    if (hasSubTasks(task.getID())) {
-      Collection<Task> subTasks = getAllSubTasks(task.getID());
+    if (hasSubTasks(task.getId())) {
+      Collection<Task> subTasks = getAllSubTasks(task.getId());
       for (Iterator<Task> iter = subTasks.iterator(); iter.hasNext();) {
         Task iterTask = iter.next();
         long[] subTaskCompletion = calculateCompletionFromSubTasks(iterTask);
@@ -507,7 +507,7 @@ public class TaskListImpl implements TaskList {
    * @return repeatableTasks
    */
   
-  public  Collection<Task> getRepeatableTasks() {
+  public  Vector<Task> getRepeatableTasks() {
   	Vector<Task> vector = new Vector<Task>();
 	nu.xom.Elements elements = _root.getChildElements("task");
 	Task t;
@@ -540,7 +540,7 @@ public class TaskListImpl implements TaskList {
   }
   
   public Collection<Task> getRepeatableTaskforDate(CalendarDate date) {
-  	Vector<Task> repeatableTasks = (Vector<Task>) getRepeatableTasks();
+  	Vector<Task> repeatableTasks = getRepeatableTasks();
   	Vector<Task> tasksForDate = new Vector<Task>();
   	boolean duplicate = false;
   	Task task;
@@ -570,13 +570,13 @@ public class TaskListImpl implements TaskList {
 	    					tasksForDate.add(task);
 	    				}
 		    		} else if (task.getRepeatType() == REPEAT_WEEKLY) {
-		  				if(date.getCalendar().get(Calendar.DAY_OF_WEEK) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_WEEK));
+		  				if(date.getCalendar().get(Calendar.DAY_OF_WEEK) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_WEEK))
 		  					tasksForDate.add(task);
 		  			} else if(task.getRepeatType() == REPEAT_MONTHLY) {
 		  				if(date.getCalendar().get(Calendar.DAY_OF_MONTH) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_MONTH));
 		  					tasksForDate.add(task);
 		  			} else if(task.getRepeatType() == REPEAT_YEARLY) {
-		  				if(date.getCalendar().get(Calendar.DAY_OF_YEAR) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR));
+		  				if(date.getCalendar().get(Calendar.DAY_OF_YEAR) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR))
 		  					tasksForDate.add(task);
 		  			}
 	    		}

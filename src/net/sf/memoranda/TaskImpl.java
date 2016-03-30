@@ -58,14 +58,17 @@ public class TaskImpl implements Task, Comparable {
 		} catch (NullPointerException e) {
 			ed = "";
 		}
-		if (ed != "")
+		if (ed.equals("")){
 			return new CalendarDate(_element.getAttribute("endDate").getValue());
+		}
 		Task parent = this.getParentTask();
-		if (parent != null)
+		if (parent != null) {
 			return parent.getEndDate();
+		}
 		Project pr = this._tl.getProject();
-		if (pr.getEndDate() != null)
+		if (pr.getEndDate() != null) {
 			return pr.getEndDate();
+		}
 		return this.getStartDate().dayBefore();
         
     }
@@ -82,12 +85,10 @@ public class TaskImpl implements Task, Comparable {
     	Attribute attr = _element.getAttribute("effort");
     	if (attr == null) {
     		return 0;
-    	}
-    	else {
+    	}else {
     		try {
         		return Long.parseLong(attr.getValue());
-    		}
-    		catch (NumberFormatException e) {
+    		} catch (NumberFormatException e) {
     			return 0;
     		}
     	}
@@ -104,24 +105,25 @@ public class TaskImpl implements Task, Comparable {
 		Node parentNode = _element.getParent();
     	if (parentNode instanceof Element) {
     	    Element parent = (Element) parentNode;
-        	if (parent.getLocalName().equalsIgnoreCase("task")) 
+        	if (parent.getLocalName().equalsIgnoreCase("task")) {
         	    return new TaskImpl(parent, _tl);
+        	}
     	}
     	return null;
 	}
 	
 	public String getParentId() {
 		Task parent = this.getParentTask();
-		if (parent != null)
-			return parent.getID();
+		if (parent != null) {
+			return parent.getId();
+		}
 		return null;
 	}
 	
 	public void setParentTask(String parentTaskId, nu.xom.Element root) {
         if (parentTaskId == null) {
             root.appendChild(_element);
-        }
-        else {
+        } else {
     		Element parent = _tl.getTaskElement(parentTaskId);
             parent.appendChild(_element);
         }
@@ -131,8 +133,7 @@ public class TaskImpl implements Task, Comparable {
     	Element thisElement = _element.getFirstChildElement("description");
     	if (thisElement == null) {
     		return null;
-    	}
-    	else {
+    	} else {
        		return thisElement.getValue();
     	}
     }
@@ -143,8 +144,7 @@ public class TaskImpl implements Task, Comparable {
         	desc = new Element("description");
             desc.appendChild(s);
             _element.appendChild(desc);    	
-    	}
-    	else {
+    	} else {
             desc.removeChildren();
             desc.appendChild(s);    	
     	}
@@ -161,26 +161,23 @@ public class TaskImpl implements Task, Comparable {
 		} catch (NullPointerException e) {
 			end = null;
 		}
-        if (isFrozen())
+        if (isFrozen()) {
             return Task.FROZEN;
-        if (isCompleted())
+        }
+        if (isCompleted()) {
         	return Task.COMPLETED;
-        if(date.before(start)) 
-		{
+        }
+        if(date.before(start)) {
 			return Task.SCHEDULED;
-		}
-        else if (end==null || end.before(start))
-        {
+		}else if (end==null || end.before(start)) {
         	return Task.ACTIVE;
-        }
-        else if (date.inPeriod(start, end)) 
-        {
-            if (date.equals(end))
+        } else if (date.inPeriod(start, end)) {
+            if (date.equals(end)) {
                 return Task.DEADLINE;
-            else
+            } else {
                 return Task.ACTIVE;
-        }
-		else if(start.after(end)) {
+            }
+        } else if(start.after(end)) {
 			return Task.ACTIVE;
 		}
 
@@ -211,9 +208,9 @@ public class TaskImpl implements Task, Comparable {
     }
 
     /**
-     * @see net.sf.memoranda.Task#getID()
+     * @see net.sf.memoranda.Task#getId()
      */
-    public String getID() {
+    public String getId() {
         return _element.getAttribute("id").getValue();
     }
 
@@ -273,7 +270,7 @@ public class TaskImpl implements Task, Comparable {
      */
     public void addDependsFrom(Task task) {
         Element dep = new Element("dependsFrom");
-        dep.addAttribute(new Attribute("idRef", task.getID()));
+        dep.addAttribute(new Attribute("idRef", task.getId()));
         _element.appendChild(dep);
     }
     /**
@@ -283,7 +280,7 @@ public class TaskImpl implements Task, Comparable {
         Elements deps = _element.getChildElements("dependsFrom");
         for (int i = 0; i < deps.size(); i++) {
             String id = deps.get(i).getAttribute("idRef").getValue();
-            if (id.equals(task.getID())) {
+            if (id.equals(task.getId())) {
                 _element.removeChild(deps.get(i));
                 return;
             }
@@ -320,10 +317,11 @@ public class TaskImpl implements Task, Comparable {
 
     private void setAttr(String a, String value) {
         Attribute attr = _element.getAttribute(a);
-        if (attr == null)
+        if (attr == null) {
            _element.addAttribute(new Attribute(a, value));
-        else
+        } else {
             attr.setValue(value);
+        }
     }
 
 	/**
@@ -339,8 +337,8 @@ public class TaskImpl implements Task, Comparable {
 	private long calcTaskRate(CalendarDate d) {
 		Calendar endDateCal = getEndDate().getCalendar();
 		Calendar dateCal = d.getCalendar();
-		int numOfDays = (endDateCal.get(Calendar.YEAR)*365 + endDateCal.get(Calendar.DAY_OF_YEAR)) - 
-						(dateCal.get(Calendar.YEAR)*365 + dateCal.get(Calendar.DAY_OF_YEAR));
+		int numOfDays = (endDateCal.get(Calendar.YEAR)*365 + endDateCal.get(Calendar.DAY_OF_YEAR)) 
+				- (dateCal.get(Calendar.YEAR)*365 + dateCal.get(Calendar.DAY_OF_YEAR));
 		if (numOfDays < 0) return -1; //Something wrong ?
 		return (100-getProgress()) / (numOfDays+1) * (getPriority()+1);
 	}
@@ -368,16 +366,17 @@ public class TaskImpl implements Task, Comparable {
 	  
 	 public int compareTo(Object o) {
 		 Task task = (Task) o;
-		 	if(getRate() > task.getRate())
+		 	if(getRate() > task.getRate()) {
 				return 1;
-			else if(getRate() < task.getRate())
+		 	} else if(getRate() < task.getRate()) {
 				return -1;
-			else 
+		 	} else { 
 				return 0;
+		 	}
 	 }
 	 
 	 public boolean equals(Object o) {
-	     return ((o instanceof Task) && (((Task)o).getID().equals(this.getID())));
+	     return ((o instanceof Task) && (((Task)o).getId().equals(this.getId())));
 	 }
 
 	/* 
@@ -414,9 +413,11 @@ public class TaskImpl implements Task, Comparable {
 	 */
 	public boolean hasSubTasks(String id) {
 		Elements subTasks = _element.getChildElements("task");
-		for (int i = 0; i < subTasks.size(); i++) 
-			if (subTasks.get(i).getAttribute("id").getValue().equals(id))
+		for (int i = 0; i < subTasks.size(); i++) {
+			if (subTasks.get(i).getAttribute("id").getValue().equals(id)) {
 				return true;
+			}
+		}
 		return false;
 	}
 
@@ -486,7 +487,7 @@ public class TaskImpl implements Task, Comparable {
 			temp = "";
 		}
 		CalendarDate attr;
-		if(temp != "") {
+		if(!temp.equals("")) {
 			attr = new CalendarDate(temp);
 		} else {
 			attr = null;
