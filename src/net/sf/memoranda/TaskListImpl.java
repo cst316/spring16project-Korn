@@ -503,7 +503,7 @@ public class TaskListImpl implements TaskList {
    * @return repeatableTasks
    */
   
-  public  Collection<Task> getRepeatableTasks() {
+  public  Vector<Task> getRepeatableTasks() {
   	Vector<Task> vector = new Vector<Task>();
 	nu.xom.Elements elements = _root.getChildElements("task");
 	Task t;
@@ -518,7 +518,7 @@ public class TaskListImpl implements TaskList {
   }
   
   public Collection<Task> getRepeatableTaskforDate(CalendarDate date) {
-  	Vector<Task> repeatableTasks = (Vector<Task>) getRepeatableTasks();
+  	Vector<Task> repeatableTasks = getRepeatableTasks();
   	Vector<Task> tasksForDate = new Vector<Task>();
   	boolean duplicate = false;
   	Task task;
@@ -544,13 +544,13 @@ public class TaskListImpl implements TaskList {
 	    			if(task.getRepeatType() == REPEAT_DAILY) {
 		    			tasksForDate.add(task);
 		    		} else if (task.getRepeatType() == REPEAT_WEEKLY) {
-		  				if(date.getCalendar().get(Calendar.DAY_OF_WEEK) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_WEEK));
+		  				if(date.getCalendar().get(Calendar.DAY_OF_WEEK) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_WEEK))
 		  					tasksForDate.add(task);
 		  			} else if(task.getRepeatType() == REPEAT_MONTHLY) {
 		  				if(date.getCalendar().get(Calendar.DAY_OF_MONTH) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_MONTH));
 		  					tasksForDate.add(task);
 		  			} else if(task.getRepeatType() == REPEAT_YEARLY) {
-		  				if(date.getCalendar().get(Calendar.DAY_OF_YEAR) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR));
+		  				if(date.getCalendar().get(Calendar.DAY_OF_YEAR) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR))
 		  					tasksForDate.add(task);
 		  			}
 	    		}
