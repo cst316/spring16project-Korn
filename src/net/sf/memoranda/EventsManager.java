@@ -336,7 +336,7 @@ public class EventsManager {
     public static void removeEvent(CalendarDate date, int hour, int minute) {
         Day day = getDay(date);
 
-        if (day == null)
+        if (day != null)
             day.getElement().removeChild(getEvent(date, hour, minute).getContent());
     }
 

@@ -68,7 +68,7 @@ public class Configuration {
     	System.out.println("Configuration: Key '"+key+"' not found.");
         return "";
     }
-    if(key == "BASE_FONT_SIZE" && config.get(key).toString() ==""){
+    if(key.equals("BASE_FONT_SIZE") && config.get(key).toString().equals("")){
     	config.put("BASE_FONT_SIZE", "16");
     }
     return config.get(key);
