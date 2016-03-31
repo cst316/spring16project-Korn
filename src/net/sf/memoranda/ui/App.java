@@ -135,7 +135,6 @@ public class App {
 		frame.setVisible(true);
 		frame.toFront();
 		frame.requestFocus();
-
 	}
 
 	public static void openWindow() {

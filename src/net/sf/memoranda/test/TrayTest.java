@@ -5,10 +5,7 @@ import net.sf.memoranda.ui.App;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 import static org.junit.Assert.assertEquals;
@@ -45,11 +42,13 @@ public class TrayTest {
 
         // There will be a delay before the event finishes;
         // sleep for a small amount of time to account for this
-        try { Thread.sleep(200); }
-        catch (InterruptedException e) { e.printStackTrace();}
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // There should now be a tray.
         assertEquals(App.getFrame().trayActive(), true);
     }
-
 }

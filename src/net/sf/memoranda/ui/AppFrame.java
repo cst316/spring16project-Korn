@@ -692,7 +692,6 @@ public class AppFrame extends JFrame {
 
     public void doHide() {
         exitNotify();
-        trayIcon = null;
         this.dispose();
     }
 
