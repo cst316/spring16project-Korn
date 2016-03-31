@@ -14,6 +14,7 @@ import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -683,13 +684,18 @@ public class TaskPanel extends JPanel {
 				msg = Local.getString("Remove task")+"\n'" + t.getText() + "'\n"+Local.getString("Are you sure?");
 			}
         }
+        //creates checkBox
+        JCheckBox checkBox= new JCheckBox("Do you want to remove all instances of this task");
+        Object[] params={msg, checkBox};
+        msg= "remove this";
         int n =
             JOptionPane.showConfirmDialog(
                 App.getFrame(),
-                msg,
+                params,
                 Local.getString("Remove task"),
                 JOptionPane.YES_NO_OPTION);
-        if (n != JOptionPane.YES_OPTION)
+        boolean boxSelected= checkBox.isSelected();
+        if (n != JOptionPane.YES_OPTION && boxSelected==false)
             return;
         Vector toremove = new Vector();
         for (int i = 0; i < taskTable.getSelectedRows().length; i++) {
@@ -699,8 +705,24 @@ public class TaskPanel extends JPanel {
             if (t != null)
                 toremove.add(t);
         }
-        for (int i = 0; i < toremove.size(); i++) {
-            CurrentProject.getTaskList().removeTask((Task)toremove.get(i));
+        //if check box is selected
+        if(n==JOptionPane.YES_OPTION && boxSelected==true){
+        	Vector sameTask= new Vector();
+        	Vector multi= new Vector();
+        	for(int i=0;i<taskTable.getSelectedRows().length;i++){
+        		Task same= CurrentProject.getTaskList().getTask(taskTable.getModel().getValueAt(
+        				taskTable.getSelectedRows()[i], TaskTable.TASK_ID).toString());
+        		multi=(Vector) CurrentProject.getTaskList().getDuplicateTasks(same.getId(), same.getEndDate());
+        	}
+        	JOptionPane.showMessageDialog(App.getFrame(), Integer.toString(multi.size()));
+        	for(int i=0;i<toremove.size();i++){
+        		CurrentProject.getTaskList().removeTask((Task)multi.get(i));
+        	}
+    	}
+        else{
+	        for (int i = 0; i < toremove.size(); i++) {
+	            CurrentProject.getTaskList().removeTask((Task)toremove.get(i));
+	        }
         }
         taskTable.tableChanged();
         CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());

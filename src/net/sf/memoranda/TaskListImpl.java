@@ -506,6 +506,23 @@ public class TaskListImpl implements TaskList {
    * Returns a collection of repeatable Tasks.
    * @return repeatableTasks
    */
+  public Collection<Task> getDuplicateTasks(String taskId, CalendarDate endDate){
+	  Vector<Task> vector= new Vector<Task>();
+	  nu.xom.Elements elements= _root.getChildElements("task");
+	  Task t;
+	  for(int i=0;i<elements.size();i++){
+		  t= getTask((elements.get(i).getAttribute("id").getValue()));
+		  if(t.getEndDate()==endDate&& t.getId()==taskId){
+			  vector.add(t);
+		  }
+		  else{
+			  t= getTask(taskId);
+			  vector.add(t);
+		  }
+	  }
+	  return vector;
+	  
+  }
   
   public  Collection<Task> getRepeatableTasks() {
   	Vector<Task> vector = new Vector<Task>();
