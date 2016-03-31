@@ -698,30 +698,43 @@ public class TaskPanel extends JPanel {
         if (n != JOptionPane.YES_OPTION && boxSelected==false)
             return;
         Vector toremove = new Vector();
+        
         for (int i = 0; i < taskTable.getSelectedRows().length; i++) {
-            Task t =
-            CurrentProject.getTaskList().getTask(
+            Task t = CurrentProject.getTaskList().getTask(
                 taskTable.getModel().getValueAt(taskTable.getSelectedRows()[i], TaskTable.TASK_ID).toString());
             if (t != null)
                 toremove.add(t);
         }
         //if check box is selected
-        if(n==JOptionPane.YES_OPTION && boxSelected==true){
-        	Vector sameTask= new Vector();
-        	Vector multi= new Vector();
-        	for(int i=0;i<taskTable.getSelectedRows().length;i++){
-        		Task same= CurrentProject.getTaskList().getTask(taskTable.getModel().getValueAt(
-        				taskTable.getSelectedRows()[i], TaskTable.TASK_ID).toString());
-        		multi=(Vector) CurrentProject.getTaskList().getDuplicateTasks(same.getId(), same.getEndDate());
-        	}
-        	JOptionPane.showMessageDialog(App.getFrame(), Integer.toString(multi.size()));
-        	for(int i=0;i<toremove.size();i++){
-        		CurrentProject.getTaskList().removeTask((Task)multi.get(i));
-        	}
+        if(n == JOptionPane.YES_OPTION && boxSelected){
+//        	Vector sameTask= new Vector();
+//        	Vector multi= new Vector();
+        	int removeCount = 0;
+	        for(int i = 0; i < toremove.size(); i++) {
+        		for(int j = 0; j < taskTable.getRowCount(); j++) {
+        			Task t = CurrentProject.getTaskList().getTask(
+	        					taskTable.getModel().getValueAt(j, TaskTable.TASK_ID).toString());
+	        		if(((Task) toremove.get(i)).getText().equals(t.getText())) {
+	        			CurrentProject.getTaskList().removeTask(t);
+	        			removeCount++;
+	        		}
+	        	}
+	       }
+        	
+//        	for(int i = 0; i < taskTable.getSelectedRows().length; i++) {
+//        		Task same = CurrentProject.getTaskList().getTask(taskTable.getModel().getValueAt(
+//        				taskTable.getSelectedRows()[i], TaskTable.TASK_ID).toString());
+//        		multi = (Vector) CurrentProject.getTaskList().getDuplicateTasks(same.getId(), same.getEndDate());
+//        	}
+        	JOptionPane.showMessageDialog(App.getFrame(), Integer.toString(removeCount));
+        	
+//        	for(int i = 0; i < toremove.size(); i++) {
+//        		CurrentProject.getTaskList().removeTask((Task) multi.get(i));
+//        	}
     	}
-        else{
+        else if(n == JOptionPane.YES_OPTION && !boxSelected){
 	        for (int i = 0; i < toremove.size(); i++) {
-	            CurrentProject.getTaskList().removeTask((Task)toremove.get(i));
+	            CurrentProject.getTaskList().removeTask((Task) toremove.get(i));
 	        }
         }
         taskTable.tableChanged();
