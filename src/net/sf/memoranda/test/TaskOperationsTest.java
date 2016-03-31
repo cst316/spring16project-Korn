@@ -56,12 +56,12 @@ public class TaskOperationsTest {
 		CalendarDate dateDay = new CalendarDate(temp).tomorrow();
 		temp.add(temp.DATE, 7);
 		CalendarDate dateWeek = new CalendarDate(temp);
-		//TODO
 		CalendarDate dateMonth = new CalendarDate(CalendarDate.toDate(CalendarDate.today().getDay(), 
 				(CalendarDate.today().getMonth() + 1) % 12, CalendarDate.today().getYear()));
 		temp.add(temp.DATE, -7);
 		temp.add(temp.DATE, 365);
 		CalendarDate dateYear = new CalendarDate(temp);
+		
 		Task t1 = testTL.createTask(CalendarDate.today(), CalendarDate.today(),
 				"ext", 1, 2, "This is a description!", null, false, 10, 1, false, dateDay);	
 		Task t2 = testTL.createTask(CalendarDate.today(), CalendarDate.today(),
@@ -70,17 +70,17 @@ public class TaskOperationsTest {
 				"tet", 1, 2, "This is a description!", null, false, 10, 3, false, dateMonth);
 		Task t4 = testTL.createTask(CalendarDate.today(), CalendarDate.today(),
 				"tex", 1, 2, "This is a description!", null, false, 10, 4, false, dateYear);
-		// TODO Need to first determine how I'm going to make recurring tasks.
+		
 		assertTrue(t1.isRepeatable() && t2.isRepeatable() && t3.isRepeatable() && t4.isRepeatable());
-		Vector<Task> vTask = (Vector<Task>) CurrentProject.getTaskList().getRepeatableTaskforDate(dateDay);
-		//assertTrue(vTask.get(0).getText() == t1.getText());
-		vTask = (Vector<Task>) CurrentProject.getTaskList().getRepeatableTaskforDate(dateWeek);
-		//assertTrue(vTask.get(0).getText() == t2.getText());
-		vTask = (Vector<Task>) CurrentProject.getTaskList().getRepeatableTaskforDate(dateMonth);
-		//assertTrue(vTask.get(0).getText() == t3.getText());
-		vTask = (Vector<Task>) CurrentProject.getTaskList().getRepeatableTaskforDate(dateYear);
-		//assertTrue(vTask.get(0).getText() == t4.getText());
-	}
+/*		Vector<Task> vTask = (Vector<Task>) testTL.getRepeatableTaskforDate(dateDay);
+		//assertTrue(vTask.get(0).getText().equals(t1.getText()));
+		vTask = (Vector<Task>) testTL.getRepeatableTaskforDate(dateWeek);
+		//assertTrue(vTask.get(0).getText().equals(t2.getText()));
+		vTask = (Vector<Task>) testTL.getRepeatableTaskforDate(dateMonth);
+		//assertTrue(vTask.get(0).getText().equals(t3.getText()));
+		vTask = (Vector<Task>) testTL.getRepeatableTaskforDate(dateYear);
+		//assertTrue(vTask.get(0).getText().equals(t4.getText()));
+*/	}
 	
 	@Test
 	public void testNoEndDateCreation() {
