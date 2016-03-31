@@ -364,7 +364,6 @@ public class EventsPanel extends JPanel {
     private void saveEvents() {
         CurrentStorage.get().storeEventsManager();
         eventsTable.refresh();
-
         //sets tables font size
         eventsTable.setFont((new Font("serif", Font.PLAIN, Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString()))));
         EventsScheduler.init();

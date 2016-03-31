@@ -10,7 +10,7 @@ package net.sf.memoranda;
 
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.util.Local;
-import sun.util.resources.cldr.aa.CalendarData_aa_DJ;
+//import sun.util.resources.cldr.aa.CalendarData_aa_DJ;
 
 import java.util.*;
 
@@ -163,7 +163,9 @@ public class EventsScheduler {
         calendar.set(Calendar.MINUTE, minutes);
         calendar.set(Calendar.SECOND, 0);
         timer.schedule(new NotifyTask(timer), calendar.getTime());
-        _timers.add(timer);
+//    	System.out.println(" DEBUG top: " +_timers.size());
+    	_timers.add(timer);
+//    	System.out.println(" DEBUG mid: " +_timers.size());
 
         // then get the rest until midnight
         while (calendar.getTime().getTime() < getMidnight().getTime()) {
@@ -177,6 +179,7 @@ public class EventsScheduler {
             timer.schedule(new NotifyTask(timer), calendar.getTime());
             _timers.add(timer);
         }
+//    	System.out.println(" DEBUG end: " +_timers.size());
     }
     
     public static void eventHour(Event event){
@@ -197,7 +200,9 @@ public class EventsScheduler {
         	calendar.set(Calendar.DAY_OF_WEEK, day);
         	calendar.set(Calendar.MINUTE,0);
         	timer.schedule(new NotifyTask(timer), calendar.getTime());
+//        	System.out.println(" DEBUG top: " +_timers.size());
         	_timers.add(timer);
+//        	System.out.println(" DEBUG mid: " +_timers.size());
             // then get hours from now until midnight
         	while(calendar.getTime().getTime()<getMidnight().getTime()){
         		timer= new EventTimer(event);
@@ -208,8 +213,9 @@ public class EventsScheduler {
         		}
         		calendar.set(Calendar.HOUR, hours);
         		timer.schedule(new NotifyTask(timer), calendar.getTime());
+                _timers.add(timer);
         	}
-    	
+//        	System.out.println(" DEBUG end: " +_timers.size());
     }
     public static void cancelAll() {
         for (int i = 0; i < _timers.size(); i++) {
