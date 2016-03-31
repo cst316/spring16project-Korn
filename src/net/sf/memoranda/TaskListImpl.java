@@ -546,22 +546,21 @@ public class TaskListImpl implements TaskList {
 	    		if(!task.getWorkingDaysOnly() || 
 	    				(task.getWorkingDaysOnly() && 
 	    						!((date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
-	    						|| (date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY))
-	    				)) {
+	    						|| (date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)))) {
 	    			if(task.getRepeatType() == REPEAT_DAILY) {
 	    				int n= date.getCalendar().get(Calendar.DAY_OF_YEAR);
 	    				int ns= task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR);
-	    				if((n-ns)%task.getPeriod()==0){
+	    				if((n-ns) % task.getPeriod() == 0){
 	    					tasksForDate.add(task);
 	    				}
 		    		} else if (task.getRepeatType() == REPEAT_WEEKLY) {
-		  				if(date.getCalendar().get(Calendar.DAY_OF_WEEK) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_WEEK));
+		  				if(date.getCalendar().get(Calendar.DAY_OF_WEEK) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_WEEK))
 		  					tasksForDate.add(task);
 		  			} else if(task.getRepeatType() == REPEAT_MONTHLY) {
 		  				if(date.getCalendar().get(Calendar.DAY_OF_MONTH) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_MONTH))
 		  					tasksForDate.add(task);
 		  			} else if(task.getRepeatType() == REPEAT_YEARLY) {
-		  				if(date.getCalendar().get(Calendar.DAY_OF_YEAR) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR));
+		  				if(date.getCalendar().get(Calendar.DAY_OF_YEAR) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR))
 		  					tasksForDate.add(task);
 		  			}
 	    		}
