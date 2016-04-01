@@ -106,6 +106,19 @@ public class TaskTable extends JTable {
         CurrentDate.addDateListener(new DateListener() {
             public void dateChange(CalendarDate d) {
                 //updateUI();
+        		TaskList tl = CurrentProject.getTaskList();
+        		//tl.clearTempTasks();
+        		Vector<Task> rptTaskList =  tl.getRepeatableTaskforDate(d);
+        		Task t;
+        		
+        		//Creates tasks on this date for any recurring tasks that do not already exist.
+        		for(int i = 0; i < rptTaskList.size(); i++) {
+        			t = rptTaskList.get(i);
+        			tl.createRptInstanceTask(d, t.getEndDate(), t.getText(), t.getPriority(), t.getEffort(), t.getDescription(), t.getParentId(), 
+        					t.getWorkingDaysOnly(), t.getProgress(), t.getRepeatType(), t.getEndRepeat() != null, t.getEndRepeat());
+        			
+        		}
+            	
                 tableChanged();
             }
         });
@@ -198,7 +211,7 @@ public class TaskTable extends JTable {
     public static void tableChanged() {
 		model.fireUpdateCache();
 		model.fireTreeStructureChanged();
-		expansion.expand(tree);
+		expansion.expand(tree);		
 		//updateUI();
     }
     

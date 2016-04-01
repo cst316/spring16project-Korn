@@ -166,8 +166,8 @@
 	<target name="clean">
 		<!-- Delete the ${build} directory tree -->
 		<delete dir="${build.dir}"/>
-		<delete dir="${build.junitreport.dir}"/>
-		<!--<delete dir="${dist.dir}"/>-->
+		<!--<delete dir="${build.junitreport.dir}"/>
+		<delete dir="${dist.dir}"/>-->
 	</target>
     
     <target name="clean-dist">
@@ -196,7 +196,7 @@
 	<!-- =================================================================== -->
 	<!-- Runs the JUnit Test                                                 -->
 	<!-- =================================================================== -->
-	<target name="junit" depends="compile" description="Runs the JUnit tests">
+	<target name="junit" depends="dist" description="Runs the JUnit tests">
 		<delete dir="${test.junit.dir}"/>
 		<delete dir="${test.jacoco.dir}"/>
 		<mkdir dir="${tests.junit.dir}"/>
