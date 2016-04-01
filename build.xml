@@ -210,7 +210,7 @@
 		    	<batchtest todir="${tests.junit.dir}">
 		    		<fileset dir="${source.dir}">
 		        		<include name="**/*Test*.java"/>
-		    			<exclude name="../TrayTest.java"/>
+		    			<exclude name="TrayTest.java"/>
 		        	</fileset>
 		    	</batchtest>
 		    </junit>
