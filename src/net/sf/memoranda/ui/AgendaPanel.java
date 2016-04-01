@@ -93,6 +93,7 @@ public class AgendaPanel extends JPanel {
 	public static int getRefreshCount(){
 		return refreshCount;
 	}
+	
 	void jbInit() throws Exception {
 		expandedTasks = new ArrayList();
 		toolBar.setFloatable(false);
