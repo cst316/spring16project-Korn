@@ -135,7 +135,14 @@ public class App {
 		frame.setVisible(true);
 		frame.toFront();
 		frame.requestFocus();
+	}
 
+	public static void openWindow() {
+		if (frame == null)
+			return;
+		frame.setVisible(true);
+		frame.setEnabled(true);
+		frame.setExtendedState(JFrame.NORMAL);
 	}
 
 	public static void closeWindow() {

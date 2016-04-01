@@ -27,7 +27,7 @@ public class Start {
     
     static {
         String port = Configuration.get("PORT_NUMBER").toString().trim();
-        if (port.length() >0) {
+        if (port.length() > 0) {
             // The Portnumber must be between 1024 (in *nix all Port's < 1024
             // are privileged) and 65535 (the highest Portnumber everywhere)
             int i = Integer.parseInt(port);
