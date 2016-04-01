@@ -36,13 +36,7 @@ public class TaskImpl implements Task, Comparable {
     public TaskImpl(Element taskElement, TaskList tl) {
         _element = taskElement;
         _tl = tl;
-       
-    }  public TaskImpl(Element taskElement) {
-        _element = taskElement;
-        
-       
-    }
-    
+    }    
 
     public Element getContent() {
         return _element;
@@ -442,7 +436,7 @@ public class TaskImpl implements Task, Comparable {
 	@Override
 	public boolean isRepeatable() {
     	int repType = getRepeatType();//Integer.parseInt(_element.getAttribute("repeatType").getValue());
-    	return repType != 0;
+    	return repType != TaskListImpl.NO_REPEAT;
 	}
 	
     public void setWorkingDaysOnly(boolean workDaysOnly) {
@@ -470,7 +464,8 @@ public class TaskImpl implements Task, Comparable {
     
     public int getRepeatType() {
     	int repType = Integer.parseInt(_element.getAttribute("repeatType").getValue());
-    	if(repType < 0 || repType > 4) {
+    	//repeatType can be 0-No-Repeat, 1-Daily, 2-Weekly, 3-Monthly, 4-Yearly
+    	if(repType < TaskListImpl.NO_REPEAT || repType > TaskListImpl.REPEAT_YEARLY) {
     		repType = -1;
     	}
     	return repType;
@@ -492,10 +487,10 @@ public class TaskImpl implements Task, Comparable {
 			temp = "";
 		}
 		CalendarDate attr;
-		if(!temp.equals("")) {
-			attr = new CalendarDate(temp);
-		} else {
+		if(temp.equals("")) {
 			attr = null;
+		} else {
+			attr = new CalendarDate(temp);
 		}
 		return attr;
 	}

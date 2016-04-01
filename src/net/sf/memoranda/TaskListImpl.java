@@ -222,39 +222,6 @@ public class TaskListImpl implements TaskList {
 	elements.put(id, task.getContent());
 	
     return new TaskImpl(task.getContent(), this);
-//      Element el = new Element("task");
-//      String id = Util.generateId();
-//      el.addAttribute(new Attribute("startDate", startDate.toString()));
-//      if (endDate != null) {
-//    	  el.addAttribute(new Attribute("endDate", endDate.toString()));          }
-//      el.addAttribute(new Attribute("progress", String.valueOf(progress)));
-//      el.addAttribute(new Attribute("effort", String.valueOf(effort)));
-//      el.addAttribute(new Attribute("priority", String.valueOf(priority)));
-//      el.addAttribute(new Attribute("frequency", String.valueOf(frequency)));
-//      //new attribute for wrkin days - ivanrise
-//      el.addAttribute(new Attribute("workingDays",String.valueOf(workDays)));
-//
-//      Element txt = new Element("text");
-//      txt.appendChild(text);
-//      el.appendChild(txt);
-//
-//      Element desc = new Element("description");
-//      desc.appendChild(description);
-//      el.appendChild(desc);
-//
-//      if (parentTaskId == null) {
-//          root.appendChild(el);
-//      }
-//      else {
-//          Element parent = getTaskElement(parentTaskId);
-//          parent.appendChild(el);
-//      }
-//    
-//      elements.put(id, el);
-//   
-//      Util.debug("Created task with parent " + parentTaskId + 
-//    		  " and recurrence " + Task.REPEAT_FREQUENCIES_LIST[frequency]);
-//      return new TaskImpl(el, this);
   }
     
   /**
@@ -572,16 +539,12 @@ public class TaskListImpl implements TaskList {
    * @return repeatableTasks
    */
   public Collection<Task> getDuplicateTasks(String taskId, CalendarDate endDate){
-	  Vector<Task> vector= new Vector<Task>();
-	  nu.xom.Elements elements= _root.getChildElements("task");
+	  Vector<Task> vector = new Vector<Task>();
+	  nu.xom.Elements elements = _root.getChildElements("task");
 	  Task t;
 	  for(int i=0;i<elements.size();i++){
-		  t= getTask((elements.get(i).getAttribute("id").getValue()));
-		  if(t.getEndDate()==endDate&& t.getId()==taskId){
-			  vector.add(t);
-		  }
-		  else{
-			  t= getTask(taskId);
+		  t = getTask((elements.get(i).getAttribute("id").getValue()));
+		  if(t.getEndDate() == endDate && t.getId() == taskId) {
 			  vector.add(t);
 		  }
 	  }
