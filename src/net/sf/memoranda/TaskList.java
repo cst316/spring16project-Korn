@@ -12,6 +12,7 @@ package net.sf.memoranda;
 import net.sf.memoranda.date.CalendarDate;
 
 import java.util.Collection;
+import java.util.Vector;
 
 /**
  *  Tasklist interface for creating a tasklist.
@@ -33,7 +34,15 @@ public interface TaskList {
         int repeatType, boolean chkEndRepeat, CalendarDate endRepeat);
     
   void removeTask(Task task);
+  
+  Task createRptInstanceTask(
+	      CalendarDate startDate, CalendarDate endDate, String text,
+	      int priority, long effort, String description, 
+	        String parentTaskId, boolean workDays, int progress,
+	        int repeatType, boolean chkEndRepeat, CalendarDate endRepeat);
 
+  void clearTempTasks();
+  
   public boolean hasSubTasks(String id);
     
   public boolean hasParentTask(String id);
@@ -54,7 +63,7 @@ public interface TaskList {
   
   public long[] calculateCompletionFromSubTasks(Task task);
   
-  Collection getRepeatableTaskforDate(CalendarDate date);
+  Vector<Task> getRepeatableTaskforDate(CalendarDate date);
   Collection getDuplicateTasks(String id, CalendarDate date);
   
   nu.xom.Element getTaskElement(String id);

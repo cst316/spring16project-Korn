@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Stack;
 import java.util.Vector;
 //import nu.xom.converters.*;
 //import org.apache.xerces.dom.*;
@@ -46,6 +47,7 @@ public class TaskListImpl implements TaskList {
   
   private Project _project = null;
   private nu.xom.Document _document = null;
+  private static Stack<Task> tempTasks = new Stack<Task>();
   static nu.xom.Element _root = null;
   
   /*
@@ -270,6 +272,69 @@ public class TaskListImpl implements TaskList {
     elements.remove(task.getId());
   }
 
+  /*
+   * (non-Javadoc)
+   * @see net.sf.memoranda.TaskList#createTask(net.sf.memoranda.date.CalendarDate,
+   *  net.sf.memoranda.date.CalendarDate, java.lang.String,
+   *   int, long, java.lang.String, java.lang.String, boolean, int, int)
+   */
+  /**
+   *  Create task adds a task to the task list.
+   *  @param startDate
+   *    The date the task begins
+   *  @param endDate
+   *   the date the task ends
+   */
+  public Task createRptInstanceTask(
+      CalendarDate startDate,
+      CalendarDate endDate,
+      String text,
+      int priority,    
+      long effort, 
+      String description, 
+      String parentTaskId,
+      boolean workDays,
+      int progress,
+      int repeatType,
+      boolean repeatHasEnd,
+      CalendarDate endRepeat) {
+      assert (Task.REPEAT_FREQUENCIES_INDEX [repeatType] == repeatType);
+    Element taskElem = new Element("task");
+    String id = Util.generateId();
+    taskElem.addAttribute(new Attribute("id", id));
+    Task task = new TaskImpl(taskElem, this);
+    task.setStartDate(startDate);
+    task.setEndDate(endDate);
+    task.setText(text);
+    task.setPriority(priority);
+    task.setEffort(effort);
+    task.setDescription(description);
+    task.setParentTask(parentTaskId, _root);
+    task.setWorkingDaysOnly(workDays);
+    task.setProgress(progress);
+    task.setRepeatType(repeatType); // 0-none, 1-Daily, 2-Weekly, 3-Monthly, 4-Yearly
+    
+    if(repeatHasEnd) {
+    	task.setEndRepeat(endRepeat);
+    }
+    for (int i = 0; i < elements.size(); i++) {
+		if(elements.contains(task.getContent()))//This is where we will fix the duplicating tasks bug
+			return null;
+	}
+	elements.put(id, task.getContent());
+	//tempTasks.add(task);
+    return new TaskImpl(task.getContent(), this);
+  }
+  
+  public void clearTempTasks(){
+	  while(!tempTasks.isEmpty()){
+		try {
+			this.removeTask(tempTasks.pop());
+		} catch (Exception e) {
+			System.out.println("[DEBUG] Temp Task Not Found");
+		}
+	  }
+  }
   
   /**
    * check for subtasks.
