@@ -524,7 +524,7 @@ public class TaskListImpl implements TaskList {
 	  
   }
   
-  public  Collection<Task> getRepeatableTasks() {
+  public  Vector<Task> getRepeatableTasks() {
   	Vector<Task> vector = new Vector<Task>();
 	nu.xom.Elements elements = _root.getChildElements("task");
 	Task t;
@@ -539,8 +539,8 @@ public class TaskListImpl implements TaskList {
   }
   
   
-  public Collection<Task> getRepeatableTaskforDate(CalendarDate date) {
-  	Vector<Task> repeatableTasks = (Vector<Task>) getRepeatableTasks();
+  public Vector<Task> getRepeatableTaskforDate(CalendarDate date) {
+  	Vector<Task> repeatableTasks = getRepeatableTasks();
   	Vector<Task> tasksForDate = new Vector<Task>();
   	boolean duplicate = false;
   	Task task;
@@ -565,19 +565,24 @@ public class TaskListImpl implements TaskList {
 	    						!((date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
 	    						|| (date.getCalendar().get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)))) {
 	    			if(task.getRepeatType() == REPEAT_DAILY) {
+	    				//Why are we bothering to check this? If something repeats daily, its period should 
+	    				//always be zero and it should show up every day.
 	    				int n= date.getCalendar().get(Calendar.DAY_OF_YEAR);
 	    				int ns= task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR);
-	    				if(task.getPeriod()==0 || (n-ns) % task.getPeriod() == 0){ 
+	    				if(task.getPeriod()==0 || (n-ns) % task.getPeriod() == 0){ //Why is this if here?
 	    					tasksForDate.add(task);
 	    				}
 		    		} else if (task.getRepeatType() == REPEAT_WEEKLY) {
-		  				if(date.getCalendar().get(Calendar.DAY_OF_WEEK) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_WEEK))
+		  				if(date.getCalendar().get(Calendar.DAY_OF_WEEK) == 
+		  						task.getStartDate().getCalendar().get(Calendar.DAY_OF_WEEK))
 		  					tasksForDate.add(task);
 		  			} else if(task.getRepeatType() == REPEAT_MONTHLY) {
-		  				if(date.getCalendar().get(Calendar.DAY_OF_MONTH) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_MONTH))
+		  				if(date.getCalendar().get(Calendar.DAY_OF_MONTH) == 
+		  						task.getStartDate().getCalendar().get(Calendar.DAY_OF_MONTH))
 		  					tasksForDate.add(task);
 		  			} else if(task.getRepeatType() == REPEAT_YEARLY) {
-		  				if(date.getCalendar().get(Calendar.DAY_OF_YEAR) == task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR))
+		  				if(date.getCalendar().get(Calendar.DAY_OF_YEAR) == 
+		  						task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR))
 		  					tasksForDate.add(task);
 		  			}
 	    		}
