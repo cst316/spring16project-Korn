@@ -62,7 +62,7 @@ public class TaskTableSorter extends TaskTableModel{
 		}
 		else{
 			Task t = (Task) parent;
-			if(activeOnly()) c = CurrentProject.getTaskList().getActiveSubTasks(t.getID(), CurrentDate.get());
+			if(activeOnly()) c = CurrentProject.getTaskList().getActiveSubTasks(t.getId(), CurrentDate.get());
 			else c = t.getSubTasks();
 		}
 		

@@ -14,6 +14,7 @@ import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -503,16 +504,29 @@ public class TaskPanel extends JPanel {
         if (dlg.CANCELLED)
             return;
         CalendarDate sd = new CalendarDate((Date) dlg.startDate.getModel().getValue());
-//        CalendarDate ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
-          CalendarDate ed;
- 		if(dlg.chkEndDate.isSelected())
+        CalendarDate ed;
+ 		if(dlg.chkEndDate.isSelected()) {
  			ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
- 		else
+ 		} else {
  			ed = null;
-        long effort = Util.getMillisFromHours(dlg.effortField.getText());
-		//XXX Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
-		Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),null);
-//		CurrentProject.getTaskList().adjustParentTasks(newTask);
+ 		}
+ 		CalendarDate repEnd;
+ 		if(dlg.chkEndDateRpt.isSelected()) {
+ 			repEnd = new CalendarDate((Date) dlg.endDateRpt.getModel().getValue());
+ 		} else {
+ 			repEnd = null;
+ 		}
+ 		Task newTask;
+ 		long effort = Util.getMillisFromHours(dlg.effortField.getText());
+    	newTask = CurrentProject.getTaskList().createTask(
+				sd, ed, dlg.todoField.getText(), 
+				dlg.priorityCB.getSelectedIndex(),effort,
+				dlg.descriptionField.getText(),null,
+				dlg.chkWorkingDays.isSelected(), //Boolean to denote recurrence is working days only
+				((Integer)dlg.progress.getValue()).intValue(),
+				dlg.cmboRepeatType.getSelectedIndex(),
+				dlg.chkEndDateRpt.isSelected(),
+				repEnd);
 		newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
         CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
         taskTable.tableChanged();
@@ -545,14 +559,29 @@ public class TaskPanel extends JPanel {
         if (dlg.CANCELLED)
             return;
         CalendarDate sd = new CalendarDate((Date) dlg.startDate.getModel().getValue());
-//        CalendarDate ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
-          CalendarDate ed;
- 		if(dlg.chkEndDate.isSelected())
+        CalendarDate ed;
+ 		if(dlg.chkEndDate.isSelected()) {
  			ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
- 		else
+ 		} else {
  			ed = null;
+ 		}
+ 		CalendarDate repEnd;
+ 		if(dlg.chkEndDateRpt.isSelected()) {
+ 			repEnd = new CalendarDate((Date) dlg.endDateRpt.getModel().getValue());
+ 		} else {
+ 			repEnd = null;
+ 		}
         long effort = Util.getMillisFromHours(dlg.effortField.getText());
-		Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
+        Task newTask;
+		newTask = CurrentProject.getTaskList().createTask(
+				sd, ed, dlg.todoField.getText(), 
+				dlg.priorityCB.getSelectedIndex(),effort, 
+				dlg.descriptionField.getText(),null,
+				dlg.chkWorkingDays.isSelected(), //Boolean to denote recurrence is working days only
+				((Integer)dlg.progress.getValue()).intValue(),
+				dlg.cmboRepeatType.getSelectedIndex(),
+				dlg.chkEndDateRpt.isSelected(),
+				repEnd);
         newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
 //		CurrentProject.getTaskList().adjustParentTasks(newTask);
 
@@ -565,7 +594,9 @@ public class TaskPanel extends JPanel {
     void calcTask_actionPerformed(ActionEvent e) {
         TaskCalcDialog dlg = new TaskCalcDialog(App.getFrame());
         dlg.pack();
-        Task t = CurrentProject.getTaskList().getTask(taskTable.getModel().getValueAt(taskTable.getSelectedRow(), TaskTable.TASK_ID).toString());
+        Task t = CurrentProject.getTaskList().getTask(
+        		taskTable.getModel().getValueAt(taskTable.getSelectedRow(), 
+        				TaskTable.TASK_ID).toString());
         
         Dimension frmSize = App.getFrame().getSize();
         Point loc = App.getFrame().getLocation();
@@ -653,24 +684,58 @@ public class TaskPanel extends JPanel {
 				msg = Local.getString("Remove task")+"\n'" + t.getText() + "'\n"+Local.getString("Are you sure?");
 			}
         }
+        //creates checkBox
+        JCheckBox checkBox= new JCheckBox("Do you want to remove all instances of this task");
+        Object[] params={msg, checkBox};
+        msg= "remove this";
         int n =
             JOptionPane.showConfirmDialog(
                 App.getFrame(),
-                msg,
+                params,
                 Local.getString("Remove task"),
                 JOptionPane.YES_NO_OPTION);
-        if (n != JOptionPane.YES_OPTION)
+        boolean boxSelected= checkBox.isSelected();
+        if (n != JOptionPane.YES_OPTION && boxSelected==false)
             return;
         Vector toremove = new Vector();
+        
         for (int i = 0; i < taskTable.getSelectedRows().length; i++) {
-            Task t =
-            CurrentProject.getTaskList().getTask(
+            Task t = CurrentProject.getTaskList().getTask(
                 taskTable.getModel().getValueAt(taskTable.getSelectedRows()[i], TaskTable.TASK_ID).toString());
             if (t != null)
                 toremove.add(t);
         }
-        for (int i = 0; i < toremove.size(); i++) {
-            CurrentProject.getTaskList().removeTask((Task)toremove.get(i));
+        //if check box is selected
+        if(n == JOptionPane.YES_OPTION && boxSelected){
+//        	Vector sameTask= new Vector();
+//        	Vector multi= new Vector();
+        	int removeCount = 0;
+	        for(int i = 0; i < toremove.size(); i++) {
+        		for(int j = 0; j < taskTable.getRowCount(); j++) {
+        			Task t = CurrentProject.getTaskList().getTask(
+	        					taskTable.getModel().getValueAt(j, TaskTable.TASK_ID).toString());
+	        		if(((Task) toremove.get(i)).getText().equals(t.getText())) {
+	        			CurrentProject.getTaskList().removeTask(t);
+	        			removeCount++;
+	        		}
+	        	}
+	       }
+        	
+//        	for(int i = 0; i < taskTable.getSelectedRows().length; i++) {
+//        		Task same = CurrentProject.getTaskList().getTask(taskTable.getModel().getValueAt(
+//        				taskTable.getSelectedRows()[i], TaskTable.TASK_ID).toString());
+//        		multi = (Vector) CurrentProject.getTaskList().getDuplicateTasks(same.getId(), same.getEndDate());
+//        	}
+        	JOptionPane.showMessageDialog(App.getFrame(), Integer.toString(removeCount));
+        	
+//        	for(int i = 0; i < toremove.size(); i++) {
+//        		CurrentProject.getTaskList().removeTask((Task) multi.get(i));
+//        	}
+    	}
+        else if(n == JOptionPane.YES_OPTION && !boxSelected){
+	        for (int i = 0; i < toremove.size(); i++) {
+	            CurrentProject.getTaskList().removeTask((Task) toremove.get(i));
+	        }
         }
         taskTable.tableChanged();
         CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
