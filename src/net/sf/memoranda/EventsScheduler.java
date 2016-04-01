@@ -21,9 +21,7 @@ import java.util.*;
 public class EventsScheduler {
 
     static Vector _timers = new Vector();
-
     static Vector _listeners = new Vector();
-
     static Timer changeDateTimer = new Timer();
 
     static {

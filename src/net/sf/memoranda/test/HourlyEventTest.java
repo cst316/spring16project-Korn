@@ -35,7 +35,6 @@ public class HourlyEventTest {
         minute = 12;
         text = "hello";
         workDays = false;
-        System.out.println("[DEBUG] Hourly Set Up complete");
     }
 
     @Test
