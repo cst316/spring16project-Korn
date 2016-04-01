@@ -567,7 +567,7 @@ public class TaskListImpl implements TaskList {
 	    			if(task.getRepeatType() == REPEAT_DAILY) {
 	    				int n= date.getCalendar().get(Calendar.DAY_OF_YEAR);
 	    				int ns= task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR);
-	    				if((n-ns) % task.getPeriod() == 0){
+	    				if(task.getPeriod()==0 || (n-ns) % task.getPeriod() == 0){ 
 	    					tasksForDate.add(task);
 	    				}
 		    		} else if (task.getRepeatType() == REPEAT_WEEKLY) {
