@@ -24,6 +24,7 @@ public class Start {
     
     static int DEFAULT_PORT = 19432;
     static boolean checkIfAlreadyStartet = true;
+    public static boolean fullysupportedPlatform = true;
     
     static {
         String port = Configuration.get("PORT_NUMBER").toString().trim();

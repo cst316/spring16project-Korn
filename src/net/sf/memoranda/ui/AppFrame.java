@@ -677,6 +677,8 @@ public class AppFrame extends JFrame {
             } catch (AWTException e) {
                 System.err.println(e);
             }
+        } else {
+        	Start.fullysupportedPlatform = false;
         }
     }
 

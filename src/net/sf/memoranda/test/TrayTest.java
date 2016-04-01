@@ -25,30 +25,27 @@ public class TrayTest {
 
     @Test
     public void testAddTray() {
-        // Starting off, there should be no tray
-        assertEquals(App.getFrame().trayActive(), false);
-
-        // Minimized, there should also be no tray icon
-        App.getFrame().doMinimize();
-        assertEquals(App.getFrame().trayActive(), false);
-
-        // Restore state
-        App.openWindow();
-
-        // Close the frame by simulating exiting (pressing the X or alt-f4)
-        // in a way that still will hook onto event listeners
-        WindowEvent wev = new WindowEvent(App.getFrame(), WindowEvent.WINDOW_CLOSING);
-        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
-
-        // There will be a delay before the event finishes;
-        // sleep for a small amount of time to account for this
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        // There should now be a tray.
-        assertEquals(App.getFrame().trayActive(), true);
+        if (Start.fullysupportedPlatform) {
+			// Starting off, there should be no tray
+			assertEquals(App.getFrame().trayActive(), false);
+			// Minimized, there should also be no tray icon
+			App.getFrame().doMinimize();
+			assertEquals(App.getFrame().trayActive(), false);
+			// Restore state
+			App.openWindow();
+			// Close the frame by simulating exiting (pressing the X or alt-f4)
+			// in a way that still will hook onto event listeners
+			WindowEvent wev = new WindowEvent(App.getFrame(), WindowEvent.WINDOW_CLOSING);
+			Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
+			// There will be a delay before the event finishes;
+			// sleep for a small amount of time to account for this
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			// There should now be a tray.
+			assertEquals(App.getFrame().trayActive(), true);
+		}
     }
 }
