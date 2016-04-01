@@ -6,39 +6,59 @@
  * @author Alex V. Alishevskikh, alex@openmechanics.net
  * Copyright (c) 2003 Memoranda Team. http://memoranda.sf.net
  */
+
 package net.sf.memoranda;
-import java.util.Collection;
 
 import net.sf.memoranda.date.CalendarDate;
+
+import java.util.Collection;
+
 /**
- * 
+ *  Tasklist interface for creating a tasklist.
  */
 /*$Id: TaskList.java,v 1.8 2005/12/01 08:12:26 alexeya Exp $*/
 public interface TaskList {
 
-	Project getProject();
-    Task getTask(String id);
+  Project getProject();
+  
+  Task getTask(String id);
 
-    Task createTask(CalendarDate startDate, CalendarDate endDate, String text, int priority, long effort, String description, String parentTaskId);
+  /* Task createTask(CalendarDate startDate, CalendarDate endDate, String text,
+     int priority, long effort, String description, String parentTaskId); */
 
-    void removeTask(Task task);
-
-    public boolean hasSubTasks(String id);
+  Task createTask(
+      CalendarDate startDate, CalendarDate endDate, String text,
+      int priority, long effort, String description, 
+        String parentTaskId, boolean workDays, int progress,
+        int repeatType, boolean chkEndRepeat, CalendarDate endRepeat);
     
-	public boolean hasParentTask(String id);
+  void removeTask(Task task);
 
-	public Collection getTopLevelTasks();
-	
-    public Collection getAllSubTasks(String taskId);
-    public Collection getActiveSubTasks(String taskId,CalendarDate date);
+  public boolean hasSubTasks(String id);
     
-//    public void adjustParentTasks(Task t);
-    
-    public long calculateTotalEffortFromSubTasks(Task t);
-    public CalendarDate getLatestEndDateFromSubTasks(Task t);
-    public CalendarDate getEarliestStartDateFromSubTasks(Task t);
-    public long[] calculateCompletionFromSubTasks(Task t);
+  public boolean hasParentTask(String id);
 
-    nu.xom.Document getXMLContent();
+  public Collection<Task> getTopLevelTasks();
+  
+  public Collection getAllSubTasks(String taskId);
+  
+  public Collection getActiveSubTasks(String taskId,CalendarDate date);
+    
+  //    public void adjustParentTasks(Task t);
+    
+  public long calculateTotalEffortFromSubTasks(Task task);
+  
+  public CalendarDate getLatestEndDateFromSubTasks(Task task);
+  
+  public CalendarDate getEarliestStartDateFromSubTasks(Task task);
+  
+  public long[] calculateCompletionFromSubTasks(Task task);
+  
+  Collection getRepeatableTaskforDate(CalendarDate date);
+  Collection getDuplicateTasks(String id, CalendarDate date);
+  
+  nu.xom.Element getTaskElement(String id);
+
+  nu.xom.Document getXmlContent();
 
 }

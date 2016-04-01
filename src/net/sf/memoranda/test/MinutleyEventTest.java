@@ -28,14 +28,15 @@ public class MinutleyEventTest {
 	@Before
 	public void setUp() throws Exception {
 		repeatType = 6;
-		dialog = new EventDialog(App.getFrame(), Local.getString("New event"));
+		//dialog = new EventDialog(App.getFrame(), Local.getString("New event"));
 		startDate = CalendarDate.today();
 		endDate = CalendarDate.tomorrow();
 		period = 1;
-		hour = 5;
-		minute = 12;
+		hour = 7;
+		minute = 14;
 		text = "hello";
-		workDays = dialog.workingDaysOnlyCB.isSelected();
+		workDays = false;
+		System.out.println("[DEBUG] Minutely Set Up complete");
 	}
 // creates a new repeatableMinute test and compares the period of when the notify panel will pop up
 	@Test
@@ -47,20 +48,20 @@ public class MinutleyEventTest {
 		Event event= (Event) events.get(events.size() - 1);
 		// sends to eventMinute and gets the current time and checks when the next notify pop will pop up.
 		EventsScheduler.eventMinute(event);
-
+		System.out.println("[DEBUG] " + period +" = "+event.getPeriod());
 		// ensures time we set to timer is the same
-		assertEquals(1, event.getPeriod());
+		assertEquals(period, event.getPeriod());
 	}
 
 	@Test
 	public void testEventMinuteExists() {
 		int beforeAdded = EventsScheduler.counter();
-		EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour, minute, text, workDays);
+		EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour+1, minute+1, text, workDays);
 		Vector events= (Vector)EventsManager.getActiveEvents();
 		Event event= (Event) events.get(events.size() - 1);
 		EventsScheduler.eventMinute(event);
 		int afterAdded = EventsScheduler.counter();
-
+		System.out.println("[DEBUG] " + beforeAdded +" != "+afterAdded);
 		// ensures that event was added to the timer vector
 		assertFalse(beforeAdded == afterAdded);
 	}

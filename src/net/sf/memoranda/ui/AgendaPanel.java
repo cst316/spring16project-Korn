@@ -242,28 +242,35 @@ public class AgendaPanel extends JPanel {
 					        if (dlg.CANCELLED)
 					            return;
 					        CalendarDate sd = new CalendarDate((Date) dlg.startDate.getModel().getValue());
-//					        CalendarDate ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
-					          CalendarDate ed;
-					 		if(dlg.chkEndDate.isSelected())
+					        CalendarDate ed;
+					 		if(dlg.chkEndDate.isSelected()) {
 					 			ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
-					 		else
+					 		} else {
 					 			ed = null;
+					 		}
+					 		CalendarDate repEnd;
+					 		if(dlg.chkEndDateRpt.isSelected()) {
+					 			repEnd = new CalendarDate((Date) dlg.endDateRpt.getModel().getValue());
+					 		} else {
+					 			repEnd = null;
+					 		}
 					        long effort = Util.getMillisFromHours(dlg.effortField.getText());
 							//XXX Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
-							Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),null);
-//							CurrentProject.getTaskList().adjustParentTasks(newTask);
-							newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
+					        Task newTask;
+					    	newTask = CurrentProject.getTaskList().createTask(
+									sd, ed, dlg.todoField.getText(), 
+									dlg.priorityCB.getSelectedIndex(),effort, 
+									dlg.descriptionField.getText(),null,
+									dlg.chkWorkingDays.isSelected(), //Boolean to denote recurrence is working days only
+									((Integer)dlg.progress.getValue()).intValue(),
+									dlg.cmboRepeatType.getSelectedIndex(),
+									dlg.chkEndDate.isSelected(),
+									repEnd);
+					    	newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());							
 					        CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
 					        TaskTable.tableChanged();
 					        parentPanel.updateIndicators();
 					        //taskTable.updateUI();	
-					        
-					        
-					        
-
-
-					       
-
 					}
 				}
 			}
