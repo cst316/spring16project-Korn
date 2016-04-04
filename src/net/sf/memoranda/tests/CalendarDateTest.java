@@ -37,8 +37,12 @@ public class CalendarDateTest {
 
 	@Test
 	public void equalsTest() {
-		assertTrue(cd1.equals(cd3));
-		assertFalse(cd1.equals(cd2));
+		Boolean t = cd1.equals(cd3);
+		System.out.println("[DEBUG] Test true: " + t.toString());
+		assertTrue(t);
+		Boolean f = cd1.equals(cd2);
+		System.out.println("[DEBUG] Test false: " + f.toString());		
+		assertFalse(f);
 	}
 	
 	@Test

@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
+import java.util.Stack;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -518,16 +519,21 @@ public class TaskPanel extends JPanel {
  		}
  		Task newTask;
  		long effort = Util.getMillisFromHours(dlg.effortField.getText());
-    	newTask = CurrentProject.getTaskList().createTask(
-				sd, ed, dlg.todoField.getText(), 
-				dlg.priorityCB.getSelectedIndex(),effort,
-				dlg.descriptionField.getText(),null,
-				dlg.chkWorkingDays.isSelected(), //Boolean to denote recurrence is working days only
-				((Integer)dlg.progress.getValue()).intValue(),
-				dlg.cmboRepeatType.getSelectedIndex(),
-				dlg.chkEndDateRpt.isSelected(),
-				repEnd);
-		newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
+ 		Stack<Object> taskCreationParams = new Stack<Object>();
+    	taskCreationParams.add(sd);
+    	taskCreationParams.add(ed); 
+    	taskCreationParams.add(dlg.todoField.getText());  
+    	taskCreationParams.add(dlg.priorityCB.getSelectedIndex());
+    	taskCreationParams.add(effort); 
+    	taskCreationParams.add(dlg.descriptionField.getText());
+    	taskCreationParams.add(null);
+    	taskCreationParams.add(dlg.chkWorkingDays.isSelected()); 
+    	taskCreationParams.add(((Integer)dlg.progress.getValue()).intValue());
+    	taskCreationParams.add(dlg.cmboRepeatType.getSelectedIndex());
+    	taskCreationParams.add(dlg.chkEndDate.isSelected());
+    	taskCreationParams.add(repEnd);
+    	newTask = CurrentProject.getTaskList().createTask(taskCreationParams);
+    	newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
         CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
         taskTable.tableChanged();
         parentPanel.updateIndicators();
@@ -573,15 +579,20 @@ public class TaskPanel extends JPanel {
  		}
         long effort = Util.getMillisFromHours(dlg.effortField.getText());
         Task newTask;
-		newTask = CurrentProject.getTaskList().createTask(
-				sd, ed, dlg.todoField.getText(), 
-				dlg.priorityCB.getSelectedIndex(),effort, 
-				dlg.descriptionField.getText(),null,
-				dlg.chkWorkingDays.isSelected(), //Boolean to denote recurrence is working days only
-				((Integer)dlg.progress.getValue()).intValue(),
-				dlg.cmboRepeatType.getSelectedIndex(),
-				dlg.chkEndDateRpt.isSelected(),
-				repEnd);
+        Stack<Object> taskCreationParams = new Stack<Object>();
+    	taskCreationParams.add(sd);
+    	taskCreationParams.add(ed); 
+    	taskCreationParams.add(dlg.todoField.getText());  
+    	taskCreationParams.add(dlg.priorityCB.getSelectedIndex());
+    	taskCreationParams.add(effort); 
+    	taskCreationParams.add(dlg.descriptionField.getText());
+    	taskCreationParams.add(null);
+    	taskCreationParams.add(dlg.chkWorkingDays.isSelected()); 
+    	taskCreationParams.add(((Integer)dlg.progress.getValue()).intValue());
+    	taskCreationParams.add(dlg.cmboRepeatType.getSelectedIndex());
+    	taskCreationParams.add(dlg.chkEndDate.isSelected());
+    	taskCreationParams.add(repEnd);
+    	newTask = CurrentProject.getTaskList().createTask(taskCreationParams);
         newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
 //		CurrentProject.getTaskList().adjustParentTasks(newTask);
 
