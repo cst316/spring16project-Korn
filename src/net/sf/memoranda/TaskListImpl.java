@@ -172,6 +172,41 @@ public class TaskListImpl implements TaskList {
         AgendaPanel.refresh(ret.getStartDate());
         return ret;
     }*/
+  
+  private Task constructTask(Stack<Object> taskCreationParams) {
+	  String id = (String) taskCreationParams.pop();
+	  CalendarDate endRepeat  = (CalendarDate) taskCreationParams.pop();
+	    boolean repeatHasEnd = (boolean) taskCreationParams.pop();
+	    int repeatType = (int) taskCreationParams.pop();
+	    int progress = (int) taskCreationParams.pop();
+	    boolean workDays = (boolean) taskCreationParams.pop();
+	    String parentTaskId = (String) taskCreationParams.pop();
+	    String description = (String) taskCreationParams.pop();
+	    long effort = (long) taskCreationParams.pop();
+	    int priority = (int) taskCreationParams.pop();
+	    String text = (String) taskCreationParams.pop();
+	    CalendarDate endDate= (CalendarDate) taskCreationParams.pop();	  
+	    CalendarDate startDate = (CalendarDate) taskCreationParams.pop();
+	    
+	    assert (Task.REPEAT_FREQUENCIES_INDEX [repeatType] == repeatType);
+	    Element taskElem = new Element("task");
+	    taskElem.addAttribute(new Attribute("id", id));
+	    Task task = new TaskImpl(taskElem, this);
+	    task.setStartDate(startDate);
+	    task.setEndDate(endDate);
+	    task.setText(text);
+	    task.setPriority(priority);
+	    task.setEffort(effort);
+	    task.setDescription(description);
+	    task.setParentTask(parentTaskId, _root);
+	    task.setWorkingDaysOnly(workDays);
+	    task.setProgress(progress);
+	    task.setRepeatType(repeatType); // 0-none, 1-Daily, 2-Weekly, 3-Monthly, 4-Yearly	    
+	    if(repeatHasEnd) {
+	    	task.setEndRepeat(endRepeat);
+	    }
+		return task;
+  }
  
   /*
    * (non-Javadoc)
@@ -186,38 +221,11 @@ public class TaskListImpl implements TaskList {
    *  @param endDate
    *   the date the task ends
    */
-  public Task createTask(
-      CalendarDate startDate,
-      CalendarDate endDate,
-      String text,
-      int priority,    
-      long effort, 
-      String description, 
-      String parentTaskId,
-      boolean workDays,
-      int progress,
-      int repeatType,
-      boolean repeatHasEnd,
-      CalendarDate endRepeat) {
-      assert (Task.REPEAT_FREQUENCIES_INDEX [repeatType] == repeatType);
-    Element taskElem = new Element("task");
+  public Task createTask(Stack<Object> taskCreationParams) {
     String id = Util.generateId();
-    taskElem.addAttribute(new Attribute("id", id));
-    Task task = new TaskImpl(taskElem, this);
-    task.setStartDate(startDate);
-    task.setEndDate(endDate);
-    task.setText(text);
-    task.setPriority(priority);
-    task.setEffort(effort);
-    task.setDescription(description);
-    task.setParentTask(parentTaskId, _root);
-    task.setWorkingDaysOnly(workDays);
-    task.setProgress(progress);
-    task.setRepeatType(repeatType); // 0-none, 1-Daily, 2-Weekly, 3-Monthly, 4-Yearly
     
-    if(repeatHasEnd) {
-    	task.setEndRepeat(endRepeat);
-    }
+    taskCreationParams.add(id);
+    Task task = constructTask(taskCreationParams);
 
 	elements.put(id, task.getContent());
 	
@@ -252,38 +260,12 @@ public class TaskListImpl implements TaskList {
    *  @param endDate
    *   the date the task ends
    */
-  public Task createRptInstanceTask(
-      CalendarDate startDate,
-      CalendarDate endDate,
-      String text,
-      int priority,    
-      long effort, 
-      String description, 
-      String parentTaskId,
-      boolean workDays,
-      int progress,
-      int repeatType,
-      boolean repeatHasEnd,
-      CalendarDate endRepeat) {
-      assert (Task.REPEAT_FREQUENCIES_INDEX [repeatType] == repeatType);
-    Element taskElem = new Element("task");
-    String id = Util.generateId();
-    taskElem.addAttribute(new Attribute("id", id));
-    Task task = new TaskImpl(taskElem, this);
-    task.setStartDate(startDate);
-    task.setEndDate(endDate);
-    task.setText(text);
-    task.setPriority(priority);
-    task.setEffort(effort);
-    task.setDescription(description);
-    task.setParentTask(parentTaskId, _root);
-    task.setWorkingDaysOnly(workDays);
-    task.setProgress(progress);
-    task.setRepeatType(repeatType); // 0-none, 1-Daily, 2-Weekly, 3-Monthly, 4-Yearly
-    
-    if(repeatHasEnd) {
-    	task.setEndRepeat(endRepeat);
-    }
+  public Task createRptInstanceTask(Stack<Object> taskCreationParams) {
+	    String id = Util.generateId();
+	    
+    taskCreationParams.add(id);
+    Task task = constructTask(taskCreationParams);
+
     for (int i = 0; i < elements.size(); i++) {
 		if(elements.contains(task.getContent()))//This is where we will fix the duplicating tasks bug
 			return null;

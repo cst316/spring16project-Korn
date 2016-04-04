@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
+import java.util.Stack;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -257,15 +258,22 @@ public class AgendaPanel extends JPanel {
 					        long effort = Util.getMillisFromHours(dlg.effortField.getText());
 							//XXX Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
 					        Task newTask;
-					    	newTask = CurrentProject.getTaskList().createTask(
-									sd, ed, dlg.todoField.getText(), 
-									dlg.priorityCB.getSelectedIndex(),effort, 
-									dlg.descriptionField.getText(),null,
-									dlg.chkWorkingDays.isSelected(), //Boolean to denote recurrence is working days only
-									((Integer)dlg.progress.getValue()).intValue(),
-									dlg.cmboRepeatType.getSelectedIndex(),
-									dlg.chkEndDate.isSelected(),
-									repEnd);
+					    	
+					    	Stack<Object> taskCreationParams = new Stack<Object>();
+					    	taskCreationParams.add(sd);
+					    	taskCreationParams.add(ed); 
+					    	taskCreationParams.add(dlg.todoField.getText());  
+					    	taskCreationParams.add(dlg.priorityCB.getSelectedIndex());
+					    	taskCreationParams.add(effort); 
+					    	taskCreationParams.add(dlg.descriptionField.getText());
+					    	taskCreationParams.add(null);
+					    	taskCreationParams.add(dlg.chkWorkingDays.isSelected()); 
+					    	taskCreationParams.add(((Integer)dlg.progress.getValue()).intValue());
+					    	taskCreationParams.add(dlg.cmboRepeatType.getSelectedIndex());
+					    	taskCreationParams.add(dlg.chkEndDate.isSelected());
+					    	taskCreationParams.add(repEnd);
+					    	newTask = CurrentProject.getTaskList().createTask(taskCreationParams);
+					    	
 					    	newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());							
 					        CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
 					        TaskTable.tableChanged();

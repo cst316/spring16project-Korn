@@ -12,6 +12,7 @@ package net.sf.memoranda;
 import net.sf.memoranda.date.CalendarDate;
 
 import java.util.Collection;
+import java.util.Stack;
 import java.util.Vector;
 
 /**
@@ -27,20 +28,12 @@ public interface TaskList {
   /* Task createTask(CalendarDate startDate, CalendarDate endDate, String text,
      int priority, long effort, String description, String parentTaskId); */
 
-  Task createTask(
-      CalendarDate startDate, CalendarDate endDate, String text,
-      int priority, long effort, String description, 
-        String parentTaskId, boolean workDays, int progress,
-        int repeatType, boolean chkEndRepeat, CalendarDate endRepeat);
+  Task createTask (Stack<Object> taskCreationParams);
     
   void removeTask(Task task);
   
-  Task createRptInstanceTask(
-	      CalendarDate startDate, CalendarDate endDate, String text,
-	      int priority, long effort, String description, 
-	        String parentTaskId, boolean workDays, int progress,
-	        int repeatType, boolean chkEndRepeat, CalendarDate endRepeat);
-
+  Task createRptInstanceTask(Stack<Object> taskCreationParams);
+  
   void clearTempTasks();
   
   public boolean hasSubTasks(String id);
