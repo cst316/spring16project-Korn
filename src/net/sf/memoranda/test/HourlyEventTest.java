@@ -42,6 +42,7 @@ public class HourlyEventTest {
     public void testEventHourPeriod() {
     	System.out.println("[DEBUG] Starting testEventHourPeriod()");
         EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour, minute, text, workDays);
+    	System.out.println("[DEBUG] Valid Event Created");
         //all current events
         Vector events= (Vector)EventsManager.getActiveEvents();
         //gets the new event that was just created
@@ -57,7 +58,9 @@ public class HourlyEventTest {
     public void testEventHourExists() {
     	System.out.println("[DEBUG] Starting testEventHourExists()");
         int beforeAdded = EventsScheduler.counter();
+        System.out.println("[DEBUG] " + beforeAdded);
         EventsManager.createRepeatableEvent(repeatType, startDate, endDate, period, hour+1, minute+1, text, workDays);
+        System.out.println("[DEBUG] Valid Event Created");
         Vector events= (Vector)EventsManager.getActiveEvents();
         Event event= (Event) events.get(events.size() - 1);
         EventsScheduler.eventHour(event);
