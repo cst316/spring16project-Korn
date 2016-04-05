@@ -255,10 +255,9 @@ public class AgendaPanel extends JPanel {
 					 		} else {
 					 			repEnd = null;
 					 		}
-					        long effort = Util.getMillisFromHours(dlg.effortField.getText());
-							//XXX Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
-					        Task newTask;
-					    	
+					        long effort = Util.getMillisFromHours(dlg.txtEffort.getText());
+
+					        Task newTask;					    	
 					    	Stack<Object> taskCreationParams = new Stack<Object>();
 					    	taskCreationParams.add(sd);
 					    	taskCreationParams.add(ed); 
@@ -269,7 +268,7 @@ public class AgendaPanel extends JPanel {
 					    	taskCreationParams.add(null);
 					    	taskCreationParams.add(dlg.chkWorkingDays.isSelected()); 
 					    	taskCreationParams.add(((Integer)dlg.progress.getValue()).intValue());
-					    	taskCreationParams.add(dlg.cmboRepeatType.getSelectedIndex());
+					    	taskCreationParams.add(dlg.cbRepeatType.getSelectedIndex());
 					    	taskCreationParams.add(dlg.chkEndDate.isSelected());
 					    	taskCreationParams.add(repEnd);
 					    	newTask = CurrentProject.getTaskList().createTask(taskCreationParams);

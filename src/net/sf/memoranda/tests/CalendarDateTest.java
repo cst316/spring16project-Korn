@@ -38,23 +38,31 @@ public class CalendarDateTest {
 	@Test
 	public void equalsTest() {
 		Boolean t = cd1.equals(cd3);
-		System.out.println("[DEBUG] Test true: " + t.toString());
+		System.out.println("[DEBUG] Test Equals true: " + t.toString());
 		assertTrue(t);
 		Boolean f = cd1.equals(cd2);
-		System.out.println("[DEBUG] Test false: " + f.toString());		
+		System.out.println("[DEBUG] Test Equals false: " + f.toString());		
 		assertFalse(f);
 	}
 	
 	@Test
 	public void beforeTest() {
-		assertTrue(cd1.before(cd2));
-		assertFalse(cd2.before(cd1));
+		Boolean t = cd1.before(cd2);
+		System.out.println("[DEBUG] Test Before true: " + t.toString());
+		assertTrue(t);
+		Boolean f = cd2.before(cd1);
+		System.out.println("[DEBUG] Test Before false: " + f.toString());		
+		assertFalse(f);
 	}
 	
 	@Test
 	public void afterTest() {
-		assertFalse(cd1.after(cd2));
-		assertTrue(cd2.after(cd1));
+		Boolean t = cd2.after(cd1);
+		System.out.println("[DEBUG] Test After true: " + t.toString());
+		assertTrue(t);
+		Boolean f = cd1.after(cd2);
+		System.out.println("[DEBUG] Test After false: " + f.toString());
+		assertFalse(f);
 	}
 
 }
