@@ -123,7 +123,7 @@ public class TaskDialog extends JDialog {
 	private final JPanel panel_2 = new JPanel();
 	private final JPanel panel_10 = new JPanel();
 	private final JLabel lblTaskTrackingTag = new JLabel();
-	private final JTextField txtTag = new JTextField();
+	JTextField txtTag = new JTextField();
 	
     
     public TaskDialog(Frame frame, String title) {

@@ -198,7 +198,8 @@ public class TaskListImpl implements TaskList {
       int progress,
       int repeatType,
       boolean repeatHasEnd,
-      CalendarDate endRepeat) {
+      CalendarDate endRepeat,
+      String tag) {
       assert (Task.REPEAT_FREQUENCIES_INDEX [repeatType] == repeatType);
     Element taskElem = new Element("task");
     String id = Util.generateId();
@@ -218,7 +219,8 @@ public class TaskListImpl implements TaskList {
     if(repeatHasEnd) {
     	task.setEndRepeat(endRepeat);
     }
-
+    
+    task.setTag(tag);
 	elements.put(id, task.getContent());
 	
     return new TaskImpl(task.getContent(), this);

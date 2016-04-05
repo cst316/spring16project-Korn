@@ -526,7 +526,7 @@ public class TaskPanel extends JPanel {
 				((Integer)dlg.progress.getValue()).intValue(),
 				dlg.cbRepeatType.getSelectedIndex(),
 				dlg.chkEndDateRpt.isSelected(),
-				repEnd);
+				repEnd, dlg.txtTag.getText());
 		newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
         CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
         taskTable.tableChanged();
@@ -581,7 +581,7 @@ public class TaskPanel extends JPanel {
 				((Integer)dlg.progress.getValue()).intValue(),
 				dlg.cbRepeatType.getSelectedIndex(),
 				dlg.chkEndDateRpt.isSelected(),
-				repEnd);
+				repEnd, dlg.txtTag.getText());
         newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
 //		CurrentProject.getTaskList().adjustParentTasks(newTask);
 

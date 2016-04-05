@@ -31,7 +31,7 @@ public interface TaskList {
       CalendarDate startDate, CalendarDate endDate, String text,
       int priority, long effort, String description, 
         String parentTaskId, boolean workDays, int progress,
-        int repeatType, boolean chkEndRepeat, CalendarDate endRepeat);
+        int repeatType, boolean chkEndRepeat, CalendarDate endRepeat, String tag);
     
   void removeTask(Task task);
   
