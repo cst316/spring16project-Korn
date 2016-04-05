@@ -254,7 +254,7 @@ public class AgendaPanel extends JPanel {
 					 		} else {
 					 			repEnd = null;
 					 		}
-					        long effort = Util.getMillisFromHours(dlg.effortField.getText());
+					        long effort = Util.getMillisFromHours(dlg.txtEffort.getText());
 							//XXX Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
 					        Task newTask;
 					    	newTask = CurrentProject.getTaskList().createTask(
@@ -263,7 +263,7 @@ public class AgendaPanel extends JPanel {
 									dlg.descriptionField.getText(),null,
 									dlg.chkWorkingDays.isSelected(), //Boolean to denote recurrence is working days only
 									((Integer)dlg.progress.getValue()).intValue(),
-									dlg.cmboRepeatType.getSelectedIndex(),
+									dlg.cbRepeatType.getSelectedIndex(),
 									dlg.chkEndDate.isSelected(),
 									repEnd);
 					    	newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());							
