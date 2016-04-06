@@ -8,20 +8,21 @@
  */
 package net.sf.memoranda;
 
+import net.sf.memoranda.ui.App;
+import net.sf.memoranda.ui.ExceptionDialog;
+import net.sf.memoranda.util.Configuration;
+
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import net.sf.memoranda.ui.*;
-import net.sf.memoranda.util.Configuration;
 
 /**
  * test
  */
 /*$Id: Start.java,v 1.7 2004/11/22 10:02:37 alexeya Exp $*/
 public class Start {
-    
+
     static App app = null;
-    
+
     static int DEFAULT_PORT = 19432;
     static boolean checkIfAlreadyStartet = true;
 
@@ -36,13 +37,13 @@ public class Start {
             }
             /*DEBUG*/ //System.out.println("Port " + DEFAULT_PORT + " used.");
         }
-        
+
         String check = Configuration.get("CHECK_IF_ALREADY_STARTED").toString().trim();
         if (check.length() > 0 && check.equalsIgnoreCase("no")) {
             checkIfAlreadyStartet = false;
         }
     }
-    
+
     public static void main(String[] args) {
         if (checkIfAlreadyStartet) {
             try {
@@ -50,25 +51,25 @@ public class Start {
                 Socket socket = new Socket("127.0.0.1", DEFAULT_PORT);
                 socket.close();
                 System.exit(0);
-                
+
             } catch (Exception e) {
                 // If socket is not opened (app is not started), continue
                 // e.printStackTrace();
             }
             new SLThread().start();
         }
-        
+
         //System.out.println(EventsScheduler.isEventScheduled());
         if ((args.length == 0) || (!args[0].equals("-m"))) {
             app = new App(true);
-        }
-        else
+        } else {
             app = new App(false);
+        }
     }
 }
 
 class SLThread extends Thread {
-    
+
     public void run() {
         ServerSocket serverSocket = null;
         try {
@@ -77,12 +78,12 @@ class SLThread extends Thread {
             Start.app.show();
             serverSocket.close();
             new SLThread().start();
-            
+
         } catch (Exception e) {
-            System.err.println("Port:"+Start.DEFAULT_PORT);
+            System.err.println("Port:" + Start.DEFAULT_PORT);
             e.printStackTrace();
-            new ExceptionDialog(e, "Cannot create a socket connection on localhost:"+Start.DEFAULT_PORT,
-            "Make sure that other software does not use the port "+Start.DEFAULT_PORT+" and examine your security settings.");
+            new ExceptionDialog(e, "Cannot create a socket connection on localhost:" + Start.DEFAULT_PORT,
+                    "Make sure that other software does not use the port " + Start.DEFAULT_PORT + " and examine your security settings.");
         }
     }
 }

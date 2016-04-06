@@ -1,23 +1,14 @@
 package net.sf.memoranda.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.io.File;
+import net.sf.memoranda.util.Local;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.CaretEvent;
-
-import net.sf.memoranda.util.Local;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.File;
 
 /*$Id: SetApplicationPanel.java,v 1.6 2004/04/05 10:05:44 alexeya Exp $*/
 public class SetApplicationPanel extends JPanel {
@@ -35,18 +26,18 @@ public class SetApplicationPanel extends JPanel {
     TitledBorder titledBorder2;
     JLabel argHelpLabel = new JLabel();
     public File d = null;
-    
+
     public SetApplicationPanel() {
         try {
             jbInit();
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             new ExceptionDialog(ex);
         }
     }
+
     void jbInit() throws Exception {
         border1 = BorderFactory.createEmptyBorder();
-        titledBorder1 = new TitledBorder(BorderFactory.createEmptyBorder(),Local.getString("Path to executable"));
+        titledBorder1 = new TitledBorder(BorderFactory.createEmptyBorder(), Local.getString("Path to executable"));
         border2 = BorderFactory.createEmptyBorder();
         titledBorder2 = new TitledBorder(border2, Local.getString("Arguments"));
         jPanel3.setLayout(borderLayout5);
@@ -80,16 +71,16 @@ public class SetApplicationPanel extends JPanel {
         argHelpLabel.setText(Local.getString("Use $1 as an alias of the file to open"));
         jPanel3.add(applicationField, BorderLayout.CENTER);
         jPanel3.add(selectAppBrowseB, BorderLayout.EAST);
-        this.add(jPanel4,  BorderLayout.SOUTH);
+        this.add(jPanel4, BorderLayout.SOUTH);
         jPanel4.add(argumentsField, BorderLayout.CENTER);
-        jPanel4.add(argHelpLabel,  BorderLayout.SOUTH);
-        this.add(jPanel3,  BorderLayout.NORTH);
+        jPanel4.add(argHelpLabel, BorderLayout.SOUTH);
+        this.add(jPanel3, BorderLayout.NORTH);
     }
-    
+
     void applicationField_caretUpdate(CaretEvent e) {
-        
+
     }
-    
+
     void selectAppBrowseB_actionPerformed(ActionEvent e) {
         // Fix until Sun's JVM supports more locales...
         UIManager.put("FileChooser.lookInLabelText", Local.getString("Look in:"));
@@ -104,7 +95,7 @@ public class SetApplicationPanel extends JPanel {
         UIManager.put("FileChooser.cancelButtonText", Local.getString("Cancel"));
         UIManager.put("FileChooser.cancelButtonToolTipText", Local.getString("Cancel"));
         UIManager.put("FileChooser.acceptAllFileFilterText", Local.getString("All Files") + " (*.*)");
-        
+
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle(Local.getString("Path to executable"));
         chooser.setFileHidingEnabled(false);
@@ -120,11 +111,12 @@ public class SetApplicationPanel extends JPanel {
             if (lastSel != null)
                 chooser.setCurrentDirectory(lastSel);
         */
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             applicationField.setText(chooser.getSelectedFile().getPath());
         }
-        
-        void argumentsField_caretUpdate(CaretEvent e) {
-            
-        }
+    }
+
+    void argumentsField_caretUpdate(CaretEvent e) {
+
+    }
 }

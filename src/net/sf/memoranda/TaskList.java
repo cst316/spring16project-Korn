@@ -2,7 +2,7 @@
  * TaskList.java
  * Created on 21.02.2003, 12:25:16 Alex
  * Package: net.sf.memoranda
- * 
+ *
  * @author Alex V. Alishevskikh, alex@openmechanics.net
  * Copyright (c) 2003 Memoranda Team. http://memoranda.sf.net
  */
@@ -16,51 +16,54 @@ import java.util.Stack;
 import java.util.Vector;
 
 /**
- *  Tasklist interface for creating a tasklist.
+ * Tasklist interface for creating a tasklist.
  */
 /*$Id: TaskList.java,v 1.8 2005/12/01 08:12:26 alexeya Exp $*/
 public interface TaskList {
 
-  Project getProject();
-  
-  Task getTask(String id);
+    Project getProject();
 
-  /* Task createTask(CalendarDate startDate, CalendarDate endDate, String text,
-     int priority, long effort, String description, String parentTaskId); */
+    Task getTask(String id);
 
-  Task createTask (Stack<Object> taskCreationParams);
-    
-  void removeTask(Task task);
-  
-  Task createRptInstanceTask(Stack<Object> taskCreationParams);
-  
-  void clearTempTasks();
-  
-  public boolean hasSubTasks(String id);
-    
-  public boolean hasParentTask(String id);
+    /*
+    Task createTask(CalendarDate startDate, CalendarDate endDate, String text,
+    int priority, long effort, String description, String parentTaskId);
+    */
 
-  public Collection<Task> getTopLevelTasks();
-  
-  public Collection getAllSubTasks(String taskId);
-  
-  public Collection getActiveSubTasks(String taskId,CalendarDate date);
-    
-  //    public void adjustParentTasks(Task t);
-    
-  public long calculateTotalEffortFromSubTasks(Task task);
-  
-  public CalendarDate getLatestEndDateFromSubTasks(Task task);
-  
-  public CalendarDate getEarliestStartDateFromSubTasks(Task task);
-  
-  public long[] calculateCompletionFromSubTasks(Task task);
-  
-  Vector<Task> getRepeatableTaskforDate(CalendarDate date);
-  Collection getDuplicateTasks(String id, CalendarDate date);
-  
-  nu.xom.Element getTaskElement(String id);
+    Task createTask(Stack<Object> taskCreationParams);
 
-  nu.xom.Document getXmlContent();
+    void removeTask(Task task);
+
+    Task createRptInstanceTask(Stack<Object> taskCreationParams);
+
+    void clearTempTasks();
+
+    public boolean hasSubTasks(String id);
+
+    public boolean hasParentTask(String id);
+
+    public Collection<Task> getTopLevelTasks();
+
+    public Collection getAllSubTasks(String taskId);
+
+    public Collection getActiveSubTasks(String taskId, CalendarDate date);
+
+    //    public void adjustParentTasks(Task t);
+
+    public long calculateTotalEffortFromSubTasks(Task task);
+
+    public CalendarDate getLatestEndDateFromSubTasks(Task task);
+
+    public CalendarDate getEarliestStartDateFromSubTasks(Task task);
+
+    public long[] calculateCompletionFromSubTasks(Task task);
+
+    Vector<Task> getRepeatableTaskforDate(CalendarDate date);
+
+    Collection getDuplicateTasks(String id, CalendarDate date);
+
+    nu.xom.Element getTaskElement(String id);
+
+    nu.xom.Document getXmlContent();
 
 }

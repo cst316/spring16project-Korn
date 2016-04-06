@@ -1,30 +1,11 @@
 package net.sf.memoranda.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JCheckBox;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.event.CaretEvent;
-
 import net.sf.memoranda.util.Local;
+
+import javax.swing.*;
+import javax.swing.event.CaretEvent;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
 /*$Id: AddResourceDialog.java,v 1.12 2007/03/20 06:21:46 alexeya Exp $*/
 public class AddResourceDialog extends JDialog {
@@ -51,29 +32,28 @@ public class AddResourceDialog extends JDialog {
         try {
             jbInit();
             pack();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             new ExceptionDialog(ex);
             ex.printStackTrace();
         }
     }
 
-	/**
-	 * setup user interface and init dialog
-	 */
-	 
+    /**
+     * setup user interface and init dialog
+     */
+
     void jbInit() throws Exception {
-		this.setResizable(false);
+        this.setResizable(false);
         dialogTitlePanel.setBackground(Color.WHITE);
         dialogTitlePanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         header.setFont(new java.awt.Font("Dialog", 0, 20));
         header.setForeground(new Color(0, 0, 124));
         header.setText(Local.getString("New resource"));
         header.setIcon(new ImageIcon(net.sf.memoranda.ui.AddResourceDialog.class.getResource(
-            "resources/icons/resource48.png")));
+                "resources/icons/resource48.png")));
         dialogTitlePanel.add(header);
         this.getContentPane().add(dialogTitlePanel, BorderLayout.NORTH);
-        
+
         buttonGroup1.add(localFileRB);
         buttonGroup1.add(inetShortcutRB);
         localFileRB.setSelected(true);
@@ -85,23 +65,26 @@ public class AddResourceDialog extends JDialog {
         });
         gbc = new GridBagConstraints();
         gbc.gridwidth = 2;
-        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
         gbc.insets = new Insets(10, 15, 5, 15);
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         areaPanel.add(localFileRB, gbc);
-        
+
         gbc = new GridBagConstraints();
         gbc.gridwidth = 2;
-        gbc.gridx = 2; gbc.gridy = 0;
+        gbc.gridx = 2;
+        gbc.gridy = 0;
         gbc.insets = new Insets(10, 15, 5, 15);
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         areaPanel.add(projectFileCB, gbc);
-        
-        jLabel1.setText(Local.getString("Path")+": ");
+
+        jLabel1.setText(Local.getString("Path") + ": ");
         gbc = new GridBagConstraints();
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         gbc.insets = new Insets(5, 20, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -114,7 +97,8 @@ public class AddResourceDialog extends JDialog {
             }
         });
         gbc = new GridBagConstraints();
-        gbc.gridx = 1; gbc.gridy = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 1;
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -126,7 +110,8 @@ public class AddResourceDialog extends JDialog {
             }
         });
         gbc = new GridBagConstraints();
-        gbc.gridx = 2; gbc.gridy = 1;
+        gbc.gridx = 2;
+        gbc.gridy = 1;
         gbc.insets = new Insets(5, 10, 5, 15);
         gbc.anchor = GridBagConstraints.WEST;
         areaPanel.add(browseB, gbc);
@@ -137,14 +122,16 @@ public class AddResourceDialog extends JDialog {
             }
         });
         gbc = new GridBagConstraints();
-        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(5, 15, 5, 15);
         gbc.anchor = GridBagConstraints.WEST;
         areaPanel.add(inetShortcutRB, gbc);
-        jLabel2.setText(Local.getString("URL")+":  ");
+        jLabel2.setText(Local.getString("URL") + ":  ");
         gbc = new GridBagConstraints();
-        gbc.gridx = 0; gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.gridy = 3;
         gbc.insets = new Insets(5, 20, 5, 15);
         gbc.anchor = GridBagConstraints.WEST;
         areaPanel.add(jLabel2, gbc);
@@ -156,14 +143,15 @@ public class AddResourceDialog extends JDialog {
             }
         });
         gbc = new GridBagConstraints();
-        gbc.gridx = 1; gbc.gridy = 3;
+        gbc.gridx = 1;
+        gbc.gridy = 3;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(5, 5, 0, 15);
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         areaPanel.add(urlField, gbc);
         this.getContentPane().add(areaPanel, BorderLayout.CENTER);
-        
+
         okB.setEnabled(false);
         okB.setMaximumSize(new Dimension(100, 26));
         okB.setMinimumSize(new Dimension(100, 26));
@@ -186,94 +174,95 @@ public class AddResourceDialog extends JDialog {
         });
         buttonsPanel.add(okB);
         buttonsPanel.add(cancelB);
-		enableFields();
+        enableFields();
         this.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
     }
 
-	/**
-	 * set CANCELLED variable to false so we can know the user 
-	 * pressed the ok buton and close this dialog.
-	 */
-	 
+    /**
+     * set CANCELLED variable to false so we can know the user
+     * pressed the ok buton and close this dialog.
+     */
+
     void okB_actionPerformed(ActionEvent e) {
         CANCELLED = false;
-		this.dispose();
+        this.dispose();
     }
 
-	/**
-	 * close the dialog window
-	 */
-	 
+    /**
+     * close the dialog window
+     */
+
     void cancelB_actionPerformed(ActionEvent e) {
         this.dispose();
     }
 
-	/**
-	 * enable localRB fields. Request focus for the text field 
-	 * so the user can start typing and set the pathField text selected
-	 */
-	 
+    /**
+     * enable localRB fields. Request focus for the text field
+     * so the user can start typing and set the pathField text selected
+     */
+
     void localFileRB_actionPerformed(ActionEvent e) {
-		enableFields();
+        enableFields();
         checkOkEnabled();
-		urlField.select(0,0);
-		pathField.select(0,pathField.getText().length());
-		pathField.requestFocus();
-	}
+        urlField.select(0, 0);
+        pathField.select(0, pathField.getText().length());
+        pathField.requestFocus();
+    }
 
-	/**
-	 * enable inetShorcutRB fields. Request focus for the text field 
-	 * so the user can start typing and set the urlField text selected
-	 */
-	
+    /**
+     * enable inetShorcutRB fields. Request focus for the text field
+     * so the user can start typing and set the urlField text selected
+     */
+
     void inetShortcutRB_actionPerformed(ActionEvent e) {
-		enableFields();
+        enableFields();
         checkOkEnabled();
-		pathField.select(0,0);
-		urlField.select(0,urlField.getText().length());
-		urlField.requestFocus();
-	}
+        pathField.select(0, 0);
+        urlField.select(0, urlField.getText().length());
+        urlField.requestFocus();
+    }
 
-	/**
-	 * setup the JFileChooser so the user can select the resource file
-	 */
-	 
+    /**
+     * setup the JFileChooser so the user can select the resource file
+     */
+
     void browseB_actionPerformed(ActionEvent e) {
         // Fix until Sun's JVM supports more locales...
-        UIManager.put("FileChooser.lookInLabelText", 
-            Local.getString("Look in:"));
-        UIManager.put("FileChooser.upFolderToolTipText", 
-            Local.getString("Up One Level"));
-        UIManager.put("FileChooser.newFolderToolTipText", 
-            Local.getString("Create New Folder"));
-        UIManager.put("FileChooser.listViewButtonToolTipText", 
-            Local.getString("List"));
-        UIManager.put("FileChooser.detailsViewButtonToolTipText", 
-            Local.getString("Details"));
-        UIManager.put("FileChooser.fileNameLabelText", 
-            Local.getString("File Name:"));
-        UIManager.put("FileChooser.filesOfTypeLabelText", 
-            Local.getString("Files of Type:"));
-        UIManager.put("FileChooser.openButtonText", 
-            Local.getString("Open"));
-        UIManager.put("FileChooser.openButtonToolTipText", 
-            Local.getString("Open selected file"));
-        UIManager.put("FileChooser.cancelButtonText", 
-            Local.getString("Cancel"));
-        UIManager.put("FileChooser.cancelButtonToolTipText", 
-            Local.getString("Cancel"));
-        
+        UIManager.put("FileChooser.lookInLabelText",
+                Local.getString("Look in:"));
+        UIManager.put("FileChooser.upFolderToolTipText",
+                Local.getString("Up One Level"));
+        UIManager.put("FileChooser.newFolderToolTipText",
+                Local.getString("Create New Folder"));
+        UIManager.put("FileChooser.listViewButtonToolTipText",
+                Local.getString("List"));
+        UIManager.put("FileChooser.detailsViewButtonToolTipText",
+                Local.getString("Details"));
+        UIManager.put("FileChooser.fileNameLabelText",
+                Local.getString("File Name:"));
+        UIManager.put("FileChooser.filesOfTypeLabelText",
+                Local.getString("Files of Type:"));
+        UIManager.put("FileChooser.openButtonText",
+                Local.getString("Open"));
+        UIManager.put("FileChooser.openButtonToolTipText",
+                Local.getString("Open selected file"));
+        UIManager.put("FileChooser.cancelButtonText",
+                Local.getString("Cancel"));
+        UIManager.put("FileChooser.cancelButtonToolTipText",
+                Local.getString("Cancel"));
+
         JFileChooser chooser = new JFileChooser();
         chooser.setFileHidingEnabled(false);
         chooser.setDialogTitle(Local.getString("Add resource"));
         chooser.setAcceptAllFileFilterUsed(true);
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);        
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setPreferredSize(new Dimension(550, 375));
         /*java.io.File lastSel = (java.io.File) Context.get("LAST_SELECTED_RESOURCE_FILE");
         if (lastSel != null)
             chooser.setCurrentDirectory(lastSel);*/
-        if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
+        if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
             return;
+        }
         /*try {
             Context.put("LAST_SELECTED_RESOURCE_FILE", chooser.getSelectedFile());
         }
@@ -282,44 +271,44 @@ public class AddResourceDialog extends JDialog {
         checkOkEnabled();
     }
 
-	/**
-	 * disable the ok button if pathField is empty
-	 */
-	 
+    /**
+     * disable the ok button if pathField is empty
+     */
+
     void pathField_caretUpdate(CaretEvent e) {
         checkOkEnabled();
     }
 
-	/**
-	 * disable the ok button if urlField is empty
-	 */
-	
-    void urlField_caretUpdate(CaretEvent e) {        
+    /**
+     * disable the ok button if urlField is empty
+     */
+
+    void urlField_caretUpdate(CaretEvent e) {
         checkOkEnabled();
     }
-    
-	/**
-	 * do not enable the ok button until the text field is not empty.
-	 */
-	 
-    void checkOkEnabled() {        
-         okB.setEnabled(
-            (localFileRB.isSelected() && pathField.getText().length() > 0) ||
-            (inetShortcutRB.isSelected() && urlField.getText().length() > 0)
-         );
+
+    /**
+     * do not enable the ok button until the text field is not empty.
+     */
+
+    void checkOkEnabled() {
+        okB.setEnabled(
+                (localFileRB.isSelected() && pathField.getText().length() > 0) ||
+                        (inetShortcutRB.isSelected() && urlField.getText().length() > 0)
+        );
     }
 
-	/** 
-	 * enable and disable fields when user selects the radio buttons options
-	 */
-	 
-	void enableFields() {
-		 pathField.setEnabled(localFileRB.isSelected());
-		 jLabel1.setEnabled(localFileRB.isSelected());
-		 browseB.setEnabled(localFileRB.isSelected());
-		 projectFileCB.setEnabled(localFileRB.isSelected());
-		 
-		 urlField.setEnabled(inetShortcutRB.isSelected());
-		 jLabel2.setEnabled(inetShortcutRB.isSelected());
-	}
+    /**
+     * enable and disable fields when user selects the radio buttons options
+     */
+
+    void enableFields() {
+        pathField.setEnabled(localFileRB.isSelected());
+        jLabel1.setEnabled(localFileRB.isSelected());
+        browseB.setEnabled(localFileRB.isSelected());
+        projectFileCB.setEnabled(localFileRB.isSelected());
+
+        urlField.setEnabled(inetShortcutRB.isSelected());
+        jLabel2.setEnabled(inetShortcutRB.isSelected());
+    }
 }

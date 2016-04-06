@@ -1,24 +1,23 @@
 /**
-
  * CurrentProject.java
  * Created on 13.02.2003, 13:16:52 Alex
  * Package: net.sf.memoranda
  *
  * @author Alex V. Alishevskikh, alex@openmechanics.net
  * Copyright (c) 2003 Memoranda Team. http://memoranda.sf.net
- *
  */
 package net.sf.memoranda;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Collection;
-import java.util.Vector;
 
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.ui.AppFrame;
 import net.sf.memoranda.util.Context;
 import net.sf.memoranda.util.CurrentStorage;
 import net.sf.memoranda.util.Storage;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Collection;
+import java.util.Vector;
 
 /**
  *
@@ -32,58 +31,61 @@ public class CurrentProject {
     private static ResourcesList _resources = null;
     private static Vector projectListeners = new Vector();
 
-        
+
     static {
-        String prjId = (String)Context.get("LAST_OPENED_PROJECT_ID");
+        String prjId = (String) Context.get("LAST_OPENED_PROJECT_ID");
         if (prjId == null) {
             prjId = "__default";
             Context.put("LAST_OPENED_PROJECT_ID", prjId);
         }
         //ProjectManager.init();
         _project = ProjectManager.getProject(prjId);
-		
-		if (_project == null) {
-			// alexeya: Fixed bug with NullPointer when LAST_OPENED_PROJECT_ID
-			// references to missing project
-			_project = ProjectManager.getProject("__default");
-			if (_project == null) {
-				_project = (Project)ProjectManager.getActiveProjects().get(0);
-				if(_project == null)
-					ProjectManager.createProject("Default Project", CalendarDate.today(), null);
-			}
+
+        if (_project == null) {
+            // alexeya: Fixed bug with NullPointer when LAST_OPENED_PROJECT_ID
+            // references to missing project
+            _project = ProjectManager.getProject("__default");
+            if (_project == null) {
+                _project = (Project) ProjectManager.getActiveProjects().get(0);
+                if (_project == null) {
+                    ProjectManager.createProject("Default Project", CalendarDate.today(), null);
+                }
+            }
             Context.put("LAST_OPENED_PROJECT_ID", _project.getID());
-			
-		}		
-		
+
+        }
+
         _tasklist = CurrentStorage.get().openTaskList(_project);
         _notelist = CurrentStorage.get().openNoteList(_project);
         _resources = CurrentStorage.get().openResourcesList(_project);
         AppFrame.addExitListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                save();                                               
+                save();
             }
         });
     }
-        
+
 
     public static Project get() {
         return _project;
     }
 
     public static TaskList getTaskList() {
-            return _tasklist;
+        return _tasklist;
     }
 
     public static NoteList getNoteList() {
-            return _notelist;
+        return _notelist;
     }
-    
+
     public static ResourcesList getResourcesList() {
-            return _resources;
+        return _resources;
     }
 
     public static void set(Project project) {
-        if (project.getID().equals(_project.getID())) return;
+        if (project.getID().equals(_project.getID())) {
+            return;
+        }
         TaskList newtasklist = CurrentStorage.get().openTaskList(project);
         NoteList newnotelist = CurrentStorage.get().openNoteList(project);
         ResourcesList newresources = CurrentStorage.get().openResourcesList(project);
@@ -106,14 +108,14 @@ public class CurrentProject {
 
     private static void notifyListenersBefore(Project project, NoteList nl, TaskList tl, ResourcesList rl) {
         for (int i = 0; i < projectListeners.size(); i++) {
-            ((ProjectListener)projectListeners.get(i)).projectChange(project, nl, tl, rl);
+            ((ProjectListener) projectListeners.get(i)).projectChange(project, nl, tl, rl);
             /*DEBUGSystem.out.println(projectListeners.get(i));*/
         }
     }
-    
+
     private static void notifyListenersAfter() {
         for (int i = 0; i < projectListeners.size(); i++) {
-            ((ProjectListener)projectListeners.get(i)).projectWasChanged();            
+            ((ProjectListener) projectListeners.get(i)).projectWasChanged();
         }
     }
 
@@ -121,11 +123,11 @@ public class CurrentProject {
         Storage storage = CurrentStorage.get();
 
         storage.storeNoteList(_notelist, _project);
-        storage.storeTaskList(_tasklist, _project); 
+        storage.storeTaskList(_tasklist, _project);
         storage.storeResourcesList(_resources, _project);
         storage.storeProjectManager();
     }
-    
+
     public static void free() {
         _project = null;
         _tasklist = null;

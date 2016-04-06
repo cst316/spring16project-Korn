@@ -27,49 +27,54 @@
 package net.sf.memoranda.ui;
 
 import net.sf.memoranda.Task;
-import java.awt.Color;
-import java.awt.Graphics;
-import javax.swing.JLabel;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * <h1>TaskProgressLabel</h1>
- * 
+ * <p>
  * Component showing task progress as colorful bar>
- * 
- * @version $Name:  $ $Revision: 1.1 $
+ *
  * @author Alex Alishevskikh, alexeya(at)gmail.com
- * 
+ * @version $Name:  $ $Revision: 1.1 $
  */
 
-class TaskProgressLabel extends JLabel{
+class TaskProgressLabel extends JLabel {
     TaskTable table;
     int column;
     Task task;
-    public TaskProgressLabel( TaskTable table ){
+
+    public TaskProgressLabel(TaskTable table) {
         this.table = table;
         setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     }
-    public void setTask(Task t){ task = t;
+
+    public void setTask(Task t) {
+        task = t;
     }
-    public void setColumn(int col){ column = col;}
-    
+
+    public void setColumn(int col) {
+        column = col;
+    }
+
     public void paintComponent(Graphics g) {
         int val = task.getProgress();
         int width = table.getColumnModel().getColumn(column).getWidth();
         int height = table.getRowHeight();
         int p = width * val / 100;
-        
-        g.setColor(Color.WHITE);
-        g.fillRect(0,0,width, height);
 
-        g.setColor( TaskTreeTableCellRenderer.getColorForTaskStatus(task, true) );
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, width, height);
+
+        g.setColor(TaskTreeTableCellRenderer.getColorForTaskStatus(task, true));
         g.fillRect(1, 1, p, height - 2);
         g.setColor(Color.LIGHT_GRAY);
         g.drawRect(1, 1, width, height - 2);
-        
+
         setText(val + "%");
         setBounds(0, 0, width, height);
-        
+
         super.paintComponent(g);
     }
 }

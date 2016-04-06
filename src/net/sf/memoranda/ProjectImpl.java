@@ -2,7 +2,7 @@
  * ProjectImpl.java
  * Created on 11.02.2003, 23:06:22 Alex
  * Package: net.sf.memoranda
- * 
+ *
  * @author Alex V. Alishevskikh, alex@openmechanics.net
  * Copyright (c) 2003 Memoranda Team. http://memoranda.sf.net
  */
@@ -24,7 +24,7 @@ public class ProjectImpl implements Project {
     /**
      * Constructor for ProjectImpl.
      */
-    public ProjectImpl(Element root) {        
+    public ProjectImpl(Element root) {
         _root = root;
     }
 
@@ -40,16 +40,19 @@ public class ProjectImpl implements Project {
      */
     public CalendarDate getStartDate() {
         Attribute d = _root.getAttribute("startDate");
-        if (d == null) return null;
-        return new CalendarDate(d.getValue());        
+        if (d == null) {
+            return null;
+        }
+        return new CalendarDate(d.getValue());
     }
 
     /**
      * @see net.sf.memoranda.Project#setStartDate(net.sf.memoranda.util.CalendarDate)
      */
     public void setStartDate(CalendarDate date) {
-        if (date != null)
+        if (date != null) {
             setAttr("startDate", date.toString());
+        }
     }
 
     /**
@@ -57,7 +60,9 @@ public class ProjectImpl implements Project {
      */
     public CalendarDate getEndDate() {
         Attribute d = _root.getAttribute("endDate");
-        if (d == null) return null;
+        if (d == null) {
+            return null;
+        }
         return new CalendarDate(d.getValue());
     }
 
@@ -65,42 +70,46 @@ public class ProjectImpl implements Project {
      * @see net.sf.memoranda.Project#setEndDate(net.sf.memoranda.util.CalendarDate)
      */
     public void setEndDate(CalendarDate date) {
-    	CalendarDate start = (getStartDate() == null ? CalendarDate.tomorrow() : getStartDate());
-    	
-        if (date != null)
-        	if (date.before(start))
-            	setAttr("endDate", start.toString());
-        	else
-        		setAttr("endDate", date.toString());
-    	else if(_root.getAttribute("endDate") != null)
-    		setAttr("endDate", null);
+        CalendarDate start = (getStartDate() == null ? CalendarDate.tomorrow() : getStartDate());
+
+        if (date != null) {
+            if (date.before(start)) {
+                setAttr("endDate", start.toString());
+            } else {
+                setAttr("endDate", date.toString());
+            }
+        } else if (_root.getAttribute("endDate") != null) {
+            setAttr("endDate", null);
+        }
     }
 
     /**
      * @see net.sf.memoranda.Project#getStatus()
      */
     public int getStatus() {
-        if (isFrozen())
+        if (isFrozen()) {
             return Project.FROZEN;
+        }
         CalendarDate today = CurrentDate.get();
         CalendarDate prStart = getStartDate();
         CalendarDate prEnd = getEndDate();
         if (prEnd == null) {
-            if (today.before(prStart))
+            if (today.before(prStart)) {
                 return Project.SCHEDULED;
-            else
-                return Project.ACTIVE;                
-        }    
-        if (today.inPeriod(prStart, prEnd))
+            } else {
+                return Project.ACTIVE;
+            }
+        }
+        if (today.inPeriod(prStart, prEnd)) {
             return Project.ACTIVE;
-        else if (today.after(prEnd)) {
+        } else if (today.after(prEnd)) {
             //if (getProgress() == 100)
-                return Project.COMPLETED;
+            return Project.COMPLETED;
             /*else
                 return Project.FAILED;*/
-        }
-        else
+        } else {
             return Project.SCHEDULED;
+        }
     }
 
     private boolean isFrozen() {
@@ -118,8 +127,8 @@ public class ProjectImpl implements Project {
         }
         return (p*100)/(v.size()*100);
     }*/
-  
-    
+
+
     /**
      * @see net.sf.memoranda.Project#freeze()
      */
@@ -131,61 +140,63 @@ public class ProjectImpl implements Project {
      * @see net.sf.memoranda.Project#unfreeze()
      */
     public void unfreeze() {
-        if (this.isFrozen())
+        if (this.isFrozen()) {
             _root.removeAttribute(new Attribute("frozen", "yes"));
+        }
     }
-    
+
     /**
      * @see net.sf.memoranda.Project#getTitle()
      */
     public String getTitle() {
         Attribute ta = _root.getAttribute("title");
-        if (ta != null)
+        if (ta != null) {
             return ta.getValue();
+        }
         return "";
     }
+
     /**
      * @see net.sf.memoranda.Project#setTitle(java.lang.String)
      */
     public void setTitle(String title) {
         setAttr("title", title);
     }
-    
+
     private void setAttr(String name, String value) {
         Attribute a = _root.getAttribute(name);
         if (a == null) {
-            if (value != null)
-             _root.addAttribute(new Attribute(name, value));
-        }
-        else if (value != null)        
+            if (value != null) {
+                _root.addAttribute(new Attribute(name, value));
+            }
+        } else if (value != null) {
             a.setValue(value);
-        else 
+        } else {
             _root.removeAttribute(a);
+        }
     }
 
-	public String getDescription() {
-    	Element thisElement = _root.getFirstChildElement("description");
-    	if (thisElement == null) {
-    		return null;
-    	}
-    	else {
-       		return thisElement.getValue();
-    	}
+    public String getDescription() {
+        Element thisElement = _root.getFirstChildElement("description");
+        if (thisElement == null) {
+            return null;
+        } else {
+            return thisElement.getValue();
+        }
     }
 
     public void setDescription(String s) {
-    	Element desc = _root.getFirstChildElement("description");
-    	if (desc == null) {
-        	desc = new Element("description");
+        Element desc = _root.getFirstChildElement("description");
+        if (desc == null) {
+            desc = new Element("description");
             desc.appendChild(s);
-            _root.appendChild(desc);    	
-    	}
-    	else {
+            _root.appendChild(desc);
+        } else {
             desc.removeChildren();
-            desc.appendChild(s);    	
-    	}
+            desc.appendChild(s);
+        }
     }
-        
+
     /**
      * @see net.sf.memoranda.Project#getTaskList()
      */
@@ -198,14 +209,14 @@ public class ProjectImpl implements Project {
     /*public NoteList getNoteList() {
         return CurrentStorage.get().openNoteList(this);
     }*/
+
     /**
      * @see net.sf.memoranda.Project#getResourcesList()
      */
     /*public ResourcesList getResourcesList() {
         return CurrentStorage.get().openResourcesList(this);
     }*/
-    
     public boolean equals(Project prj) {
-    	return (this.getID().equals(prj.getID()));
+        return (this.getID().equals(prj.getID()));
     }
 }

@@ -1,56 +1,36 @@
 /**
  * AltHTMLWriter.java
  * Hacked version of javax.swing.text.html.HTMLWriter
- * Created on 18.02.2003, 16:27:05 Alex 
+ * Created on 18.02.2003, 16:27:05 Alex
  * Package: javax.swing.text.html
- * 
+ *
  * @author Alex V. Alishevskikh, alex@openmechanics.net
  * Copyright (c) 2003 OpenMechanics.org
  */
 package net.sf.memoranda.ui.htmleditor;
 
-import java.awt.Polygon;
-import java.io.IOException;
-import java.io.Serializable;
-import java.io.Writer;
-import java.util.BitSet;
-import java.util.Enumeration;
-import java.util.Stack;
-import java.util.StringTokenizer;
-import java.util.Vector;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.text.AbstractWriter;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.Element;
-import javax.swing.text.ElementIterator;
-import javax.swing.text.MutableAttributeSet;
-import javax.swing.text.Segment;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
-import javax.swing.text.html.CSS;
-import javax.swing.text.html.HTML;
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.Option;
-import javax.swing.text.html.StyleSheet;
+import javax.swing.text.*;
+import javax.swing.text.html.*;
+import java.awt.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.io.Writer;
+import java.util.*;
+
+import net.sf.memoranda.ui.htmleditor.AltHTMLWriter.Map;
 
 /**
  * This is an alternate writer for HTMLDocuments.
- * 
- * Based on original javax.swing.text.html.HTMLWriter: 
- * 
+ * <p>
+ * Based on original javax.swing.text.html.HTMLWriter:
+ * <p>
  * Sun Java(TM) 2 SDK, Standard Edition Version 1.4.1
  * HTMLWriter.java 1.30 01/12/03
- * author  Sunita Mani 
+ * author  Sunita Mani
  * version 1.26, 02/02/00
  * Copyright 2002 Sun Microsystems, Inc.
  */
@@ -63,8 +43,10 @@ public class AltHTMLWriter extends AbstractWriter {
     private Stack blockElementStack = new Stack();
     private boolean inContent = false;
     private boolean inPre = false;
-    /** When inPre is true, this will indicate the end offset of the pre
-     * element. */
+    /**
+     * When inPre is true, this will indicate the end offset of the pre
+     * element.
+     */
     private int preEndOffset;
     private boolean inTextArea = false;
     private boolean newlineOutputed = false;
@@ -109,12 +91,12 @@ public class AltHTMLWriter extends AbstractWriter {
     private char[] tempChars;
 
     private String encoding = null;
+
     /**
      * Creates a new HTMLWriter.
      *
      * @param w   a Writer
-     * @param doc  an HTMLDocument
-     *
+     * @param doc an HTMLDocument
      */
 
     public AltHTMLWriter(Writer w, HTMLDocument doc) {
@@ -134,7 +116,7 @@ public class AltHTMLWriter extends AbstractWriter {
     /**
      * Creates a new HTMLWriter.
      *
-     * @param w  a Writer
+     * @param w   a Writer
      * @param doc an HTMLDocument
      * @param pos the document location from which to fetch the content
      * @param len the amount to write out
@@ -152,10 +134,9 @@ public class AltHTMLWriter extends AbstractWriter {
      * Element tree and controls the writing out of
      * all the tags and its attributes.
      *
-     * @exception IOException on any I/O error
-     * @exception BadLocationException if pos represents an invalid
-     *            location within the document.
-     *
+     * @throws IOException          on any I/O error
+     * @throws BadLocationException if pos represents an invalid
+     *                              location within the document.
      */
     public void write() throws IOException, BadLocationException {
         ElementIterator it = getElementIterator();
@@ -175,8 +156,7 @@ public class AltHTMLWriter extends AbstractWriter {
             if (!inRange(next)) {
                 if (completeDoc && next.getAttributes().getAttribute(StyleConstants.NameAttribute) == HTML.Tag.BODY) {
                     forcedBody = true;
-                }
-                else {
+                } else {
                     continue;
                 }
             }
@@ -188,8 +168,7 @@ public class AltHTMLWriter extends AbstractWriter {
 
                 if (indentNeedsIncrementing(current, next)) {
                     incrIndent();
-                }
-                else if (current.getParentElement() != next.getParentElement()) {
+                } else if (current.getParentElement() != next.getParentElement()) {
                     /*
                        next and current are not siblings
                        so emit end tags for items on the stack until the
@@ -211,8 +190,7 @@ public class AltHTMLWriter extends AbstractWriter {
                         }
                         top = (Element) blockElementStack.peek();
                     }
-                }
-                else if (current.getParentElement() == next.getParentElement()) {
+                } else if (current.getParentElement() == next.getParentElement()) {
                     /*
                        if next and current are siblings the indent level
                        is correct.  But, we need to make sure that if current is
@@ -228,8 +206,7 @@ public class AltHTMLWriter extends AbstractWriter {
             if (!next.isLeaf() || isFormElementWithContent(next.getAttributes())) {
                 blockElementStack.push(next);
                 startTag(next);
-            }
-            else {
+            } else {
                 emptyTag(next);
             }
             current = next;
@@ -271,9 +248,8 @@ public class AltHTMLWriter extends AbstractWriter {
      * and attributes with a key of type
      * HTML.Attribute.ENDTAG.
      *
-     * @param attr   an AttributeSet
-     * @exception IOException on any I/O error
-     *
+     * @param attr an AttributeSet
+     * @throws IOException on any I/O error
      */
     protected void writeAttributes(AttributeSet attr) throws IOException {
         // translate css attributes to html
@@ -294,10 +270,10 @@ public class AltHTMLWriter extends AbstractWriter {
      * Writes out all empty elements (all tags that have no
      * corresponding end tag).
      *
-     * @param elem   an Element
-     * @exception IOException on any I/O error
-     * @exception BadLocationException if pos represents an invalid
-     *            location within the document.
+     * @param elem an Element
+     * @throws IOException          on any I/O error
+     * @throws BadLocationException if pos represents an invalid
+     *                              location within the document.
      */
     protected void emptyTag(Element elem) throws BadLocationException, IOException {
 
@@ -312,11 +288,9 @@ public class AltHTMLWriter extends AbstractWriter {
         if (matchNameAttribute(attr, HTML.Tag.CONTENT)) {
             inContent = true;
             text(elem);
-        }
-        else if (matchNameAttribute(attr, HTML.Tag.COMMENT)) {
+        } else if (matchNameAttribute(attr, HTML.Tag.COMMENT)) {
             comment(elem);
-        }
-        else {
+        } else {
             boolean isBlock = isBlockTag(elem.getAttributes());
             if (inContent && isBlock) {
                 writeLineSeparator();
@@ -355,9 +329,7 @@ public class AltHTMLWriter extends AbstractWriter {
                 Document doc = elem.getDocument();
                 String title = (String) doc.getProperty(Document.TitleProperty);
                 write(title);
-            }
-
-            else if (!inContent || isBlock) {
+            } else if (!inContent || isBlock) {
                 writeLineSeparator();
                 if (isBlock && inContent) {
                     indent();
@@ -370,8 +342,8 @@ public class AltHTMLWriter extends AbstractWriter {
      * Determines if the HTML.Tag associated with the
      * element is a block tag.
      *
-     * @param attr  an AttributeSet
-     * @return  true if tag is block tag, false otherwise.
+     * @param attr an AttributeSet
+     * @return true if tag is block tag, false otherwise.
      */
     protected boolean isBlockTag(AttributeSet attr) {
         Object o = attr.getAttribute(StyleConstants.NameAttribute);
@@ -386,8 +358,8 @@ public class AltHTMLWriter extends AbstractWriter {
      * Writes out a start tag for the element.
      * Ignores all synthesized elements.
      *
-     * @param elem   an Element
-     * @exception IOException on any I/O error
+     * @param elem an Element
+     * @throws IOException on any I/O error
      */
     protected void startTag(Element elem) throws IOException, BadLocationException {
 
@@ -401,8 +373,7 @@ public class AltHTMLWriter extends AbstractWriter {
         HTML.Tag name;
         if (nameAttribute instanceof HTML.Tag) {
             name = (HTML.Tag) nameAttribute;
-        }
-        else {
+        } else {
             name = null;
         }
 
@@ -456,16 +427,9 @@ public class AltHTMLWriter extends AbstractWriter {
 
         if (name == HTML.Tag.TEXTAREA) {
             textAreaContent(elem.getAttributes());
-        }
-        else if (name == HTML.Tag.SELECT) {
+        } else if (name == HTML.Tag.SELECT) {
             selectContent(elem.getAttributes());
-        }
-      //  else if (completeDoc && name == HTML.Tag.BODY) {
-            // Write out the maps, which is not stored as Elements in
-            // the Document.
-            //writeMaps(((HTMLDocument)getDocument()).getMaps());
-      //  }
-        else if (name == HTML.Tag.HEAD) {
+        } else if (name == HTML.Tag.HEAD) {
             indent();
             writeAdditionalComments();
             if (encoding != null) {
@@ -481,10 +445,10 @@ public class AltHTMLWriter extends AbstractWriter {
      * Writes out text that is contained in a TEXTAREA form
      * element.
      *
-     * @param attr  an AttributeSet
-     * @exception IOException on any I/O error
-     * @exception BadLocationException if pos represents an invalid
-     *            location within the document.
+     * @param attr an AttributeSet
+     * @throws IOException          on any I/O error
+     * @throws BadLocationException if pos represents an invalid
+     *                              location within the document.
      */
     protected void textAreaContent(AttributeSet attr) throws BadLocationException, IOException {
         Document doc = (Document) attr.getAttribute(StyleConstants.ModelAttribute);
@@ -514,10 +478,10 @@ public class AltHTMLWriter extends AbstractWriter {
      * is invoked, then only the appropriate range of text is written
      * out.
      *
-     * @param elem   an Element
-     * @exception IOException on any I/O error
-     * @exception BadLocationException if pos represents an invalid
-     *            location within the document.
+     * @param elem an Element
+     * @throws IOException          on any I/O error
+     * @throws BadLocationException if pos represents an invalid
+     *                              location within the document.
      */
     protected void text(Element elem) throws BadLocationException, IOException {
         int start = Math.max(getStartOffset(), elem.getStartOffset());
@@ -535,8 +499,7 @@ public class AltHTMLWriter extends AbstractWriter {
                 if (inPre && end == preEndOffset) {
                     if (segment.count > 1) {
                         segment.count--;
-                    }
-                    else {
+                    } else {
                         return;
                     }
                 }
@@ -553,7 +516,7 @@ public class AltHTMLWriter extends AbstractWriter {
      * Writes out the content of the SELECT form element.
      *
      * @param attr the AttributeSet associated with the form element
-     * @exception IOException on any I/O error
+     * @throws IOException on any I/O error
      */
     protected void selectContent(AttributeSet attr) throws IOException {
         Object model = attr.getAttribute(StyleConstants.ModelAttribute);
@@ -565,8 +528,7 @@ public class AltHTMLWriter extends AbstractWriter {
                 Option option = (Option) listModel.getElementAt(i);
                 writeOption(option);
             }
-        }
-        else if (model instanceof OptionComboBoxModel) {
+        } else if (model instanceof OptionComboBoxModel) {
             OptionComboBoxModel comboBoxModel = (OptionComboBoxModel) model;
             int size = comboBoxModel.getSize();
             for (int i = 0; i < size; i++) {
@@ -579,9 +541,9 @@ public class AltHTMLWriter extends AbstractWriter {
 
     /**
      * Writes out the content of the Option form element.
-     * @param option  an Option
-     * @exception IOException on any I/O error
      *
+     * @param option an Option
+     * @throws IOException on any I/O error
      */
     protected void writeOption(Option option) throws IOException {
 
@@ -606,8 +568,8 @@ public class AltHTMLWriter extends AbstractWriter {
     /**
      * Writes out an end tag for the element.
      *
-     * @param elem    an Element
-     * @exception IOException on any I/O error
+     * @param elem an Element
+     * @throws IOException on any I/O error
      */
     protected void endTag(Element elem) throws IOException {
         if (synthesizedElement(elem)) {
@@ -637,10 +599,10 @@ public class AltHTMLWriter extends AbstractWriter {
     /**
      * Writes out comments.
      *
-     * @param elem    an Element
-     * @exception IOException on any I/O error
-     * @exception BadLocationException if pos represents an invalid
-     *            location within the document.
+     * @param elem an Element
+     * @throws IOException          on any I/O error
+     * @throws BadLocationException if pos represents an invalid
+     *                              location within the document.
      */
     protected void comment(Element elem) throws BadLocationException, IOException {
         AttributeSet as = elem.getAttributes();
@@ -648,8 +610,7 @@ public class AltHTMLWriter extends AbstractWriter {
             Object comment = as.getAttribute(HTML.Attribute.COMMENT);
             if (comment instanceof String) {
                 writeComment((String) comment);
-            }
-            else {
+            } else {
                 writeComment(null);
             }
         }
@@ -658,10 +619,10 @@ public class AltHTMLWriter extends AbstractWriter {
     /**
      * Writes out comment string.
      *
-     * @param string   the comment
-     * @exception IOException on any I/O error
-     * @exception BadLocationException if pos represents an invalid
-     *            location within the document.
+     * @param string the comment
+     * @throws IOException          on any I/O error
+     * @throws BadLocationException if pos represents an invalid
+     *                              location within the document.
      */
     void writeComment(String string) throws IOException {
         write("<!--");
@@ -678,16 +639,17 @@ public class AltHTMLWriter extends AbstractWriter {
      */
     void writeAdditionalComments() throws IOException {
         Object comments = getDocument().getProperty(HTMLDocument.AdditionalComments);
-        if (comments == null) return; 
+        if (comments == null) {
+            return;
+        }
         if (comments instanceof Vector) {
             Vector v = (Vector) comments;
             for (int counter = 0, maxCounter = v.size(); counter < maxCounter; counter++) {
                 writeComment(v.elementAt(counter).toString());
             }
-        }
-        //[alex] I've add the following 'else' for single comments:
-        else
+        } else { //[alex] I've add the following 'else' for single comments:
             writeComment(comments.toString());
+        }
         // end add
     }
 
@@ -724,7 +686,7 @@ public class AltHTMLWriter extends AbstractWriter {
      * so that when appropriate the corresponding end tags can be
      * written out.
      *
-     * @exception IOException on any I/O error
+     * @throws IOException on any I/O error
      */
     protected void writeEmbeddedTags(AttributeSet attr) throws IOException {
 
@@ -774,7 +736,7 @@ public class AltHTMLWriter extends AbstractWriter {
      * then the tag is removed from the vector and a corresponding
      * end tag is written out.
      *
-     * @exception IOException on any I/O error
+     * @throws IOException on any I/O error
      */
     protected void closeOutUnwantedEmbeddedTags(AttributeSet attr) throws IOException {
 
@@ -847,19 +809,18 @@ public class AltHTMLWriter extends AbstractWriter {
      * This state is maintained by the indentNext boolean.
      *
      * @return boolean that's true if indent level
-     *         needs incrementing.
+     * needs incrementing.
      */
     private boolean indentNext = false;
+
     private boolean indentNeedsIncrementing(Element current, Element next) {
         if ((next.getParentElement() == current) && !inPre) {
             if (indentNext) {
                 indentNext = false;
                 return true;
-            }
-            else if (synthesizedElement(next)) {
+            } else if (synthesizedElement(next)) {
                 indentNext = true;
-            }
-            else if (!synthesizedElement(current)) {
+            } else if (!synthesizedElement(current)) {
                 return true;
             }
         }
@@ -883,8 +844,7 @@ public class AltHTMLWriter extends AbstractWriter {
                     write(" name=\"");
                     write(name);
                     write("\">");
-                }
-                else {
+                } else {
                     write('>');
                 }
                 writeLineSeparator();
@@ -924,7 +884,7 @@ public class AltHTMLWriter extends AbstractWriter {
                     String name = (String) styles.nextElement();
                     // Don't write out the default style.
                     if (!StyleContext.DEFAULT_STYLE.equals(name)
-                        && writeStyle(name, sheet.getStyle(name), outputStyle)) {
+                            && writeStyle(name, sheet.getStyle(name), outputStyle)) {
                         outputStyle = true;
                     }
                 }
@@ -958,8 +918,7 @@ public class AltHTMLWriter extends AbstractWriter {
                             indent();
                             write(name);
                             write(" {");
-                        }
-                        else {
+                        } else {
                             write(";");
                         }
                         write(' ');
@@ -1018,8 +977,7 @@ public class AltHTMLWriter extends AbstractWriter {
         to.removeAttributes(to);
         if (writeCSS) {
             convertToHTML40(from, to);
-        }
-        else {
+        } else {
             convertToHTML32(from, to);
         }
         return to;
@@ -1059,12 +1017,11 @@ public class AltHTMLWriter extends AbstractWriter {
             Object key = keys.nextElement();
             if (key instanceof CSS.Attribute) {
                 if ((key == CSS.Attribute.FONT_FAMILY)
-                    || (key == CSS.Attribute.FONT_SIZE)
-                    || (key == CSS.Attribute.COLOR)) {
+                        || (key == CSS.Attribute.FONT_SIZE)
+                        || (key == CSS.Attribute.COLOR)) {
 
                     createFontAttribute((CSS.Attribute) key, from, to);
-                }
-                else if (key == CSS.Attribute.FONT_WEIGHT) {
+                } else if (key == CSS.Attribute.FONT_WEIGHT) {
                     // add a bold tag is weight is bold
                     //CSS.FontWeight weightValue = (CSS.FontWeight) from.getAttribute(CSS.Attribute.FONT_WEIGHT);
                     String weightValue = from.getAttribute(CSS.Attribute.FONT_WEIGHT).toString();
@@ -1072,21 +1029,19 @@ public class AltHTMLWriter extends AbstractWriter {
                         int fweight;
                         try {
                             fweight = new Integer(weightValue).intValue();
-                        }
-                        catch (Exception ex) {
+                        } catch (Exception ex) {
                             fweight = -1;
                         }
-                        if ((weightValue.toLowerCase().equals("bold")) || (fweight > 400))
+                        if ((weightValue.toLowerCase().equals("bold")) || (fweight > 400)) {
                             to.addAttribute(HTML.Tag.B, SimpleAttributeSet.EMPTY);
+                        }
                     }
-                }
-                else if (key == CSS.Attribute.FONT_STYLE) {
+                } else if (key == CSS.Attribute.FONT_STYLE) {
                     String s = from.getAttribute(key).toString();
                     if (s.indexOf("italic") >= 0) {
                         to.addAttribute(HTML.Tag.I, SimpleAttributeSet.EMPTY);
                     }
-                }
-                else if (key == CSS.Attribute.TEXT_DECORATION) {
+                } else if (key == CSS.Attribute.TEXT_DECORATION) {
                     String decor = from.getAttribute(key).toString();
                     if (decor.indexOf("underline") >= 0) {
                         to.addAttribute(HTML.Tag.U, SimpleAttributeSet.EMPTY);
@@ -1094,8 +1049,7 @@ public class AltHTMLWriter extends AbstractWriter {
                     if (decor.indexOf("line-through") >= 0) {
                         to.addAttribute(HTML.Tag.STRIKE, SimpleAttributeSet.EMPTY);
                     }
-                }
-                else if (key == CSS.Attribute.VERTICAL_ALIGN) {
+                } else if (key == CSS.Attribute.VERTICAL_ALIGN) {
                     String vAlign = from.getAttribute(key).toString();
                     if (vAlign.indexOf("sup") >= 0) {
                         to.addAttribute(HTML.Tag.SUP, SimpleAttributeSet.EMPTY);
@@ -1103,19 +1057,16 @@ public class AltHTMLWriter extends AbstractWriter {
                     if (vAlign.indexOf("sub") >= 0) {
                         to.addAttribute(HTML.Tag.SUB, SimpleAttributeSet.EMPTY);
                     }
-                }
-                else if (key == CSS.Attribute.TEXT_ALIGN) {
+                } else if (key == CSS.Attribute.TEXT_ALIGN) {
                     to.addAttribute(HTML.Attribute.ALIGN, from.getAttribute(key).toString());
-                }
-                else {
+                } else {
                     // default is to store in a HTML style attribute
                     if (value.length() > 0) {
                         value = value + "; ";
                     }
                     value = value + key + ": " + from.getAttribute(key);
                 }
-            }
-            else {
+            } else {
                 to.addAttribute(key, from.getAttribute(key));
             }
         }
@@ -1139,11 +1090,9 @@ public class AltHTMLWriter extends AbstractWriter {
         String htmlValue = from.getAttribute(a).toString();
         if (a == CSS.Attribute.FONT_FAMILY) {
             fontAttr.addAttribute(HTML.Attribute.FACE, htmlValue);
-        }
-        else if (a == CSS.Attribute.FONT_SIZE) {
+        } else if (a == CSS.Attribute.FONT_SIZE) {
             fontAttr.addAttribute(HTML.Attribute.SIZE, htmlValue);
-        }
-        else if (a == CSS.Attribute.COLOR) {
+        } else if (a == CSS.Attribute.COLOR) {
             fontAttr.addAttribute(HTML.Attribute.COLOR, htmlValue);
         }
     }
@@ -1160,8 +1109,7 @@ public class AltHTMLWriter extends AbstractWriter {
             Object key = keys.nextElement();
             if (key instanceof CSS.Attribute) {
                 value = value + " " + key + "=" + from.getAttribute(key) + ";";
-            }
-            else {
+            } else {
                 to.addAttribute(key, from.getAttribute(key));
             }
         }
@@ -1205,40 +1153,40 @@ public class AltHTMLWriter extends AbstractWriter {
             // entities.
             switch (chars[counter]) {
                 // Character level entities.
-                case '<' :
+                case '<':
                     if (counter > last) {
                         super.output(chars, last, counter - last);
                     }
                     last = counter + 1;
                     output("&lt;");
                     break;
-                case '>' :
+                case '>':
                     if (counter > last) {
                         super.output(chars, last, counter - last);
                     }
                     last = counter + 1;
                     output("&gt;");
                     break;
-                case '&' :
+                case '&':
                     if (counter > last) {
                         super.output(chars, last, counter - last);
                     }
                     last = counter + 1;
                     output("&amp;");
                     break;
-                case '"' :
+                case '"':
                     if (counter > last) {
                         super.output(chars, last, counter - last);
                     }
                     last = counter + 1;
                     output("&quot;");
                     break;
-                    // Special characters
-                case '\n' :
-                case '\t' :
-                case '\r' :
+                // Special characters
+                case '\n':
+                case '\t':
+                case '\r':
                     break;
-                default :
+                default:
 
                     /**
                      * [alex]I've replaced the following line to avoid to substitute non-ascii characters by numeric
@@ -1282,13 +1230,13 @@ public class AltHTMLWriter extends AbstractWriter {
      * the ListSelectionModel interface, allowing for it to store state
      * relevant to a SELECT form element which is implemented as a List.
      * If SELECT has a size attribute whose value is greater than 1,
-     * or if allows multiple selection then a JList is used to 
+     * or if allows multiple selection then a JList is used to
      * represent it and the OptionListModel is used as its model.
      * It also stores the initial state of the JList, to ensure an
      * accurate reset, if the user requests a reset of the form.
      *
-      @author Sunita Mani
-      @version 1.9 12/03/01
+     * @author Sunita Mani
+     * @version 1.9 12/03/01
      */
 
     class OptionListModel extends DefaultListModel implements ListSelectionModel, Serializable {
@@ -1327,12 +1275,12 @@ public class AltHTMLWriter extends AbstractWriter {
 
         public void setSelectionMode(int selectionMode) {
             switch (selectionMode) {
-                case SINGLE_SELECTION :
-                case SINGLE_INTERVAL_SELECTION :
-                case MULTIPLE_INTERVAL_SELECTION :
+                case SINGLE_SELECTION:
+                case SINGLE_INTERVAL_SELECTION:
+                case MULTIPLE_INTERVAL_SELECTION:
                     this.selectionMode = selectionMode;
                     break;
-                default :
+                default:
                     throw new IllegalArgumentException("invalid selectionMode");
             }
         }
@@ -1358,7 +1306,7 @@ public class AltHTMLWriter extends AbstractWriter {
          * to this OptionListModel with addListSelectionListener().
          *
          * @return all of the <code>ListSelectionListener</code>s added or an empty
-         *         array if no listeners have been added
+         * array if no listeners have been added
          * @since 1.4
          */
         public ListSelectionListener[] getListSelectionListeners() {
@@ -1382,8 +1330,8 @@ public class AltHTMLWriter extends AbstractWriter {
         }
 
         /**
-         * @param firstIndex The first index in the interval.
-         * @param index1 The last index in the interval.
+         * @param firstIndex  The first index in the interval.
+         * @param index1      The last index in the interval.
          * @param isAdjusting True if this is the final change in a series of them.
          * @see EventListenerList
          */
@@ -1497,7 +1445,8 @@ public class AltHTMLWriter extends AbstractWriter {
 
         /**
          * Sets the value of the leadAnchorNotificationEnabled flag.
-         * @see     #isLeadAnchorNotificationEnabled()
+         *
+         * @see #isLeadAnchorNotificationEnabled()
          */
         public void setLeadAnchorNotificationEnabled(boolean flag) {
             leadAnchorNotificationEnabled = flag;
@@ -1512,8 +1461,9 @@ public class AltHTMLWriter extends AbstractWriter {
          * include only the elements that have been selected or deselected since
          * the last change. Either way, the model continues to maintain the lead
          * and anchor variables internally. The default is true.
-         * @return      the value of the leadAnchorNotificationEnabled flag
-         * @see     #setLeadAnchorNotificationEnabled(boolean)
+         *
+         * @return the value of the leadAnchorNotificationEnabled flag
+         * @see #setLeadAnchorNotificationEnabled(boolean)
          */
         public boolean isLeadAnchorNotificationEnabled() {
             return leadAnchorNotificationEnabled;
@@ -1552,8 +1502,7 @@ public class AltHTMLWriter extends AbstractWriter {
                 if (shouldSet && shouldClear) {
                     if (clearFirst) {
                         shouldClear = false;
-                    }
-                    else {
+                    } else {
                         shouldSet = false;
                     }
                 }
@@ -1635,15 +1584,14 @@ public class AltHTMLWriter extends AbstractWriter {
         private void setState(int index, boolean state) {
             if (state) {
                 set(index);
-            }
-            else {
+            } else {
                 clear(index);
             }
         }
 
         /**
-         * Insert length indices beginning before/after index. If the value 
-         * at index is itself selected, set all of the newly inserted 
+         * Insert length indices beginning before/after index. If the value
+         * at index is itself selected, set all of the newly inserted
          * items, otherwise leave them unselected. This method is typically
          * called to sync the selection model with a corresponding change
          * in the data model.
@@ -1707,9 +1655,9 @@ public class AltHTMLWriter extends AbstractWriter {
          * <code>listenerLists</code> are not duplicated.
          *
          * @return a clone of the receiver
-         * @exception CloneNotSupportedException if the receiver does not
-         *    both (a) implement the <code>Cloneable</code> interface
-         *    and (b) define a <code>clone</code> method
+         * @throws CloneNotSupportedException if the receiver does not
+         *                                    both (a) implement the <code>Cloneable</code> interface
+         *                                    and (b) define a <code>clone</code> method
          */
         public Object clone() throws CloneNotSupportedException {
             OptionListModel clone = (OptionListModel) super.clone();
@@ -1727,9 +1675,9 @@ public class AltHTMLWriter extends AbstractWriter {
         }
 
         /**
-         * Set the anchor selection index, leaving all selection values unchanged. 
+         * Set the anchor selection index, leaving all selection values unchanged.
          *
-         * @see #getAnchorSelectionIndex     
+         * @see #getAnchorSelectionIndex
          * @see #setLeadSelectionIndex
          */
         public void setAnchorSelectionIndex(int anchorIndex) {
@@ -1737,30 +1685,30 @@ public class AltHTMLWriter extends AbstractWriter {
         }
 
         /**
-         * Set the lead selection index, ensuring that values between the 
-         * anchor and the new lead are either all selected or all deselected. 
-         * If the value at the anchor index is selected, first clear all the 
-         * values in the range [anchor, oldLeadIndex], then select all the values 
-         * values in the range [anchor, newLeadIndex], where oldLeadIndex is the old 
-         * leadIndex and newLeadIndex is the new one. 
-         * <p> 
-         * If the value at the anchor index is not selected, do the same thing in reverse, 
-         * selecting values in the old range and deslecting values in the new one. 
+         * Set the lead selection index, ensuring that values between the
+         * anchor and the new lead are either all selected or all deselected.
+         * If the value at the anchor index is selected, first clear all the
+         * values in the range [anchor, oldLeadIndex], then select all the values
+         * values in the range [anchor, newLeadIndex], where oldLeadIndex is the old
+         * leadIndex and newLeadIndex is the new one.
          * <p>
-         * Generate a single event for this change and notify all listeners. 
-         * For the purposes of generating minimal bounds in this event, do the 
-         * operation in a single pass; that way the first and last index inside the 
-         * ListSelectionEvent that is broadcast will refer to cells that actually 
-         * changed value because of this method. If, instead, this operation were 
-         * done in two steps the effect on the selection state would be the same 
-         * but two events would be generated and the bounds around the changed values 
-         * would be wider, including cells that had been first cleared and only 
-         * to later be set. 
+         * If the value at the anchor index is not selected, do the same thing in reverse,
+         * selecting values in the old range and deslecting values in the new one.
          * <p>
-         * This method can be used in the mouseDragged() method of a UI class 
-         * to extend a selection.  
+         * Generate a single event for this change and notify all listeners.
+         * For the purposes of generating minimal bounds in this event, do the
+         * operation in a single pass; that way the first and last index inside the
+         * ListSelectionEvent that is broadcast will refer to cells that actually
+         * changed value because of this method. If, instead, this operation were
+         * done in two steps the effect on the selection state would be the same
+         * but two events would be generated and the bounds around the changed values
+         * would be wider, including cells that had been first cleared and only
+         * to later be set.
+         * <p>
+         * This method can be used in the mouseDragged() method of a UI class
+         * to extend a selection.
          *
-         * @see #getLeadSelectionIndex     
+         * @see #getLeadSelectionIndex
          * @see #setAnchorSelectionIndex
          */
         public void setLeadSelectionIndex(int leadIndex) {
@@ -1777,8 +1725,7 @@ public class AltHTMLWriter extends AbstractWriter {
             int newMax = Math.max(anchorIndex, leadIndex);
             if (value.get(this.anchorIndex)) {
                 changeSelection(oldMin, oldMax, newMin, newMax);
-            }
-            else {
+            } else {
                 changeSelection(newMin, newMax, oldMin, oldMax, false);
             }
             this.anchorIndex = anchorIndex;
@@ -1838,19 +1785,26 @@ public class AltHTMLWriter extends AbstractWriter {
      * Once a Map has been created, and any number of areas have been added,
      * you can test if a point falls inside the map via the contains method.
      *
-     * @author  Scott Violet
+     * @author Scott Violet
      * @version 1.6 12/03/01
      */
     class Map {
-        /** Name of the Map. */
+        /**
+         * Name of the Map.
+         */
         private String name;
-        /** An array of AttributeSets. */
+        /**
+         * An array of AttributeSets.
+         */
         private Vector areaAttributes;
-        /** An array of RegionContainments, will slowly grow to match the
-         * length of areaAttributes as needed. */
+        /**
+         * An array of RegionContainments, will slowly grow to match the
+         * length of areaAttributes as needed.
+         */
         private Vector areas;
 
-        public Map() {}
+        public Map() {
+        }
 
         public Map(String name) {
             this.name = name;
@@ -1952,18 +1906,14 @@ public class AltHTMLWriter extends AbstractWriter {
                 try {
                     if (shapeString.equals("rect")) {
                         rc = new RectangleRegionContainment(attributes);
-                    }
-                    else if (shapeString.equals("circle")) {
+                    } else if (shapeString.equals("circle")) {
                         rc = new CircleRegionContainment(attributes);
-                    }
-                    else if (shapeString.equals("poly")) {
+                    } else if (shapeString.equals("poly")) {
                         rc = new PolygonRegionContainment(attributes);
-                    }
-                    else if (shapeString.equals("default")) {
+                    } else if (shapeString.equals("default")) {
                         rc = DefaultRegionContainment.sharedInstance();
                     }
-                }
-                catch (RuntimeException re) {
+                } catch (RuntimeException re) {
                     // Something wrong with attributes.
                     rc = null;
                 }
@@ -1978,17 +1928,29 @@ public class AltHTMLWriter extends AbstractWriter {
      * Used to test for containment in a circular region.
      */
     static class CircleRegionContainment implements RegionContainment {
-        /** X origin of the circle. */
+        /**
+         * X origin of the circle.
+         */
         int x;
-        /** Y origin of the circle. */
+        /**
+         * Y origin of the circle.
+         */
         int y;
-        /** Radius of the circle. */
+        /**
+         * Radius of the circle.
+         */
         int radiusSquared;
-        /** Non-null indicates one of the values represents a percent. */
+        /**
+         * Non-null indicates one of the values represents a percent.
+         */
         float[] percentValues;
-        /** Last value of width passed in. */
+        /**
+         * Last value of width passed in.
+         */
         int lastWidth;
-        /** Last value of height passed in. */
+        /**
+         * Last value of height passed in.
+         */
         int lastHeight;
 
         public CircleRegionContainment(AttributeSet as) {
@@ -2006,13 +1968,11 @@ public class AltHTMLWriter extends AbstractWriter {
                 for (int counter = 0; counter < 3; counter++) {
                     if (coords[counter] < 0) {
                         percentValues[counter] = coords[counter] / -100.0f;
-                    }
-                    else {
+                    } else {
                         percentValues[counter] = -1.0f;
                     }
                 }
-            }
-            else {
+            } else {
                 percentValues = null;
             }
         }
@@ -2044,7 +2004,9 @@ public class AltHTMLWriter extends AbstractWriter {
      * width passed in, and height equal to height passed in.
      */
     static class DefaultRegionContainment implements RegionContainment {
-        /** A global shared instance. */
+        /**
+         * A global shared instance.
+         */
         static DefaultRegionContainment si = null;
 
         public static DefaultRegionContainment sharedInstance() {
@@ -2063,13 +2025,19 @@ public class AltHTMLWriter extends AbstractWriter {
      * Used to test for containment in a polygon region.
      */
     static class PolygonRegionContainment extends Polygon implements RegionContainment {
-        /** If any value is a percent there will be an entry here for the
-         * percent value. Use percentIndex to find out the index for it. */
+        /**
+         * If any value is a percent there will be an entry here for the
+         * percent value. Use percentIndex to find out the index for it.
+         */
         float[] percentValues;
         int[] percentIndexs;
-        /** Last value of width passed in. */
+        /**
+         * Last value of width passed in.
+         */
         int lastWidth;
-        /** Last value of height passed in. */
+        /**
+         * Last value of height passed in.
+         */
         int lastHeight;
 
         public PolygonRegionContainment(AttributeSet as) {
@@ -2077,8 +2045,7 @@ public class AltHTMLWriter extends AbstractWriter {
 
             if (coords == null || coords.length == 0 || coords.length % 2 != 0) {
                 throw new RuntimeException("Unable to parse polygon area");
-            }
-            else {
+            } else {
                 int numPercents = 0;
 
                 lastWidth = lastHeight = -1;
@@ -2098,8 +2065,7 @@ public class AltHTMLWriter extends AbstractWriter {
                             pCounter++;
                         }
                     }
-                }
-                else {
+                } else {
                     percentIndexs = null;
                     percentValues = null;
                 }
@@ -2128,8 +2094,7 @@ public class AltHTMLWriter extends AbstractWriter {
                 if (percentIndexs[counter] % 2 == 0) {
                     // x
                     xpoints[percentIndexs[counter] / 2] = (int) (percentValues[counter] * fWidth);
-                }
-                else {
+                } else {
                     // y
                     ypoints[percentIndexs[counter] / 2] = (int) (percentValues[counter] * fHeight);
                 }
@@ -2142,18 +2107,28 @@ public class AltHTMLWriter extends AbstractWriter {
      * Used to test for containment in a rectangular region.
      */
     static class RectangleRegionContainment implements RegionContainment {
-        /** Will be non-null if one of the values is a percent, and any value
+        /**
+         * Will be non-null if one of the values is a percent, and any value
          * that is non null indicates it is a percent
-         * (order is x, y, width, height). */
+         * (order is x, y, width, height).
+         */
         float[] percents;
-        /** Last value of width passed in. */
+        /**
+         * Last value of width passed in.
+         */
         int lastWidth;
-        /** Last value of height passed in. */
+        /**
+         * Last value of height passed in.
+         */
         int lastHeight;
-        /** Top left. */
+        /**
+         * Top left.
+         */
         int x0;
         int y0;
-        /** Bottom right. */
+        /**
+         * Bottom right.
+         */
         int x1;
         int y1;
 
@@ -2163,8 +2138,7 @@ public class AltHTMLWriter extends AbstractWriter {
             percents = null;
             if (coords == null || coords.length != 4) {
                 throw new RuntimeException("Unable to parse rectangular area");
-            }
-            else {
+            } else {
                 x0 = coords[0];
                 y0 = coords[1];
                 x1 = coords[2];
@@ -2175,8 +2149,7 @@ public class AltHTMLWriter extends AbstractWriter {
                     for (int counter = 0; counter < 4; counter++) {
                         if (coords[counter] < 0) {
                             percents[counter] = Math.abs(coords[counter]) / 100.0f;
-                        }
-                        else {
+                        } else {
                             percents[counter] = -1.0f;
                         }
                     }
@@ -2234,8 +2207,7 @@ public class AltHTMLWriter extends AbstractWriter {
             if (token.endsWith("%")) {
                 scale = -1;
                 token = token.substring(0, token.length() - 1);
-            }
-            else {
+            } else {
                 scale = 1;
             }
             try {
@@ -2243,16 +2215,14 @@ public class AltHTMLWriter extends AbstractWriter {
 
                 if (retValue == null) {
                     retValue = new int[4];
-                }
-                else if (numCoords == retValue.length) {
+                } else if (numCoords == retValue.length) {
                     int[] temp = new int[retValue.length * 2];
 
                     System.arraycopy(retValue, 0, temp, 0, retValue.length);
                     retValue = temp;
                 }
                 retValue[numCoords++] = intValue * scale;
-            }
-            catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 return null;
             }
         }
@@ -2266,9 +2236,9 @@ public class AltHTMLWriter extends AbstractWriter {
     }
 
     /**
-        * Defines the interface used for to check if a point is inside a
-        * region.
-        */
+     * Defines the interface used for to check if a point is inside a
+     * region.
+     */
     interface RegionContainment {
         /**
          * Returns true if the location <code>x</code>, <code>y</code>
