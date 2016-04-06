@@ -8,10 +8,12 @@ import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.util.Util;
 import nu.xom.Attribute;
 import nu.xom.Element;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Calendar;
+import java.util.Stack;
 
 import static org.junit.Assert.assertTrue;
 
@@ -36,8 +38,22 @@ public class TaskOperationsTest {
 
     @Test
     public void testRegTaskCreation() {
-        Task t = testTL.createTask(CalendarDate.today(), CalendarDate.tomorrow(), "text property",
-                1, 2, "This is a description!", null, false, 10, 0, false, null);
+        Task t;
+        Stack<Object> taskCreationParams = new Stack<Object>();
+        taskCreationParams.add(CalendarDate.today());
+        taskCreationParams.add(CalendarDate.tomorrow());
+        taskCreationParams.add("text property");
+        taskCreationParams.add(1);
+        taskCreationParams.add(2);
+        taskCreationParams.add("This is a description!");
+        taskCreationParams.add(null);
+        taskCreationParams.add(false);
+        taskCreationParams.add(10);
+        taskCreationParams.add(0);
+        taskCreationParams.add(false);
+        taskCreationParams.add(null);
+        t = testTL.createTask(taskCreationParams);
+        
         assertTrue(testTL.getTask(t.getId()).equals(t));
     }
 
@@ -53,22 +69,91 @@ public class TaskOperationsTest {
         temp.add(temp.DATE, 365);
         CalendarDate dateYear = new CalendarDate(temp);
 
-        Task t1 = testTL.createTask(CalendarDate.today(), CalendarDate.today(),
-                "ext", 1, 2, "This is a description!", null, false, 10, 1, false, dateDay);
-        Task t2 = testTL.createTask(CalendarDate.today(), CalendarDate.today(),
-                "txt", 1, 2, "This is a description!", null, false, 10, 2, false, dateWeek);
-        Task t3 = testTL.createTask(CalendarDate.today(), CalendarDate.today(),
-                "tet", 1, 2, "This is a description!", null, false, 10, 3, false, dateMonth);
-        Task t4 = testTL.createTask(CalendarDate.today(), CalendarDate.today(),
-                "tex", 1, 2, "This is a description!", null, false, 10, 4, false, dateYear);
+        Task t1;
+        Stack<Object> taskCreationParams = new Stack<Object>();
+        taskCreationParams.add(CalendarDate.today());
+        taskCreationParams.add(CalendarDate.tomorrow());
+        taskCreationParams.add("t1");
+        taskCreationParams.add(1);
+        taskCreationParams.add(2);
+        taskCreationParams.add("This is a description!");
+        taskCreationParams.add(null);
+        taskCreationParams.add(false);
+        taskCreationParams.add(10);
+        taskCreationParams.add(1);
+        taskCreationParams.add(false);
+        taskCreationParams.add(dateDay);
+        t1 = testTL.createTask(taskCreationParams);
+        
+        Task t2;
+        taskCreationParams.clear();
+        taskCreationParams.add(CalendarDate.today());
+        taskCreationParams.add(CalendarDate.tomorrow());
+        taskCreationParams.add("t2");
+        taskCreationParams.add(1);
+        taskCreationParams.add(2);
+        taskCreationParams.add("This is a description!");
+        taskCreationParams.add(null);
+        taskCreationParams.add(false);
+        taskCreationParams.add(10);
+        taskCreationParams.add(2);
+        taskCreationParams.add(false);
+        taskCreationParams.add(dateWeek);
+        t2 = testTL.createTask(taskCreationParams);
+      
+        Task t3;
+        taskCreationParams.clear();
+        taskCreationParams.add(CalendarDate.today());
+        taskCreationParams.add(CalendarDate.tomorrow());
+        taskCreationParams.add("t3");
+        taskCreationParams.add(1);
+        taskCreationParams.add(2);
+        taskCreationParams.add("This is a description!");
+        taskCreationParams.add(null);
+        taskCreationParams.add(false);
+        taskCreationParams.add(10);
+        taskCreationParams.add(3);
+        taskCreationParams.add(false);
+        taskCreationParams.add(dateMonth);
+        t3 = testTL.createTask(taskCreationParams);
+        
+        Task t4;
+        taskCreationParams.clear();
+        taskCreationParams.add(CalendarDate.today());
+        taskCreationParams.add(CalendarDate.tomorrow());
+        taskCreationParams.add("t4");
+        taskCreationParams.add(1);
+        taskCreationParams.add(2);
+        taskCreationParams.add("This is a description!");
+        taskCreationParams.add(null);
+        taskCreationParams.add(false);
+        taskCreationParams.add(10);
+        taskCreationParams.add(4);
+        taskCreationParams.add(false);
+        taskCreationParams.add(dateYear);
+        t4 = testTL.createTask(taskCreationParams);       
 
         assertTrue(t1.isRepeatable() && t2.isRepeatable() && t3.isRepeatable() && t4.isRepeatable());
     }
 
     @Test
     public void testNoEndDateCreation() {
-        Task t = testTL.createTask(CalendarDate.today(), null, "text property",
-                1, 2, "This is a description!", null, false, 10, 0, false, null);
+        Task t;
+        Stack<Object> taskCreationParams = new Stack<Object>();
+        taskCreationParams.add(CalendarDate.today());
+        taskCreationParams.add(null);
+        taskCreationParams.add("text property");
+        taskCreationParams.add(1);
+        taskCreationParams.add(2);
+        taskCreationParams.add("This is a description!");
+        taskCreationParams.add(null);
+        taskCreationParams.add(false);
+        taskCreationParams.add(10);
+        taskCreationParams.add(0);
+        taskCreationParams.add(false);
+        taskCreationParams.add(null);
+        t = testTL.createTask(taskCreationParams);
+        
         assertTrue(t.equals(testTL.getTask(t.getId())));
     }
 
@@ -76,8 +161,20 @@ public class TaskOperationsTest {
     public void testInvalidStartCreation() {
         Task t = null;
         try {
-            t = testTL.createTask(null, null, "text property",
-                    1, 2, "This is a description!", null, false, 10, 0, false, null);
+            Stack<Object> taskCreationParams = new Stack<Object>();
+            taskCreationParams.add(null);
+            taskCreationParams.add(null);
+            taskCreationParams.add("text property");
+            taskCreationParams.add(1);
+            taskCreationParams.add(2);
+            taskCreationParams.add("This is a description!");
+            taskCreationParams.add(null);
+            taskCreationParams.add(false);
+            taskCreationParams.add(10);
+            taskCreationParams.add(0);
+            taskCreationParams.add(false);
+            taskCreationParams.add(null);
+            t = testTL.createTask(taskCreationParams);
         } catch (Exception e) {
             assertTrue(t == null);
         }
@@ -85,8 +182,22 @@ public class TaskOperationsTest {
 
     @Test
     public void testWorkingDaysOnlyRecurCreation() {
-        Task t = testTL.createTask(CalendarDate.today(), CalendarDate.today(),
-                "text", 1, 2, "This is a description!", null, true, 10, 4, false, null);
+
+        Task t;
+        Stack<Object> taskCreationParams = new Stack<Object>();
+        taskCreationParams.add(CalendarDate.today());
+        taskCreationParams.add(CalendarDate.tomorrow());
+        taskCreationParams.add("text property");
+        taskCreationParams.add(1);
+        taskCreationParams.add(2);
+        taskCreationParams.add("This is a description!");
+        taskCreationParams.add(null);
+        taskCreationParams.add(true);
+        taskCreationParams.add(10);
+        taskCreationParams.add(4);
+        taskCreationParams.add(false);
+        taskCreationParams.add(null);
+        t = testTL.createTask(taskCreationParams);
         assertTrue(t.getWorkingDaysOnly());
     }
 }

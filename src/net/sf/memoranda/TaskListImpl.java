@@ -170,7 +170,16 @@ public class TaskListImpl implements TaskList {
         boolean workDays = (boolean) taskCreationParams.pop();
         String parentTaskId = (String) taskCreationParams.pop();
         String description = (String) taskCreationParams.pop();
-        long effort = (long) taskCreationParams.pop();
+        Object effortObj = taskCreationParams.pop();
+        long effort;
+        	if(effortObj.getClass().equals(Long.class)){
+        		effort = (long)effortObj;
+        	} else if (effortObj.getClass().equals(Integer.class)){
+        		effort = ((Integer)effortObj).longValue();
+        	} else {
+        		effort = 0;
+        	}
+         
         int priority = (int) taskCreationParams.pop();
         String text = (String) taskCreationParams.pop();
         CalendarDate endDate = (CalendarDate) taskCreationParams.pop();
