@@ -333,19 +333,17 @@ public class TaskListImpl implements TaskList {
    *   id of the item being checked.
    */
   public boolean hasParentTask(String id) {
+	boolean hasParent = false;
     Element element = getTaskElement(id);
-
+    
     Node parentNode = element.getParent();
     if (parentNode instanceof Element) {
       Element parent = (Element) parentNode;
       if (parent.getLocalName().equalsIgnoreCase("task")) {
-        return true;
-      } else {
-        return false;
+        hasParent = true;
       }
-    } else {
-      return false;
     }
+    return hasParent;
   }
 
   /**
