@@ -106,4 +106,12 @@ public class TaskOperationsTest {
 				"text", 1, 2, "This is a description!", null, true, 10, 4, false, null, "coding");
 		assertTrue(t.getWorkingDaysOnly());
 	}
+	
+	@Test
+	public void testTaskTagging() {
+		Task t = testTL.createTask(CalendarDate.today(), CalendarDate.today(), "Text", 0, 0, "Desc", null, true, 0, 0, false, null, "coding");
+		assertTrue(t.getTag().equals("coding"));
+		t.setTag("debugging");
+		assertTrue(t.getTag().equals("debugging"));
+	}
 }
