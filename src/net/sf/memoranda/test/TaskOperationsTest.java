@@ -114,4 +114,10 @@ public class TaskOperationsTest {
 		t.setTag("debugging");
 		assertTrue(t.getTag().equals("debugging"));
 	}
+	
+	@Test
+	public void testInvalidTagging() {
+		Task t = testTL.createTask(CalendarDate.today(), CalendarDate.today(), "Text", 0, 0, "Desc", null, true, 0, 0, false, null, null);
+		assertTrue(t.getTag().equals(""));
+	}
 }
