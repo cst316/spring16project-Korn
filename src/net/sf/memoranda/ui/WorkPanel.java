@@ -38,6 +38,7 @@ public class WorkPanel extends JPanel {
 	public JButton tasksB = new JButton();
 	public JButton eventsB = new JButton();
 	public JButton filesB = new JButton();
+	public JButton pspB = new JButton();
 	JButton currentB = null;
 	Border border1;
 
@@ -196,6 +197,34 @@ public class WorkPanel extends JPanel {
 		filesB.setOpaque(false);
 		filesB.setMaximumSize(new Dimension(60, 80));
 		filesB.setBackground(Color.white);
+		
+		pspB.setFont(new java.awt.Font("Dialog", 1, 10));
+		pspB.setBackground(Color.white);
+		pspB.setBorder(null);
+		pspB.setMaximumSize(new Dimension(60, 80));
+		pspB.setMinimumSize(new Dimension(30, 30));
+		pspB.setOpaque(false);
+		pspB.setPreferredSize(new Dimension(60, 50));
+		pspB.setBorderPainted(false);
+		pspB.setContentAreaFilled(false);
+		pspB.setFocusPainted(false);
+		pspB.setHorizontalTextPosition(SwingConstants.CENTER);
+		pspB.setText(Local.getString("PSP"));
+		pspB.setVerticalAlignment(SwingConstants.TOP);
+		pspB.setVerticalTextPosition(SwingConstants.BOTTOM);
+		pspB.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pspB_actionPerformed(e);
+			}
+		});
+		pspB.setIcon(
+			new ImageIcon(
+				net.sf.memoranda.ui.AppFrame.class.getResource(
+					"resources/icons/psp.png")));
+		pspB.setMargin(new Insets(0, 0, 0, 0));
+		pspB.setSelected(true);
+		this.setPreferredSize(new Dimension(1073, 300));
+		
 		this.add(toolBar, BorderLayout.WEST);
 		this.add(panel, BorderLayout.CENTER);
 		panel.add(dailyItemsPanel, "DAILYITEMS");
@@ -205,6 +234,7 @@ public class WorkPanel extends JPanel {
 		toolBar.add(tasksB, null);
 		toolBar.add(notesB, null);
 		toolBar.add(filesB, null);
+		toolBar.add(pspB, null);
 		currentB = agendaB;
 		// Default blue color
 		currentB.setBackground(new Color(215, 225, 250));
@@ -227,7 +257,16 @@ public class WorkPanel extends JPanel {
 				eventsB_actionPerformed(null);
 			else if (pan.equals("FILES"))
 				filesB_actionPerformed(null);
+			else if (pan.equals("PSP"))
+				pspB_actionPerformed(null);
 		}
+	}
+
+	private void pspB_actionPerformed(ActionEvent e) {
+		cardLayout1.show(panel, "PSP");
+		dailyItemsPanel.selectPanel("PSP");
+		setCurrentButton(pspB);
+		Context.put("CURRENT_PANEL", "PSP");
 	}
 
 	public void agendaB_actionPerformed(ActionEvent e) {
