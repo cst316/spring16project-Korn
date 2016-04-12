@@ -14,9 +14,6 @@ import net.sf.memoranda.util.Util;
 import nu.xom.*;
 
 import java.util.*;
-//import nu.xom.converters.*;
-//import org.apache.xerces.dom.*;
-//import nux.xom.xquery.XQueryUtil;
 
 /**
  * TaskListImp the implementation of TaskList.
@@ -119,48 +116,7 @@ public class TaskListImpl implements TaskList {
         Collection<Task> allTasks = getAllSubTasks(taskId);
         return filterActiveTasks(allTasks, date);
     }
-
-  /*    public Task createTask(
-       CalendarDate startDate, 
-       CalendarDate endDate, 
-       String text, 
-       int priority, 
-       long effort, 
-       String description, 
-       String parentTaskId) {
-        Element el = new Element("task");
-        el.addAttribute(new Attribute("startDate", startDate.toString()));
-        if (endDate != null)
-        el.addAttribute(new Attribute("endDate", endDate.toString()));
-        String id = Util.generateId();
-        el.addAttribute(new Attribute("id", id));
-        el.addAttribute(new Attribute("progress", "0"));
-        el.addAttribute(new Attribute("effort", String.valueOf(effort)));
-        el.addAttribute(new Attribute("priority", String.valueOf(priority)));
-                
-        Element txt = new Element("text");
-        txt.appendChild(text);
-        el.appendChild(txt);
-
-        Element desc = new Element("description");
-        desc.appendChild(description);
-        el.appendChild(desc);
-
-        if (parentTaskId == null) {
-            _root.appendChild(el);
-        }
-        else {
-            Element parent = getTaskElement(parentTaskId);
-            parent.appendChild(el);
-        }
-        
-        elements.put(id, el);
-        Util.debug("Created task with parent " + parentTaskId);
-        TaskImpl ret = new TaskImpl(el, this);
-        AgendaPanel.refresh(ret.getStartDate());
-        return ret;
-    }*/
-
+    
     private Task constructTask(Stack<Object> taskCreationParams) {
         String id = (String) taskCreationParams.pop();
         CalendarDate endRepeat = (CalendarDate) taskCreationParams.pop();
@@ -232,7 +188,6 @@ public class TaskListImpl implements TaskList {
     /**
      * @see net.sf.memoranda.TaskList#removeTask(import net.sf.memoranda.Task)
      */
-
     public void removeTask(Task task) {
         String parentTaskId = task.getParentId();
         if (parentTaskId == null) {
@@ -458,16 +413,6 @@ public class TaskListImpl implements TaskList {
      * @return taskElement the contents of the task
      */
     public nu.xom.Element getTaskElement(String id) {
-               
-    /*Nodes nodes = XQueryUtil.xquery(_doc, "//task[@id='" + id + "']");
-        if (nodes.size() > 0) {
-            Element el = (Element) nodes.get(0);
-            return el;            
-        }
-        else {
-            Util.debug("Task " + id + " cannot be found in project " + _project.getTitle());
-            return null;
-        } */
         Element el = elements.get(id);
         if (el == null) {
             Util.debug("Task " + id + " cannot be found in project " + _project.getTitle());
@@ -574,7 +519,7 @@ public class TaskListImpl implements TaskList {
                             //always be zero and it should show up every day.
                             int n = date.getCalendar().get(Calendar.DAY_OF_YEAR);
                             int ns = task.getStartDate().getCalendar().get(Calendar.DAY_OF_YEAR);
-                            if (task.getPeriod() == 0 || (n - ns) % task.getPeriod() == 0) { //Why is this if here?
+                            if (task.getPeriod() == 0 || (n - ns) % task.getPeriod() == 0) {
                                 tasksForDate.add(task);
                             }
                         } else if (task.getRepeatType() == REPEAT_WEEKLY) {
@@ -601,38 +546,4 @@ public class TaskListImpl implements TaskList {
         }
         return tasksForDate;
     }
-
-
-  
-
-/*
- * deprecated methods below
- * 
- */
-                    
-/*    public void adjustParentTasks(Task t) { 
-    if ((t.getParent() == null) || (t.getParent().equals(""))){
-      return;
-    } else {
-       Task p = getTask(t.getParent());
-
-       long totalEffort = calculateTotalEffortFromSubTasks(p);
-
-       if(totalEffort > p.getEffort()) {
-         p.setEffort(totalEffort);
-       }
-       if(t.getStartDate().before(p.getStartDate())) {
-          p.setStartDate(t.getStartDate());
-       }
-       if (t.getEndDate().after(p.getEndDate())) {
-         p.setEndDate(t.getEndDate());
-       }
-
-       if (!((p.getParent() == null) || (p.getParent().equals("")))){
-       // still has parent, go up the tree
-         adjustParentTasks(p);
-         }
-    }
-    }
-} */
 }

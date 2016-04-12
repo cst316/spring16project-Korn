@@ -25,11 +25,6 @@ public interface TaskList {
 
     Task getTask(String id);
 
-    /*
-    Task createTask(CalendarDate startDate, CalendarDate endDate, String text,
-    int priority, long effort, String description, String parentTaskId);
-    */
-
     Task createTask(Stack<Object> taskCreationParams);
 
     void removeTask(Task task);
@@ -48,8 +43,6 @@ public interface TaskList {
 
     public Collection getActiveSubTasks(String taskId, CalendarDate date);
 
-    //    public void adjustParentTasks(Task t);
-
     public long calculateTotalEffortFromSubTasks(Task task);
 
     public CalendarDate getLatestEndDateFromSubTasks(Task task);
@@ -65,5 +58,4 @@ public interface TaskList {
     nu.xom.Element getTaskElement(String id);
 
     nu.xom.Document getXmlContent();
-
 }
