@@ -15,6 +15,9 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ *
+ */
 /*$Id: CalendarDate.java,v 1.3 2004/01/30 12:17:41 alexeya Exp $*/
 public class CalendarDate {
 

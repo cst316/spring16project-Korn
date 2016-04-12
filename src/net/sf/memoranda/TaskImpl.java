@@ -148,6 +148,8 @@ public class TaskImpl implements Task, Comparable {
     }
 
     /**
+     * s
+     *
      * @see net.sf.memoranda.Task#getStatus()
      */
     public int getStatus(CalendarDate date) {
