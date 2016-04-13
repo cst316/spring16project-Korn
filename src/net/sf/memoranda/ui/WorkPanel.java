@@ -209,7 +209,7 @@ public class WorkPanel extends JPanel {
 		pspB.setContentAreaFilled(false);
 		pspB.setFocusPainted(false);
 		pspB.setHorizontalTextPosition(SwingConstants.CENTER);
-		pspB.setText(Local.getString("PSP"));
+		pspB.setText("PSP");
 		pspB.setVerticalAlignment(SwingConstants.TOP);
 		pspB.setVerticalTextPosition(SwingConstants.BOTTOM);
 		pspB.addActionListener(new java.awt.event.ActionListener() {
@@ -217,12 +217,13 @@ public class WorkPanel extends JPanel {
 				pspB_actionPerformed(e);
 			}
 		});
-		pspB.setIcon(
-			new ImageIcon(
-				net.sf.memoranda.ui.AppFrame.class.getResource(
-					"resources/icons/psp.png")));
+//		pspB.setIcon(
+//			new ImageIcon(
+//				net.sf.memoranda.ui.AppFrame.class.getResource(
+//				"resources/icons/psp.png")));
 		pspB.setMargin(new Insets(0, 0, 0, 0));
 		pspB.setSelected(true);
+		
 		this.setPreferredSize(new Dimension(1073, 300));
 		
 		this.add(toolBar, BorderLayout.WEST);
