@@ -217,10 +217,10 @@ public class WorkPanel extends JPanel {
 				pspB_actionPerformed(e);
 			}
 		});
-//		pspB.setIcon(
-//			new ImageIcon(
-//				net.sf.memoranda.ui.AppFrame.class.getResource(
-//				"resources/icons/psp.png")));
+		pspB.setIcon(
+			new ImageIcon(
+				net.sf.memoranda.ui.AppFrame.class.getResource(
+				"resources/icons/psp.png")));
 		pspB.setMargin(new Insets(0, 0, 0, 0));
 		pspB.setSelected(true);
 		
