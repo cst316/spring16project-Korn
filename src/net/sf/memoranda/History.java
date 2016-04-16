@@ -51,10 +51,6 @@ public class History {
         next = null;
         historyBackAction.update();
         historyForwardAction.update();
-        /*System.out.println();
-        for (int i = 0; i < _list.size(); i++)
-            System.out.println(((HistoryItem)_list.get(i)).getDate().toString());
-        System.out.println(item.getDate().toShortString()+ " added");*/
         if (_list.size() > 99) {
             _list.remove(0);
         }
@@ -161,10 +157,6 @@ public class History {
             historyForwardAction.update();
         }
 
-        /*public boolean isEnabled() {
-            return canRollBack();
-        }*/
-
         void update() {
             if (canRollBack()) {
                 setEnabled(true);
@@ -198,10 +190,6 @@ public class History {
             update();
             historyBackAction.update();
         }
-
-        /*public boolean isEnabled() {
-            return canRollForward();
-        }*/
 
         void update() {
             if (canRollForward()) {

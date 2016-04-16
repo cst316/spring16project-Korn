@@ -183,24 +183,6 @@ public class TaskImpl implements Task, Comparable {
         return Task.FAILED;
     }
 
-    /**
-     * Method isDependsCompleted.
-     *
-     * @return boolean
-     */
-    /*
-    private boolean isDependsCompleted() {
-        Vector v = (Vector) getDependsFrom();
-        boolean check = true;
-        for (Enumeration en = v.elements(); en.hasMoreElements();) {
-            Task t = (Task) en.nextElement();
-            if (t.getStatus() != Task.COMPLETED)
-                check = false;
-        }
-        return check;
-    }
-    */
-
     private boolean isFrozen() {
         return _element.getAttribute("frozen") != null;
     }
@@ -230,8 +212,6 @@ public class TaskImpl implements Task, Comparable {
         Element txt = new Element("text");
         txt.appendChild(s);
         _element.appendChild(txt);
-        //        _element.getFirstChildElement("text").removeChildren();
-        //        _element.getFirstChildElement("text").appendChild(s);
     }
 
     public String toString() {
@@ -438,13 +418,6 @@ public class TaskImpl implements Task, Comparable {
         return false;
     }
 
-    //    @Override
-    //    public int getRepeat() {
-    //        Attribute a = _element.getAttribute("repeat-type");
-    //        if (a != null) return new Integer(a.getValue()).intValue();
-    //        return 0;
-    //    }
-
     public int getPeriod() {
         Attribute a = _element.getAttribute("period");
         if (a != null) {
@@ -467,10 +440,6 @@ public class TaskImpl implements Task, Comparable {
         }
         return workingDays;
     }
-    //
-    //    public void setFrequency(int frequency) {
-    //        _element.addAttribute(new Attribute("frequency", String.valueOf(frequency)));
-    //    }
 
     public void setWorkingDaysOnly(boolean workDaysOnly) {
         if (workDaysOnly) {

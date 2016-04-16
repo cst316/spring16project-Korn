@@ -133,13 +133,6 @@ public class EventImpl implements Event, Comparable {
      * @see net.sf.memoranda.Event#getTime()
      */
     public Date getTime() {
-        //Deprecated methods
-        //Date d = new Date();
-        //d.setHours(getHour());
-        //d.setMinutes(getMinute());
-        //d.setSeconds(0);
-        //End deprecated methods
-
         Date d = new Date(); //Revision to fix deprecated methods (jcscoobyrs) 12-NOV-2003 14:26:00
         Calendar calendar = new GregorianCalendar(Local.getCurrentLocale()); //Revision to fix deprecated methods (jcscoobyrs) 12-NOV-2003 14:26:00
         calendar.setTime(d); //Revision to fix deprecated methods (jcscoobyrs) 12-NOV-2003 14:26:00

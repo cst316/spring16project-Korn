@@ -120,47 +120,6 @@ public class TaskListImpl implements TaskList {
         return filterActiveTasks(allTasks, date);
     }
 
-  /*    public Task createTask(
-       CalendarDate startDate, 
-       CalendarDate endDate, 
-       String text, 
-       int priority, 
-       long effort, 
-       String description, 
-       String parentTaskId) {
-        Element el = new Element("task");
-        el.addAttribute(new Attribute("startDate", startDate.toString()));
-        if (endDate != null)
-        el.addAttribute(new Attribute("endDate", endDate.toString()));
-        String id = Util.generateId();
-        el.addAttribute(new Attribute("id", id));
-        el.addAttribute(new Attribute("progress", "0"));
-        el.addAttribute(new Attribute("effort", String.valueOf(effort)));
-        el.addAttribute(new Attribute("priority", String.valueOf(priority)));
-                
-        Element txt = new Element("text");
-        txt.appendChild(text);
-        el.appendChild(txt);
-
-        Element desc = new Element("description");
-        desc.appendChild(description);
-        el.appendChild(desc);
-
-        if (parentTaskId == null) {
-            _root.appendChild(el);
-        }
-        else {
-            Element parent = getTaskElement(parentTaskId);
-            parent.appendChild(el);
-        }
-        
-        elements.put(id, el);
-        Util.debug("Created task with parent " + parentTaskId);
-        TaskImpl ret = new TaskImpl(el, this);
-        AgendaPanel.refresh(ret.getStartDate());
-        return ret;
-    }*/
-
     private Task constructTask(Stack<Object> taskCreationParams) {
         String id = (String) taskCreationParams.pop();
         CalendarDate endRepeat = (CalendarDate) taskCreationParams.pop();
@@ -205,12 +164,6 @@ public class TaskListImpl implements TaskList {
         return task;
     }
  
-  /*
-   * (non-Javadoc)
-   * @see net.sf.memoranda.TaskList#createTask(net.sf.memoranda.date.CalendarDate,
-   *  net.sf.memoranda.date.CalendarDate, java.lang.String,
-   *   int, long, java.lang.String, java.lang.String, boolean, int, int)
-   */
 
     /**
      * Create task adds a task to the task list.
@@ -243,13 +196,6 @@ public class TaskListImpl implements TaskList {
         }
         elements.remove(task.getId());
     }
-
-  /*
-   * (non-Javadoc)
-   * @see net.sf.memoranda.TaskList#createTask(net.sf.memoranda.date.CalendarDate,
-   *  net.sf.memoranda.date.CalendarDate, java.lang.String,
-   *   int, long, java.lang.String, java.lang.String, boolean, int, int)
-   */
 
     /**
      * Create task adds a task to the task list.
@@ -458,16 +404,6 @@ public class TaskListImpl implements TaskList {
      * @return taskElement the contents of the task
      */
     public nu.xom.Element getTaskElement(String id) {
-               
-    /*Nodes nodes = XQueryUtil.xquery(_doc, "//task[@id='" + id + "']");
-        if (nodes.size() > 0) {
-            Element el = (Element) nodes.get(0);
-            return el;            
-        }
-        else {
-            Util.debug("Task " + id + " cannot be found in project " + _project.getTitle());
-            return null;
-        } */
         Element el = elements.get(id);
         if (el == null) {
             Util.debug("Task " + id + " cannot be found in project " + _project.getTitle());
@@ -601,38 +537,4 @@ public class TaskListImpl implements TaskList {
         }
         return tasksForDate;
     }
-
-
-  
-
-/*
- * deprecated methods below
- * 
- */
-                    
-/*    public void adjustParentTasks(Task t) { 
-    if ((t.getParent() == null) || (t.getParent().equals(""))){
-      return;
-    } else {
-       Task p = getTask(t.getParent());
-
-       long totalEffort = calculateTotalEffortFromSubTasks(p);
-
-       if(totalEffort > p.getEffort()) {
-         p.setEffort(totalEffort);
-       }
-       if(t.getStartDate().before(p.getStartDate())) {
-          p.setStartDate(t.getStartDate());
-       }
-       if (t.getEndDate().after(p.getEndDate())) {
-         p.setEndDate(t.getEndDate());
-       }
-
-       if (!((p.getParent() == null) || (p.getParent().equals("")))){
-       // still has parent, go up the tree
-         adjustParentTasks(p);
-         }
-    }
-    }
-} */
 }

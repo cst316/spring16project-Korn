@@ -116,18 +116,6 @@ public class ProjectImpl implements Project {
         return _root.getAttribute("frozen") != null;
     }
 
-   
-    /*public int getProgress() {
-        Vector v = getAllTasks();
-        if (v.size() == 0) return 0;
-        int p = 0;
-        for (Enumeration en = v.elements(); en.hasMoreElements();) {
-          Task t = (Task) en.nextElement();
-          p += t.getProgress();
-        }
-        return (p*100)/(v.size()*100);
-    }*/
-
 
     /**
      * @see net.sf.memoranda.Project#freeze()
@@ -196,26 +184,7 @@ public class ProjectImpl implements Project {
             desc.appendChild(s);
         }
     }
-
-    /**
-     * @see net.sf.memoranda.Project#getTaskList()
-     */
-    /*public TaskList getTaskList() {
-        return CurrentStorage.get().openTaskList(this);
-    }*/
-    /**
-     * @see net.sf.memoranda.Project#getNoteList()
-     */
-    /*public NoteList getNoteList() {
-        return CurrentStorage.get().openNoteList(this);
-    }*/
-
-    /**
-     * @see net.sf.memoranda.Project#getResourcesList()
-     */
-    /*public ResourcesList getResourcesList() {
-        return CurrentStorage.get().openResourcesList(this);
-    }*/
+    
     public boolean equals(Project prj) {
         return (this.getID().equals(prj.getID()));
     }

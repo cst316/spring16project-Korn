@@ -314,17 +314,7 @@ public class NoteListImpl implements NoteList {
         private Day createDay(int d) {
             Element el = new Element("day");
             el.addAttribute(new Attribute("day", new Integer(d).toString()));
-
-            /*
-            el.addAttribute(
-                new Attribute(
-                    "date",
-                    new CalendarDate(
-                        d,
-                        getValue(),
-                        new Integer(((Element) mElement.getParent()).getAttribute("year").getValue()).intValue())
-                        .toString()));
-            */
+            
             mElement.appendChild(el);
             return new Day(el);
         }
@@ -397,17 +387,6 @@ public class NoteListImpl implements NoteList {
 
         public NoteElement createNote(String d) {
             Element el = new Element("note");
-            /*
-            el.addAttribute(new Attribute("refid", d));
-            el.addAttribute(new Attribute("day", new Integer(d).toString()));
-                        el.addAttribute(
-                new Attribute(
-                    "date",
-                    new CalendarDate(
-                        10,
-                        10,
-                        2004).toString()));
-            */
             dEl.appendChild(el);
             return new NoteElement(el);
         }

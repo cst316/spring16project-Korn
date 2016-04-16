@@ -63,18 +63,7 @@ public class ResourcesListImpl implements ResourcesList {
         }
         return null;
     }
-
-    /**
-     * @see net.sf.memoranda.ResourcesList#addResource(java.lang.String, java.lang.String)
-     */
-    /*public void addResource(String path, String taskId) {
-        Element el = new Element("resource");
-        el.addAttribute(new Attribute("id", Util.generateId()));
-        el.addAttribute(new Attribute("path", path));
-        if (taskId != null) el.addAttribute(new Attribute("taskId", taskId));
-        _root.appendChild(el);
-    }*/
-
+    
     /**
      * @see net.sf.memoranda.ResourcesList#addResource(java.lang.String, boolean)
      */
@@ -126,18 +115,6 @@ public class ResourcesListImpl implements ResourcesList {
     public Document getXMLContent() {
         return _doc;
     }
-
-    /**
-     * @see net.sf.memoranda.ResourcesList#getResourcesForTask(java.lang.String)
-     */
-    /*public Vector getResourcesForTask(String taskId) {
-        Vector v = new Vector();
-        Elements rs = _root.getChildElements("resource");
-        for (int i = 0; i < rs.size(); i++)
-            if (rs.get(i).getAttribute("taskId").getValue().equals(taskId))
-                v.add(rs.get(i).getAttribute("path").getValue());
-        return v;
-    }*/
 
 
 }

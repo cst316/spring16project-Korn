@@ -13,10 +13,6 @@ import net.sf.memoranda.util.Local;
 
 import java.util.*;
 
-//import sun.util.resources.cldr.aa.CalendarData_aa_DJ;
-
-//import sun.util.resources.cldr.aa.CalendarData_aa_DJ;
-
 /**
  *
  */
@@ -50,12 +46,6 @@ public class EventsScheduler {
             System.out.println((Calendar.getInstance()).getTime());
 
             if (eventTime.after((Calendar.getInstance().getTime()))) {
-                /*
-                Calendar calendar = new GregorianCalendar(Local.getCurrentLocale());
-                // replace with event.getStartDate() when includes minute & hour
-                CalendarDate date = CalendarDate.today();
-                int minutes, hours,day;
-                */
                 EventTimer timer = null;
                 if (event.getRepeat() == EventsManager.REPEAT_MINUTELY) {
                     eventMinute(event);
@@ -66,61 +56,6 @@ public class EventsScheduler {
                     timer.schedule(new NotifyTask(timer), event.getTime());
                     _timers.add(timer);
                 }
-                /*
-                if (event.getRepeat() == EventsManager.REPEAT_MINUTELY) {
-                    // get remaining minutes from now until next cycle
-                    timer = new EventTimer(event);
-                    int now = date.getCalendar().get(Calendar.MINUTE);
-                    int difference = now % event.getPeriod() + 1;
-
-                    minutes = calendar.get(Calendar.MINUTE) + difference;
-                    hours = calendar.get(Calendar.HOUR_OF_DAY);
-                    calendar.set(Calendar.HOUR_OF_DAY, hours);
-                    calendar.set(Calendar.MINUTE, minutes);
-                    calendar.set(Calendar.SECOND, 0);
-                    timer.schedule(new NotifyTask(timer), calendar.getTime());
-                    _timers.add(timer);
-
-                    // then get the rest until midnight
-                    while (calendar.getTime().getTime() < getMidnight().getTime()) {
-                        timer = new EventTimer(event);
-                        minutes += event.getPeriod();
-                        if (minutes > 60) {
-                            calendar.set(Calendar.HOUR_OF_DAY, ++hours);
-                            minutes %= 60;
-                        }
-                        calendar.set(Calendar.MINUTE, minutes);
-                        timer.schedule(new NotifyTask(timer), calendar.getTime());
-                        _timers.add(timer);
-                    }
-                }
-
-                
-                else if (event.getRepeat() == EventsManager.REPEAT_HOURLY) {
-                    // get remaining minutes from now until next cycle
-                    timer= new EventTimer(event);
-                    int now=date.getCalendar().get(Calendar.HOUR);
-                    int difference =now% event.getPeriod()+1;
-                    
-                    hours = calendar.get(Calendar.HOUR)+difference;
-                    day= calendar.get(Calendar.DAY_OF_WEEK);
-                    calendar.set(Calendar.DAY_OF_WEEK, day);
-                    calendar.set(Calendar.MINUTE,0);
-                    timer.schedule(new NotifyTask(timer), calendar.getTime());
-                    _timers.add(timer);
-                    // then get hours from now until midnight
-                    while(calendar.getTime().getTime()<getMidnight().getTime()){
-                        timer= new EventTimer(event);
-                        hours += event.getPeriod();
-                        if(hours> 24){
-                            calendar.set(Calendar.DAY_OF_WEEK,++day);
-                            hours%=24;
-                        }
-                        calendar.set(Calendar.HOUR, hours);
-                        timer.schedule(new NotifyTask(timer), calendar.getTime());
-                    }
-                }
-                */
                 /*DEBUG*/
                 System.out.println(event.getTimeString());
             }
