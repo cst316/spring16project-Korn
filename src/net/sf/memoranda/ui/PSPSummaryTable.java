@@ -29,21 +29,21 @@ public class PSPSummaryTable extends JPanel {
 	//We may not have actual values for all tasks. In this case, return values so far, or 0.
 	double[] actualTimeList = {3, 17, 311, 120, 
 			240, 48, 15, 180};
-	int[] estimatedDefectList = {0, 0, 5, 0, //This needs to be added to task Dialogue 
+	double[] estimatedDefectList = {0, 0, 5, 0, //This needs to be added to task Dialogue 
 			0, 0, 0, 0};
 	//We may not have actual values for all tasks. In this case, return values so far, or 0.
-	int[] actualDefectList = {0, 5, 23, 6, 
+	double[] actualDefectList = {0, 5, 23, 6, 
 			3, 1, 2, 0};
 	//  Get the following values from project properties. 
 	//They will all likely need to be added to the project  
 	//class, the serialization, and the GUI, somewhere.
-	int estimatedProjectLinesOfCode = 1200;
-	int actualProjectLinesOfCode = 3600;
+	double estimatedProjectLinesOfCode = 1200;
+	double actualProjectLinesOfCode = 3600;
 	//NON-GUI VARIABLES
 	double estimatedTotalTime;
 	double actualTotalTime;
-	int estimatedTotalDefects;
-	int actualTotalDefects;
+	double estimatedTotalDefects;
+	double actualTotalDefects;
 	//COMPONENTS
 	private JScrollPane paneTime;
 	private JTable tblTime;
@@ -78,6 +78,7 @@ public class PSPSummaryTable extends JPanel {
 		}
 		//Time Table
 		tblTime = new JTable();
+		tblTime;
 		modelTime = new DefaultTableModel(
 				new Object[][] {
 					{"TOTAL", 0.0, 0.0},
@@ -148,8 +149,8 @@ public class PSPSummaryTable extends JPanel {
 					estimatedProjectLinesOfCode/estimatedTotalTime, 
 					actualProjectLinesOfCode/actualTotalTime},
 				{"Defects/KLoC", 
-					estimatedTotalDefects/(estimatedProjectLinesOfCode*1000.0), 
-					actualTotalDefects/(actualProjectLinesOfCode*1000.0)},
+					(estimatedTotalDefects)/((estimatedProjectLinesOfCode)/1000.0), 
+					(actualTotalDefects)/((actualProjectLinesOfCode)/1000.0)},
 			},
 			new String[] {
 				"Lines of Code", "Estimated", "Actual"

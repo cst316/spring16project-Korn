@@ -34,6 +34,7 @@ public class WorkPanel extends JPanel {
 	public JButton notesB = new JButton();
 	public DailyItemsPanel dailyItemsPanel = new DailyItemsPanel(this);
 	public ResourcesPanel filesPanel = new ResourcesPanel();
+    PSPPanel pspPanel = new PSPPanel();
 	public JButton agendaB = new JButton();
 	public JButton tasksB = new JButton();
 	public JButton eventsB = new JButton();
@@ -230,6 +231,7 @@ public class WorkPanel extends JPanel {
 		this.add(panel, BorderLayout.CENTER);
 		panel.add(dailyItemsPanel, "DAILYITEMS");
 		panel.add(filesPanel, "FILES");
+		panel.add(pspPanel, "PSP");
 		toolBar.add(agendaB, null);
 		toolBar.add(eventsB, null);
 		toolBar.add(tasksB, null);
@@ -245,7 +247,7 @@ public class WorkPanel extends JPanel {
 		panel.setBorder(null);
 		dailyItemsPanel.setBorder(null);
 		filesPanel.setBorder(null);
-
+		pspPanel.setBorder(null);
 	}
 
 	public void selectPanel(String pan) {
@@ -262,14 +264,6 @@ public class WorkPanel extends JPanel {
 				pspB_actionPerformed(null);
 		}
 	}
-
-	private void pspB_actionPerformed(ActionEvent e) {
-		cardLayout1.show(panel, "PSP");
-		dailyItemsPanel.selectPanel("PSP");
-		setCurrentButton(pspB);
-		Context.put("CURRENT_PANEL", "PSP");
-	}
-
 	public void agendaB_actionPerformed(ActionEvent e) {
 		cardLayout1.show(panel, "DAILYITEMS");
 		dailyItemsPanel.selectPanel("AGENDA");
@@ -302,6 +296,12 @@ public class WorkPanel extends JPanel {
 		cardLayout1.show(panel, "FILES");
 		setCurrentButton(filesB);
 		Context.put("CURRENT_PANEL", "FILES");
+	}
+
+	public void pspB_actionPerformed(ActionEvent e) {
+		cardLayout1.show(panel, "PSP");
+		setCurrentButton(pspB);
+		Context.put("CURRENT_PANEL", "PSP");
 	}
 
 	void setCurrentButton(JButton cb) {
