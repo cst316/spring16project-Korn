@@ -62,7 +62,7 @@ public class TaskDialog extends JDialog {
     JPanel jPanel2 = new JPanel(new GridLayout(2, 2));
     JTextField todoField = new JTextField();
     
-    JTextField effortField = new JTextField();
+    JTextField txtEffort = new JTextField();
     JTextArea descriptionField = new JTextArea();
     JScrollPane descriptionScrollPane = new JScrollPane(descriptionField);
     Border border8;
@@ -86,7 +86,7 @@ public class TaskDialog extends JDialog {
     JSpinner endDate;
     JSpinner endDateRpt;
     JButton setEndDateB = new JButton();
-    JPanel jPanelRepeat = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    JPanel jPanelRepeat = new JPanel();
     
     JButton setNotifB = new JButton();
     JComboBox<?> priorityCB = new JComboBox<Object>(priority);
@@ -97,7 +97,7 @@ public class TaskDialog extends JDialog {
 	JCheckBox chkEndDate;
 	
 
-	JComboBox<?> cmboRepeatType = new JComboBox<Object>(Task.REPEAT_FREQUENCIES_LIST);
+	JComboBox<?> cbRepeatType = new JComboBox<Object>(Task.REPEAT_FREQUENCIES_LIST);
 	public JCheckBox chkWorkingDays = new JCheckBox();
 	JCheckBox chkEndDateRpt = new JCheckBox();
 	JLabel jLabelProgress = new JLabel();
@@ -120,6 +120,10 @@ public class TaskDialog extends JDialog {
 	private final JPanel panel_8 = new JPanel();
 	private final JLabel lblTaskName = new JLabel();
 	private final JPanel panel_9 = new JPanel();
+	private final JPanel panel_2 = new JPanel();
+	private final JPanel panel_10 = new JPanel();
+	private final JLabel lblTaskTrackingTag = new JLabel();
+	JTextField txtTag = new JTextField();
 	
     
     public TaskDialog(Frame frame, String title) {
@@ -406,10 +410,24 @@ public class TaskDialog extends JDialog {
         
 
         jPanel2.add(jPanelRepeat, null);
-        jPanelRepeat.add(cmboRepeatType);
-        cmboRepeatType.setSelectedIndex(0);
-        cmboRepeatType.setEnabled(true);
-        cmboRepeatType.addActionListener(new java.awt.event.ActionListener() {
+        jPanelRepeat.setLayout(new GridLayout(0, 1, 0, 0));
+        
+        jPanelRepeat.add(panel_2);
+        lblTaskTrackingTag.setText("Task Tracking Tag:");
+        lblTaskTrackingTag.setMinimumSize(new Dimension(60, 16));
+        lblTaskTrackingTag.setMaximumSize(new Dimension(100, 16));
+        
+        panel_2.add(lblTaskTrackingTag);
+        txtTag.setPreferredSize(new Dimension(90, 24));
+        txtTag.setBorder(border8);
+        
+        panel_2.add(txtTag);
+        
+        jPanelRepeat.add(panel_10);
+        panel_10.add(cbRepeatType);
+        cbRepeatType.setSelectedIndex(0);
+        cbRepeatType.setEnabled(true);
+        cbRepeatType.addActionListener(new java.awt.event.ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		cmboRepeatType_actionPerformed(e);
         	}
@@ -424,9 +442,9 @@ public class TaskDialog extends JDialog {
                 jLabelEffort.setMaximumSize(new Dimension(100, 16));
                 jLabelEffort.setMinimumSize(new Dimension(60, 16));
                 jLabelEffort.setText(Local.getString("Est Effort(hrs)"));
-                panel_9.add(effortField);
-                effortField.setBorder(border8);
-                effortField.setPreferredSize(new Dimension(30, 24));
+                panel_9.add(txtEffort);
+                txtEffort.setBorder(border8);
+                txtEffort.setPreferredSize(new Dimension(30, 24));
                 panel_9.add(jLabelProgress);
                 
                 jLabelProgress.setText("Progress(hrs)");
@@ -561,9 +579,9 @@ public class TaskDialog extends JDialog {
 		}
 	}
 	void cmboRepeatType_actionPerformed(ActionEvent e) {
-		jPanelRepeatToggle.setEnabled(cmboRepeatType.getSelectedIndex()!=0);
-		chkWorkingDays.setEnabled(cmboRepeatType.getSelectedIndex()!=0);
-		chkEndDateRpt.setEnabled(cmboRepeatType.getSelectedIndex()!=0);
+		jPanelRepeatToggle.setEnabled(cbRepeatType.getSelectedIndex()!=0);
+		chkWorkingDays.setEnabled(cbRepeatType.getSelectedIndex()!=0);
+		chkEndDateRpt.setEnabled(cbRepeatType.getSelectedIndex()!=0);
 	}
 
 	

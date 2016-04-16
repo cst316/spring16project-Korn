@@ -494,5 +494,18 @@ public class TaskImpl implements Task, Comparable {
 		}
 		return attr;
 	}
+	
+	public void setTag(String tag) {
+		if(tag == null) {
+			setAttr("tag", "");
+		} else {
+			setAttr("tag", tag);
+		}
+	}
+	
+	public String getTag() {
+		String tag = _element.getAttribute("tag").getValue();
+		return tag;
+	}
 }
 	
