@@ -20,30 +20,6 @@ import javax.swing.BoxLayout;
 
 @SuppressWarnings("serial")
 public class PSPSummaryTable extends JPanel {
-	//STUB LITERALS
-	//  Get the following values from a static collection of tagged tasks
-	String[] tagNameList = {"Planning", "Design", "Code","Test", 
-			"Code Review", "CI Build", "Bookkeeping", "Postmortem"};
-	double[] estimatedTimeList = {10, 5, 350, 2, 
-			10, 3, 15, 120};
-	//We may not have actual values for all tasks. In this case, return values so far, or 0.
-	double[] actualTimeList = {3, 17, 311, 120, 
-			240, 48, 15, 180};
-	double[] estimatedDefectList = {0, 0, 5, 0, //This needs to be added to task Dialogue 
-			0, 0, 0, 0};
-	//We may not have actual values for all tasks. In this case, return values so far, or 0.
-	double[] actualDefectList = {0, 5, 23, 6, 
-			3, 1, 2, 0};
-	//  Get the following values from project properties. 
-	//They will all likely need to be added to the project  
-	//class, the serialization, and the GUI, somewhere.
-	double estimatedProjectLinesOfCode = 1200;
-	double actualProjectLinesOfCode = 3600;
-	//NON-GUI VARIABLES
-	double estimatedTotalTime;
-	double actualTotalTime;
-	double estimatedTotalDefects;
-	double actualTotalDefects;
 	//COMPONENTS
 	private JScrollPane paneTime;
 	private JTable tblTime;
@@ -56,37 +32,10 @@ public class PSPSummaryTable extends JPanel {
 	
 	public PSPSummaryTable() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		assert(tagNameList.length == estimatedTimeList.length);
-		assert(tagNameList.length == actualTimeList.length);
-		assert(tagNameList.length == estimatedDefectList.length);
-		assert(tagNameList.length == actualDefectList.length);
-		estimatedTotalTime = 0.0;
-		actualTotalTime = 0.0;
-		estimatedTotalDefects = 0;
-		actualTotalDefects = 0;
-		for (int i = 0; i < estimatedTimeList.length; i++) {
-			estimatedTotalTime+=estimatedTimeList[i];
-		}
-		for (int i = 0; i < actualTimeList.length; i++) {
-			actualTotalTime+=actualTimeList[i];
-		}
-		for (int i = 0; i < estimatedDefectList.length; i++) {
-			estimatedTotalDefects+=estimatedDefectList[i];
-		}
-		for (int i = 0; i < actualDefectList.length; i++) {
-			actualTotalDefects+=actualDefectList[i];
-		}
 		//Time Table
 		tblTime = new JTable();
 		tblTime;
-		modelTime = new DefaultTableModel(
-				new Object[][] {
-					{"TOTAL", 0.0, 0.0},
-				},
-				new String[] {
-					"Time in Phase (Tags)", "Estimated", "Actual"
-				}
-			) {
+		modelTime = new DefaultTableModel( {
 			@SuppressWarnings("rawtypes")
 			Class[] columnTypes = new Class[] {
 				String.class, Double.class, Double.class
