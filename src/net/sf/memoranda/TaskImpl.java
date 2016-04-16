@@ -504,7 +504,12 @@ public class TaskImpl implements Task, Comparable {
 	}
 	
 	public String getTag() {
-		String tag = _element.getAttribute("tag").getValue();
+		String tag;
+		try {
+			tag = _element.getAttribute("tag").getValue();
+		} catch (NullPointerException ex) {
+			tag = "";
+		}
 		return tag;
 	}
 }
