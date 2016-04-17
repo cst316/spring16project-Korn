@@ -4,21 +4,20 @@ import java.util.Collections;
 
 public interface PSP {
 	
-	void setID();
 	
 	String getId();
 	
 	void setEstimated(double estimated);
 	
-	double getEstimated();
+	String getEstimated();
 	
 	void setActual(double actual);
 	
-	double getActual();
+	String getActual();
 	
 	void setToDate(double toDate);
 	
-	double getToDate();
+	String getToDate();
 	
 	nu.xom.Element getContent();
 	

@@ -1,5 +1,6 @@
 package net.sf.memoranda;
 
+import nu.xom.Attribute;
 import nu.xom.Element;
 
 public class PSPImpl implements PSP, Comparable {
@@ -19,43 +20,36 @@ public class PSPImpl implements PSP, Comparable {
 	}
 
 	@Override
-	public void setID() {
-	}
-
-	@Override
 	public void setEstimated(double estimated) {
-		// TODO Auto-generated method stub
+		setAttr("Estimated", Double.toString(estimated));
 		
 	}
 
 	@Override
-	public double getEstimated() {
-		// TODO Auto-generated method stub
-		return 0;
+	public String getEstimated() {
+		return element.getFirstChildElement("Estimated").getValue();
 	}
 
 	@Override
 	public void setActual(double actual) {
-		// TODO Auto-generated method stub
+		setAttr("Actual",Double.toString(actual));
 		
 	}
 
 	@Override
-	public double getActual() {
-		// TODO Auto-generated method stub
-		return 0;
+	public String getActual() {
+		return element.getFirstChildElement("Actual").getValue();
 	}
 
 	@Override
 	public void setToDate(double toDate) {
-		// TODO Auto-generated method stub
+		setAttr("To Date",Double.toString(toDate));
 		
 	}
 
 	@Override
-	public double getToDate() {
-		// TODO Auto-generated method stub
-		return 0;
+	public String getToDate() {
+		return element.getFirstChildElement("To Date").getValue();
 	}
 	
 	public Element getContent(){
@@ -66,8 +60,17 @@ public class PSPImpl implements PSP, Comparable {
 		return null;
 	}
 	public String getId(){
-		return null;
+		return element.getAttribute("id").getValue();
 	}
+	
+	private void setAttr(String a, String value) {
+        Attribute attr = element.getAttribute(a);
+        if (attr == null) {
+           element.addAttribute(new Attribute(a, value));
+        } else {
+            attr.setValue(value);
+        }
+    }
 
 
 

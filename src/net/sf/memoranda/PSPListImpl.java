@@ -33,7 +33,7 @@ public class PSPListImpl implements PSPList {
 	
 	
 	private void buildElements(Element parent) {
-	    Elements els = parent.getChildElements("task");
+	    Elements els = parent.getChildElements("PSP");
 	    for (int i = 0; i < els.size(); i++) {
 	      Element el = els.get(i);
 	      elements.put(el.getAttribute("id").getValue(), el);
