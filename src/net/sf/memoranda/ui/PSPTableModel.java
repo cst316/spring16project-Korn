@@ -6,6 +6,9 @@ import javax.swing.table.TableModel;
 
 @SuppressWarnings("serial")
 public class PSPTableModel extends DefaultTableModel implements TableModel {
+	//PUBLIC STATIC
+	public static enum TableType {TIME,DEFECT,LOC}
+	
 	//STUB LITERALS
 	//**Get the following values from a static collection of tagged tasks
 	private String[] tagNameList = {"Planning", "Design", "Code","Test", 
@@ -26,15 +29,24 @@ public class PSPTableModel extends DefaultTableModel implements TableModel {
 	private double estimatedProjectLinesOfCode = 1200;
 	private double actualProjectLinesOfCode = 3600;
 	//VARIABLES
+	@SuppressWarnings("rawtypes")
+	private Class[] columnTypes = new Class[] {
+			String.class, Double.class, Double.class
+		};
 	private double estimatedTotalTime;
 	private double actualTotalTime;
 	private double estimatedTotalDefects;
 	private double actualTotalDefects;
+	private TableType tableType;
+		
 	
 	
-	public static enum TableType {TIME,DEFECT,LOC}
-	public PSPTableModel(TableType tableType){
+	public PSPTableModel(TableType pTableType){
 		super();
+		tableType = pTableType;
+		refreshModel();
+	}
+	public void refreshModel(){
 		validateData();
 		//Set Up Columns 
 		String firstColumnName="";
@@ -54,6 +66,7 @@ public class PSPTableModel extends DefaultTableModel implements TableModel {
 		this.setColumnIdentifiers(
 				new String[] {firstColumnName, "Estimated", "Actual"});	
 		//Add data to rows
+		this.clearRows();
 		if (tableType==TableType.LOC) {
 			this.insertRow(0, 
 					new Object[]{"Defects/KLoC", 
@@ -62,26 +75,47 @@ public class PSPTableModel extends DefaultTableModel implements TableModel {
 			this.insertRow(0, 
 					new Object[]{"LoC/Hour", 
 							estimatedProjectLinesOfCode/estimatedTotalTime, 
-							actualProjectLinesOfCode/actualTotalTime};
+							actualProjectLinesOfCode/actualTotalTime});
 			this.insertRow(0, 
 					new Object[]{"Program Size (LoC)", 
 							estimatedProjectLinesOfCode, 
 							actualProjectLinesOfCode});
 		} else {
 			this.insertRow(0, 
-					new Object[]{"TOTAL",0.0, 0.0});
+					new Object[]{"TOTAL",0.0, 0.0});	
+			double[] estimatedList;
+			double[] actualList;
+			if(tableType==TableType.TIME){
+				estimatedList = estimatedTimeList; 
+				actualList = actualTimeList;
+			}else{
+				estimatedList = estimatedDefectList; 
+				actualList = actualDefectList;
+			}				
+			for (int i = tagNameList.length; i > 0; i--) {
+				this.insertRow(0, 
+						new Object[]{tagNameList[i-1], 
+								estimatedList[i-1],
+								actualList[i-1]});
+			}
+		}		
+	}
+	
+	public void clearRows(){
+		for (int i = 0; i < this.getRowCount(); i++) {
+			this.removeRow(i);
 		}
 	}
 	
-	public void validateData(){
+	private void validateData(){
 		assert(tagNameList.length == estimatedTimeList.length);
 		assert(tagNameList.length == actualTimeList.length);
 		assert(tagNameList.length == estimatedDefectList.length);
 		assert(tagNameList.length == actualDefectList.length);
 		estimatedTotalTime = 0.0;
 		actualTotalTime = 0.0;
-		estimatedTotalDefects = 0;
-		actualTotalDefects = 0;
+		estimatedTotalDefects = 0.0;
+		actualTotalDefects = 0.0;
 		for (int i = 0; i < estimatedTimeList.length; i++) {
 			estimatedTotalTime+=estimatedTimeList[i];
 		}
@@ -95,11 +129,6 @@ public class PSPTableModel extends DefaultTableModel implements TableModel {
 			actualTotalDefects+=actualDefectList[i];
 		}		
 	}
-	
-	@SuppressWarnings("rawtypes")
-	private Class[] columnTypes = new Class[] {
-			String.class, Double.class, Double.class
-		};
 	
 	//Overrides
 	@Override
