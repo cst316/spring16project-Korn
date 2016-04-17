@@ -45,8 +45,9 @@ public class PSPListImpl implements PSPList {
 
 	@Override
 	public PSP getPSPTask(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		Util.debug("getting PSP "+ id);
+		return new PSPImpl ((Element) getPSPElement(id), this);
+		
 	}
 	
 	
@@ -67,9 +68,17 @@ public class PSPListImpl implements PSPList {
 	}
 
 	@Override
-	public PSP removePSPTask(String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public void removePSPTask(PSP pspTask) {
+		String parentPSPId= pspTask.getParentId();
+		if(parentPSPId==null){
+			_root.removeChild(pspTask.getContent());
+		}
+		else{
+			Element parentNode = (Element) getPSPElement(parentPSPId);
+			parentNode.removeChild(pspTask.getContent());
+		}
+		elements.remove(pspTask.getId());
+		
 	}
 
 	@Override
@@ -79,9 +88,12 @@ public class PSPListImpl implements PSPList {
 	}
 
 	@Override
-	public Element getTaskElement(String Id) {
-		// TODO Auto-generated method stub
-		return null;
+	public nu.xom.Element getPSPElement(String id) {
+		Element el= elements.get(id);
+		if(el== null){
+			Util.debug("PSP " + id + " cannot be found in project " + _project.getTitle());
+		}
+		return el;
 	}
 
 }

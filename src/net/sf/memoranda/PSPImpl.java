@@ -19,9 +19,7 @@ public class PSPImpl implements PSP, Comparable {
 	}
 
 	@Override
-	public String setID() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setID() {
 	}
 
 	@Override
@@ -62,6 +60,13 @@ public class PSPImpl implements PSP, Comparable {
 	
 	public Element getContent(){
 		return element;
+	}
+	
+	public String getParentId(){
+		return null;
+	}
+	public String getId(){
+		return null;
 	}
 
 

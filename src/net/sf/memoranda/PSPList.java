@@ -7,10 +7,10 @@ public interface PSPList {
 	
 	PSP createPSPTask(double estimated, double actual, double toDate);
 	
-	PSP removePSPTask(String id);
+	void removePSPTask(PSP psTask);
 	
 	public double calculateToDatePercentage();
 	
-	nu.xom.Element getTaskElement(String Id);
+	nu.xom.Element getPSPElement(String Id);
 
 }

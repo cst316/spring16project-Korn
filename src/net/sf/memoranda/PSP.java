@@ -4,7 +4,9 @@ import java.util.Collections;
 
 public interface PSP {
 	
-	String setID();
+	void setID();
+	
+	String getId();
 	
 	void setEstimated(double estimated);
 	
@@ -19,6 +21,8 @@ public interface PSP {
 	double getToDate();
 	
 	nu.xom.Element getContent();
+	
+	String getParentId();
 	
 	
 }
