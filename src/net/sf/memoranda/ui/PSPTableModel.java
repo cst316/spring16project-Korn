@@ -81,17 +81,23 @@ public class PSPTableModel extends DefaultTableModel implements TableModel {
 							estimatedProjectLinesOfCode, 
 							actualProjectLinesOfCode});
 		} else {
-			this.insertRow(0, 
-					new Object[]{"TOTAL",0.0, 0.0});	
 			double[] estimatedList;
+			double estimatedTotal;
 			double[] actualList;
+			double actualTotal;
 			if(tableType==TableType.TIME){
 				estimatedList = estimatedTimeList; 
 				actualList = actualTimeList;
+				estimatedTotal = estimatedTotalTime;
+				actualTotal = actualTotalTime;
 			}else{
 				estimatedList = estimatedDefectList; 
 				actualList = actualDefectList;
+				estimatedTotal = estimatedTotalDefects;
+				actualTotal = actualTotalDefects;
 			}				
+			this.insertRow(0, 
+					new Object[]{"TOTAL",estimatedTotal, actualTotal});	
 			for (int i = tagNameList.length; i > 0; i--) {
 				this.insertRow(0, 
 						new Object[]{tagNameList[i-1], 
