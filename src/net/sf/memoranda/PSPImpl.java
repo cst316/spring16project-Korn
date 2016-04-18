@@ -1,5 +1,6 @@
 package net.sf.memoranda;
 
+import net.sf.memoranda.util.Util;
 import nu.xom.Attribute;
 import nu.xom.Element;
 
@@ -21,35 +22,36 @@ public class PSPImpl implements PSP, Comparable {
 
 	@Override
 	public void setEstimated(double estimated) {
-		setAttr("Estimated", Double.toString(estimated));
+		setAttr("estimated", Double.toString(estimated));
 		
 	}
 
 	@Override
 	public String getEstimated() {
-		return element.getFirstChildElement("Estimated").getValue();
+		return element.getFirstChildElement("estimated").getValue();
 	}
 
 	@Override
 	public void setActual(double actual) {
-		setAttr("Actual",Double.toString(actual));
+		setAttr("actual", Double.toString(actual));
 		
 	}
 
 	@Override
 	public String getActual() {
-		return element.getFirstChildElement("Actual").getValue();
+		Util.debug(element.getFirstChildElement("actual").getValue());
+		return "found";
 	}
 
 	@Override
 	public void setToDate(double toDate) {
-		setAttr("To Date",Double.toString(toDate));
+		setAttr("toDate",Double.toString(toDate));
 		
 	}
 
 	@Override
 	public String getToDate() {
-		return element.getFirstChildElement("To Date").getValue();
+		return element.getFirstChildElement("toDate").getValue();
 	}
 	
 	public Element getContent(){
@@ -59,6 +61,7 @@ public class PSPImpl implements PSP, Comparable {
 	public String getParentId(){
 		return null;
 	}
+	
 	public String getId(){
 		return element.getAttribute("id").getValue();
 	}

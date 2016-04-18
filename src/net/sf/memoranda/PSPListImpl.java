@@ -25,6 +25,11 @@ public class PSPListImpl implements PSPList {
 		    _project = prj;
 		    buildElements(_root);
 	  }
+	  public PSPListImpl(Project prj){
+		  _root = new Element("psplist");
+		    _document = new Document(_root);
+		    _project = prj;
+	  }
 
 	@Override
 	public Project getProject() {
@@ -46,6 +51,7 @@ public class PSPListImpl implements PSPList {
 	@Override
 	public PSP getPSPTask(String id) {
 		Util.debug("getting PSP "+ id);
+		Util.debug(getPSPElement(id).toString());
 		return new PSPImpl ((Element) getPSPElement(id), this);
 		
 	}
