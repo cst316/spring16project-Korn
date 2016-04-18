@@ -63,10 +63,9 @@
 		</tstamp>
 		<jar jarfile="${build.dir}/${jarname}">
 			<fileset dir="${build.classes.dir}" includes="*net/**"/>
-			<fileset dir="${basedir}" includes="*lib/**"/>
 			<manifest>
 				<attribute name="Main-Class" value="${main.class}"/>
-				<attribute name="Class-Path" value="${runtime.classpath}"/>
+				<!--<attribute name="Class-Path" value="${runtime.classpath}"/>-->
 				<attribute name="Implementation-Title" value="${name}"/>
 				<attribute name="Implementation-Version" value="${version}"/>
 				<attribute name="Implementation-Vendor" value="http://memoranda.sf.net"/>
@@ -74,7 +73,6 @@
 			</manifest>
 		</jar>
 	</target>
-	
 	<target name="compile" depends="init">
 		<!-- Compile the java code from ${src} into ${build} -->
 		<buildnumber/>
