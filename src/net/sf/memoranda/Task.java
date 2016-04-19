@@ -117,4 +117,7 @@ public interface Task {
 
   void setEndRepeat(CalendarDate endRepeat);
 
+  void setTag(String tag);
+  
+  String getTag();
 }

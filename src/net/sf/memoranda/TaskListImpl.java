@@ -198,7 +198,8 @@ public class TaskListImpl implements TaskList {
       int progress,
       int repeatType,
       boolean repeatHasEnd,
-      CalendarDate endRepeat) {
+      CalendarDate endRepeat,
+      String tag) {
       assert (Task.REPEAT_FREQUENCIES_INDEX [repeatType] == repeatType);
     Element taskElem = new Element("task");
     String id = Util.generateId();
@@ -218,7 +219,8 @@ public class TaskListImpl implements TaskList {
     if(repeatHasEnd) {
     	task.setEndRepeat(endRepeat);
     }
-
+    
+    task.setTag(tag);
 	elements.put(id, task.getContent());
 	
     return new TaskImpl(task.getContent(), this);
@@ -331,19 +333,17 @@ public class TaskListImpl implements TaskList {
    *   id of the item being checked.
    */
   public boolean hasParentTask(String id) {
+	boolean hasParent = false;
     Element element = getTaskElement(id);
-
+    
     Node parentNode = element.getParent();
     if (parentNode instanceof Element) {
       Element parent = (Element) parentNode;
       if (parent.getLocalName().equalsIgnoreCase("task")) {
-        return true;
-      } else {
-        return false;
+        hasParent = true;
       }
-    } else {
-      return false;
     }
+    return hasParent;
   }
 
   /**

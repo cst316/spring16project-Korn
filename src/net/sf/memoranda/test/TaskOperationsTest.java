@@ -46,7 +46,7 @@ public class TaskOperationsTest {
 	@Test
 	public void testRegTaskCreation() {
 		Task t = testTL.createTask(CalendarDate.today(), CalendarDate.tomorrow(), "text property",
-				1, 2, "This is a description!", null, false, 10, 0, false, null);
+				1, 2, "This is a description!", null, false, 10, 0, false, null, "");
 		assertTrue(testTL.getTask(t.getId()).equals(t));
 	}
 
@@ -63,13 +63,13 @@ public class TaskOperationsTest {
 		CalendarDate dateYear = new CalendarDate(temp);
 		
 		Task t1 = testTL.createTask(CalendarDate.today(), CalendarDate.today(),
-				"ext", 1, 2, "This is a description!", null, false, 10, 1, false, dateDay);	
+				"ext", 1, 2, "This is a description!", null, false, 10, 1, false, dateDay, "testing");	
 		Task t2 = testTL.createTask(CalendarDate.today(), CalendarDate.today(),
-				"txt", 1, 2, "This is a description!", null, false, 10, 2, false, dateWeek);
+				"txt", 1, 2, "This is a description!", null, false, 10, 2, false, dateWeek, "coding");
 		Task t3 = testTL.createTask(CalendarDate.today(), CalendarDate.today(),
-				"tet", 1, 2, "This is a description!", null, false, 10, 3, false, dateMonth);
+				"tet", 1, 2, "This is a description!", null, false, 10, 3, false, dateMonth, "design");
 		Task t4 = testTL.createTask(CalendarDate.today(), CalendarDate.today(),
-				"tex", 1, 2, "This is a description!", null, false, 10, 4, false, dateYear);
+				"tex", 1, 2, "This is a description!", null, false, 10, 4, false, dateYear, "coding");
 		
 		assertTrue(t1.isRepeatable() && t2.isRepeatable() && t3.isRepeatable() && t4.isRepeatable());
 /*		Vector<Task> vTask = (Vector<Task>) testTL.getRepeatableTaskforDate(dateDay);
@@ -85,7 +85,7 @@ public class TaskOperationsTest {
 	@Test
 	public void testNoEndDateCreation() {
 		Task t = testTL.createTask(CalendarDate.today(), null, "text property",
-				1, 2, "This is a description!", null, false, 10, 0, false, null);
+				1, 2, "This is a description!", null, false, 10, 0, false, null, "");
 		assertTrue(t.equals(testTL.getTask(t.getId())));
 	}
 	
@@ -94,7 +94,7 @@ public class TaskOperationsTest {
 		Task t = null;
 		try {
 			t = testTL.createTask(null, null, "text property",
-					1, 2, "This is a description!", null, false, 10, 0, false, null);
+					1, 2, "This is a description!", null, false, 10, 0, false, null, "");
 		} catch (Exception e) {
 			assertTrue(t == null);
 		}
@@ -103,7 +103,21 @@ public class TaskOperationsTest {
 	@Test
 	public void testWorkingDaysOnlyRecurCreation() {
 		Task t = testTL.createTask(CalendarDate.today(), CalendarDate.today(),
-				"text", 1, 2, "This is a description!", null, true, 10, 4, false, null);
+				"text", 1, 2, "This is a description!", null, true, 10, 4, false, null, "coding");
 		assertTrue(t.getWorkingDaysOnly());
+	}
+	
+	@Test
+	public void testTaskTagging() {
+		Task t = testTL.createTask(CalendarDate.today(), CalendarDate.today(), "Text", 0, 0, "Desc", null, true, 0, 0, false, null, "coding");
+		assertTrue(t.getTag().equals("coding"));
+		t.setTag("debugging");
+		assertTrue(t.getTag().equals("debugging"));
+	}
+	
+	@Test
+	public void testInvalidTagging() {
+		Task t = testTL.createTask(CalendarDate.today(), CalendarDate.today(), "Text", 0, 0, "Desc", null, true, 0, 0, false, null, null);
+		assertTrue(t.getTag().equals(""));
 	}
 }
