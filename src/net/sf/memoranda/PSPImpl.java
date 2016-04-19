@@ -4,7 +4,7 @@ import net.sf.memoranda.util.Util;
 import nu.xom.Attribute;
 import nu.xom.Element;
 
-public class PSPImpl implements PSP, Comparable {
+public class PSPImpl implements PSP {
 	
 	private nu.xom.Element element = null;
 	private PSPList pspList=null;
@@ -14,11 +14,6 @@ public class PSPImpl implements PSP, Comparable {
 		pspList= pspL;
 	}
 
-	@Override
-	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public void setEstimated(double estimated) {

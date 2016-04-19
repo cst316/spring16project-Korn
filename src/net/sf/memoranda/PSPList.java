@@ -7,7 +7,7 @@ public interface PSPList {
 	
 	PSP createPSPTask(double estimated, double actual, double toDate);
 	
-	void removePSPTask(PSP psTask);
+	void removePSPTask(PSP pspTask);
 	
 	public double calculateToDatePercentage();
 	
