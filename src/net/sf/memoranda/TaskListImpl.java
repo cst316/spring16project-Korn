@@ -378,9 +378,6 @@ public class TaskListImpl implements TaskList {
                     / (double) totalEffort) * 100));
             task.setProgress(thisProgress);
 
-      /*          Util.debug("Expended Effort: "+ expendedEffort);
-                  Util.debug("Total Effort: "+ totalEffort);
-                  Util.debug("Progress: "+ t.getProgress());   */
 
             res[0] = expendedEffort;
             res[1] = totalEffort;

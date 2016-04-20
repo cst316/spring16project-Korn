@@ -103,7 +103,6 @@ public class ProjectImpl implements Project {
         if (today.inPeriod(prStart, prEnd)) {
             return Project.ACTIVE;
         } else if (today.after(prEnd)) {
-            //if (getProgress() == 100)
             return Project.COMPLETED;
             /*else
                 return Project.FAILED;*/

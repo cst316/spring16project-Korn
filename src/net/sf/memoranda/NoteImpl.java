@@ -37,7 +37,7 @@ public class NoteImpl implements Note, Comparable {
         Element month = (Element) day.getParent();
         Element year = (Element) month.getParent();
 
-        //   return new CalendarDate(day.getAttribute("date").getValue());
+
 
         return new CalendarDate(new Integer(day.getAttribute("day").getValue()).intValue(),
                 new Integer(month.getAttribute("month").getValue()).intValue(),

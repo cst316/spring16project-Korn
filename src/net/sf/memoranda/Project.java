@@ -47,14 +47,6 @@ public interface Project {
 
     int getStatus();
 
-    //int getProgress();
-
-    //TaskList getTaskList();
-
-    //NoteList getNoteList();
-
-    //ResourcesList getResourcesList();
-
     void freeze();
 
     void unfreeze();

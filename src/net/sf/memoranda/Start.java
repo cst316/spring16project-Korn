@@ -54,12 +54,10 @@ public class Start {
 
             } catch (Exception e) {
                 // If socket is not opened (app is not started), continue
-                // e.printStackTrace();
             }
             new SLThread().start();
         }
 
-        //System.out.println(EventsScheduler.isEventScheduled());
         if ((args.length == 0) || (!args[0].equals("-m"))) {
             app = new App(true);
         } else {

@@ -20,15 +20,12 @@ public interface ResourcesList {
 
     Vector getAllResources();
 
-    //Vector getResourcesForTask(String taskId);
 
     Resource getResource(String path);
 
     void addResource(String path, boolean isInternetShortcut, boolean isProjectFile);
 
     void addResource(String path);
-
-    //void addResource(String path, String taskId);
 
     void removeResource(String path);
 

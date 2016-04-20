@@ -343,16 +343,6 @@ public class TaskImpl implements Task, Comparable {
      */
 
     public long getRate() {
-        /*
-        Task t = (Task)task;
-        switch (mode) {
-           case BY_IMP_RATE: return -1*calcTaskRate(t, date);
-           case BY_END_DATE: return t.getEndDate().getDate().getTime();
-           case BY_PRIORITY: return 5-t.getPriority();
-           case BY_COMPLETION: return 100-t.getProgress();
-        }
-        return -1;
-        */
         return -1 * calcTaskRate(CurrentDate.get());
     }
 

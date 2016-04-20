@@ -21,13 +21,12 @@ public interface Event {
 
     String getId();
 
-    //CalendarDate getDate();
+
 
     int getHour();
 
     int getMinute();
 
-    //Date getTime();
 
     String getText();
 

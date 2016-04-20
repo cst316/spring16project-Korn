@@ -358,7 +358,6 @@ public class EventsManager {
                     return new Month(ms.get(i));
                 }
             }
-            //return createMonth(m);
             return null;
         }
 

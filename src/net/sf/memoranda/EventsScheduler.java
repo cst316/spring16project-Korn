@@ -31,7 +31,6 @@ public class EventsScheduler {
 
     public static void init() {
         cancelAll();
-        //changeDateTimer.cancel();
         Vector events = (Vector) EventsManager.getActiveEvents();
         _timers = new Vector();
 
@@ -93,9 +92,8 @@ public class EventsScheduler {
         calendar.set(Calendar.MINUTE, minutes);
         calendar.set(Calendar.SECOND, 0);
         timer.schedule(new NotifyTask(timer), calendar.getTime());
-        //        System.out.println(" DEBUG top: " +_timers.size());
         _timers.add(timer);
-        //        System.out.println(" DEBUG mid: " +_timers.size());
+
 
         // then get the rest until midnight
         while (calendar.getTime().getTime() < getMidnight().getTime()) {
@@ -130,9 +128,9 @@ public class EventsScheduler {
         calendar.set(Calendar.DAY_OF_WEEK, day);
         calendar.set(Calendar.MINUTE, 0);
         timer.schedule(new NotifyTask(timer), calendar.getTime());
-        //            System.out.println(" DEBUG top: " +_timers.size());
+
         _timers.add(timer);
-        //            System.out.println(" DEBUG mid: " +_timers.size());
+
         // then get hours from now until midnight
         while (calendar.getTime().getTime() < getMidnight().getTime()) {
             timer = new EventTimer(event);

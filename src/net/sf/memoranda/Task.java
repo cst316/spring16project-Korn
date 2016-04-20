@@ -69,13 +69,6 @@ public interface Task {
 
     void setText(String s);
     
-    /*
-    Collection getDependsFrom();
-
-    void addDependsFrom(Task task);
-
-    void removeDependsFrom(Task task);
-    */
 
     Collection getSubTasks();
 

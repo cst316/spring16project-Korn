@@ -38,7 +38,6 @@ public class CurrentProject {
             prjId = "__default";
             Context.put("LAST_OPENED_PROJECT_ID", prjId);
         }
-        //ProjectManager.init();
         _project = ProjectManager.getProject(prjId);
 
         if (_project == null) {

@@ -183,7 +183,6 @@ public class NoteListImpl implements NoteList {
     }
 
     public Note getActiveNote() {
-        // return CurrentNote.get();
         return getNoteForDate(CurrentDate.get());
         // FIXED: Must return the first note for today [alexeya]
     }
@@ -207,15 +206,7 @@ public class NoteListImpl implements NoteList {
         return new Year(el);
     }
 
-    /*
-        private Vector getYears() {
-            Vector v = new Vector();
-            Elements yrs = _root.getChildElements("year");
-            for (int i = 0; i < yrs.size(); i++)
-                v.add(new Year(yrs.get(i)));
-            return v;
-        }
-    */
+
     private Day getDay(CalendarDate date) {
         Year y = getYear(date.getYear());
         if (y == null) {
