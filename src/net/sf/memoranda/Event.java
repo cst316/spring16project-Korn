@@ -19,33 +19,33 @@ import java.util.Date;
 /*$Id: Event.java,v 1.4 2004/07/21 17:51:25 ivanrise Exp $*/
 public interface Event {
 
-    String getId();
+  String getId();
 
 
 
-    int getHour();
+  int getHour();
 
-    int getMinute();
+  int getMinute();
 
 
-    String getText();
+  String getText();
 
-    nu.xom.Element getContent();
+  nu.xom.Element getContent();
 
-    int getRepeat();
+  int getRepeat();
 
-    CalendarDate getStartDate();
+  CalendarDate getStartDate();
 
-    CalendarDate getEndDate();
+  CalendarDate getEndDate();
 
-    int getPeriod();
+  int getPeriod();
 
-    boolean isRepeatable();
+  boolean isRepeatable();
 
-    Date getTime();
+  Date getTime();
 
-    String getTimeString();
+  String getTimeString();
 
-    boolean getWorkingDays();
+  boolean getWorkingDays();
 
 }

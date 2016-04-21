@@ -18,21 +18,21 @@ import java.util.Collection;
 /*$Id: NoteList.java,v 1.5 2004/10/07 21:33:36 ivanrise Exp $*/
 public interface NoteList {
 
-    Collection getAllNotes();
+  Collection getAllNotes();
 
-    Collection getMarkedNotes();
+  Collection getMarkedNotes();
 
-    Collection getNotesForPeriod(CalendarDate startDate, CalendarDate endDate);
+  Collection getNotesForPeriod(CalendarDate startDate, CalendarDate endDate);
 
-    Note getNoteForDate(CalendarDate date);
+  Note getNoteForDate(CalendarDate date);
 
-    Note createNoteForDate(CalendarDate date);
+  Note createNoteForDate(CalendarDate date);
 
-    //    void removeNoteForDate(CalendarDate date);
-    void removeNote(CalendarDate date, String id);
+  //    void removeNoteForDate(CalendarDate date);
+  void removeNote(CalendarDate date, String id);
 
-    Note getActiveNote();
+  Note getActiveNote();
 
-    nu.xom.Document getXMLContent();
+  nu.xom.Document getXMLContent();
 
 }

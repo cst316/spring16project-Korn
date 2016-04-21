@@ -16,19 +16,19 @@ import net.sf.memoranda.date.CalendarDate;
 /*$Id: Note.java,v 1.4 2004/09/30 17:19:52 ivanrise Exp $*/
 public interface Note {
 
-    CalendarDate getDate();
+  CalendarDate getDate();
 
-    String getTitle();
+  String getTitle();
 
-    void setTitle(String s);
+  void setTitle(String s);
 
-    String getId();
+  String getId();
 
-    void setId(String s);
+  void setId(String s);
 
-    boolean isMarked();
+  boolean isMarked();
 
-    void setMark(boolean mark);
+  void setMark(boolean mark);
 
-    Project getProject();
+  Project getProject();
 }
