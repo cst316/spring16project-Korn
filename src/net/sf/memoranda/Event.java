@@ -17,35 +17,35 @@ import net.sf.memoranda.date.CalendarDate;
  */
 /*$Id: Event.java,v 1.4 2004/07/21 17:51:25 ivanrise Exp $*/
 public interface Event {
-    
-    String getId();
-    
-    //CalendarDate getDate();
-    
-    int getHour();
-    
-    int getMinute();
-    
-    //Date getTime();
-    
-    String getText();
-    
-    nu.xom.Element getContent();
-    
-    int getRepeat();
-    
-    CalendarDate getStartDate();
 
-    CalendarDate getEndDate();
+  String getId();
 
-    int getPeriod();
+  //CalendarDate getDate();
 
-    boolean isRepeatable();
-    
-    Date getTime();
+  int getHour();
 
-    String getTimeString();
-    
-	boolean getWorkingDays();
-    
+  int getMinute();
+
+  //Date getTime();
+
+  String getText();
+
+  nu.xom.Element getContent();
+
+  int getRepeat();
+
+  CalendarDate getStartDate();
+
+  CalendarDate getEndDate();
+
+  int getPeriod();
+
+  boolean isRepeatable();
+
+  Date getTime();
+
+  String getTimeString();
+
+  boolean getWorkingDays();
+
 }
