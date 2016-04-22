@@ -34,8 +34,6 @@ public interface TaskList {
 
     void removeTask(Task task);
 
-    Task createRptInstanceTask(Stack<Object> taskCreationParams);
-
     void clearTempTasks();
 
     public boolean hasSubTasks(String id);

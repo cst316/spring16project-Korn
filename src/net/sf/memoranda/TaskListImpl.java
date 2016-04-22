@@ -35,7 +35,7 @@ public class TaskListImpl implements TaskList {
     private Project _project = null;
     private nu.xom.Document _document = null;
     private static Stack<Task> tempTasks = new Stack<Task>();
-    static nu.xom.Element _root = null;
+    protected static nu.xom.Element _root = null;
 
     /*
      * Hastable of "task" XOM elements for quick searching them by ID's
@@ -120,9 +120,10 @@ public class TaskListImpl implements TaskList {
         return filterActiveTasks(allTasks, date);
     }
 
-    private Task constructTask(Stack<Object> taskCreationParams) {
+    private Task constructTasks(Stack<Object> taskCreationParams) {
     	if(taskCreationParams.size()!= Task.CONSTRUCTOR_ARGS){
     		System.out.println("[DEBUG] Task Constructor error: Stack<> taskCreationParams wrong length.");
+    		System.out.println("[DEBUG] Stack<> taskCreationParams size = " + taskCreationParams.size());
     	}
         String id = (String) taskCreationParams.pop();
         String tag;
@@ -167,10 +168,18 @@ public class TaskListImpl implements TaskList {
         task.setWorkingDaysOnly(workDays);
         task.setProgress(progress);
         task.setRepeatType(repeatType); // 0-none, 1-Daily, 2-Weekly, 3-Monthly, 4-Yearly
+        task.setTag(tag);
         if (repeatHasEnd) {
             task.setEndRepeat(endRepeat);
+            CalendarDate instanceDate = startDate.getNextRepeatingDate(repeatType);
+            while (instanceDate.before(endRepeat) || instanceDate.equals(endRepeat)){
+                String idRep = Util.generateId();
+                Task dup = task.duplicateTask(instanceDate, idRep);                
+                dup.setParentTask(parentTaskId, _root);
+                elements.put(id, dup.getContent());
+                instanceDate = instanceDate.getNextRepeatingDate(repeatType);
+			}
         }
-        task.setTag(tag);
         return task;
     }
  
@@ -185,11 +194,11 @@ public class TaskListImpl implements TaskList {
         String id = Util.generateId();
 
         taskCreationParams.add(id);
-        Task task = constructTask(taskCreationParams);
+        Task task = constructTasks(taskCreationParams);
 
         elements.put(id, task.getContent());
 
-        return new TaskImpl(task.getContent(), this);
+        return task;
     }
 
     /**
@@ -217,7 +226,7 @@ public class TaskListImpl implements TaskList {
         String id = Util.generateId();
 
         taskCreationParams.add(id);
-        Task task = constructTask(taskCreationParams);
+        Task task = constructTasks(taskCreationParams);
 
         for (int i = 0; i < elements.size(); i++) {
             if (elements.contains(task.getContent()))//This is where we will fix the duplicating tasks bug

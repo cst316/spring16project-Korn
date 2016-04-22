@@ -511,8 +511,9 @@ public class TaskPanel extends JPanel {
         taskCreationParams.add(dlg.chkWorkingDays.isSelected());
         taskCreationParams.add(((Integer) dlg.progress.getValue()).intValue());
         taskCreationParams.add(dlg.cbRepeatType.getSelectedIndex());
-        taskCreationParams.add(dlg.chkEndDate.isSelected());
+        taskCreationParams.add(dlg.chkEndDateRpt.isSelected());
         taskCreationParams.add(repEnd);
+        taskCreationParams.add(dlg.txtTag.getText());
         newTask = CurrentProject.getTaskList().createTask(taskCreationParams);
         newTask.setProgress(((Integer) dlg.progress.getValue()).intValue());
         CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
@@ -574,8 +575,9 @@ public class TaskPanel extends JPanel {
         taskCreationParams.add(dlg.chkWorkingDays.isSelected());
         taskCreationParams.add(((Integer) dlg.progress.getValue()).intValue());
         taskCreationParams.add(dlg.cbRepeatType.getSelectedIndex());
-        taskCreationParams.add(dlg.chkEndDate.isSelected());
+        taskCreationParams.add(dlg.chkEndDateRpt.isSelected());
         taskCreationParams.add(repEnd);
+        taskCreationParams.add(dlg.txtTag.getText());
         newTask = CurrentProject.getTaskList().createTask(taskCreationParams);
         newTask.setProgress(((Integer) dlg.progress.getValue()).intValue());
         //        CurrentProject.getTaskList().adjustParentTasks(newTask);

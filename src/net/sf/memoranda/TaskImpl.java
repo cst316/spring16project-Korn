@@ -10,6 +10,7 @@ package net.sf.memoranda;
 
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.date.CurrentDate;
+import net.sf.memoranda.util.Util;
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -492,5 +493,26 @@ public class TaskImpl implements Task, Comparable {
             setAttr("endRepeat", "");
         }
     }
+
+	@Override
+	public Task duplicateTask(CalendarDate newTaskDate, String id) {
+        Element taskElem = new Element("task");
+        taskElem.addAttribute(new Attribute("id", id));
+        Task dup = new TaskImpl(taskElem, this._tl);
+        dup.setStartDate(newTaskDate);
+        dup.setEndDate(this.getEndDate().increaseByDifference(this.getStartDate(), newTaskDate));
+        dup.setText(this.getText());
+        dup.setPriority(this.getPriority());
+        dup.setEffort(this.getEffort());
+        dup.setDescription(this.getDescription());
+        dup.setWorkingDaysOnly(this.getWorkingDaysOnly());
+        dup.setProgress(this.getProgress());
+        dup.setRepeatType(this.getRepeatType()); // 0-none, 1-Daily, 2-Weekly, 3-Monthly, 4-Yearly
+        if (this.isRepeatable()) {
+        	dup.setEndRepeat(this.getEndRepeat());
+        }
+        dup.setTag(this.getTag());
+		return dup;
+	}
 }
     

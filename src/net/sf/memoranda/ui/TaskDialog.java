@@ -576,10 +576,10 @@ public class TaskDialog extends JDialog {
 		setEndDateRptB.setEnabled(cbRepeatType.getSelectedIndex()!=0);
 		lblEndRepeat.setEnabled(cbRepeatType.getSelectedIndex()!=0);
 		if(cbRepeatType.getSelectedIndex()!=0) {
-			Date currentEndDate = (Date) endDate.getModel().getValue();
+			Date rptEndDate = (Date) endDateRpt.getModel().getValue();
 			Date currentStartDate = (Date) startDate.getModel().getValue();
-			if(currentEndDate.getTime() < currentStartDate.getTime()) {
-				endDate.getModel().setValue(currentStartDate);
+			if(rptEndDate.getTime() < currentStartDate.getTime()) {
+				endDateRpt.getModel().setValue(currentStartDate);
 			}
 		}
 		chkEndDateRpt.setSelected(cbRepeatType.getSelectedIndex()!=0);

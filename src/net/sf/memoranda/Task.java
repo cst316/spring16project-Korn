@@ -119,4 +119,6 @@ public interface Task {
     void setTag(String tag);
     
     String getTag();
+    
+    Task duplicateTask(CalendarDate newTaskDate, String id);
 }

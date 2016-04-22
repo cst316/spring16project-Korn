@@ -85,6 +85,32 @@ public class CalendarDate {
         return new CalendarDate(cal);
     }
 
+    public CalendarDate getNextRepeatingDate(int repeatType) {
+        Calendar cal = toCalendar(_day, _month, _year);
+        int period;
+        if(repeatType==1){
+        	period = Calendar.DATE;
+        } else if (repeatType==2) {
+        	period = Calendar.WEEK_OF_YEAR;
+        } else if (repeatType==3) {
+        	period = Calendar.MONTH;
+        } else {
+        	period = Calendar.YEAR;
+        }
+        cal.add(period, 1);
+        return new CalendarDate(cal);
+    }
+    
+    public CalendarDate increaseByDifference(CalendarDate base, CalendarDate newDate) {
+        Calendar oldCal = toCalendar(base._day, base._month, base._year);
+        Calendar newCal = toCalendar(newDate._day, newDate._month, newDate._year);
+        long diff = newCal.getTimeInMillis() - oldCal.getTimeInMillis();
+                  //milisec->sec->min->hours->days
+        float days = diff /(1000 * 60 * 60 * 24);   
+        Calendar out =  toCalendar((int) (_day+days), _month, _year);
+        return new CalendarDate(out);
+    }
+    
     public static CalendarDate tomorrow() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, 1);
