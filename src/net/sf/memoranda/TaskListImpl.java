@@ -121,7 +121,16 @@ public class TaskListImpl implements TaskList {
     }
 
     private Task constructTask(Stack<Object> taskCreationParams) {
+    	if(taskCreationParams.size()!= Task.CONSTRUCTOR_ARGS){
+    		System.out.println("[DEBUG] Task Constructor error: Stack<> taskCreationParams wrong length.");
+    	}
         String id = (String) taskCreationParams.pop();
+        String tag;
+        try {
+        	tag = (String) taskCreationParams.pop();
+		} catch (Exception e) {
+			tag = "";		
+		}
         CalendarDate endRepeat = (CalendarDate) taskCreationParams.pop();
         boolean repeatHasEnd = (boolean) taskCreationParams.pop();
         int repeatType = (int) taskCreationParams.pop();
@@ -143,7 +152,7 @@ public class TaskListImpl implements TaskList {
         String text = (String) taskCreationParams.pop();
         CalendarDate endDate = (CalendarDate) taskCreationParams.pop();
         CalendarDate startDate = (CalendarDate) taskCreationParams.pop();
-
+        
         assert (Task.REPEAT_FREQUENCIES_INDEX[repeatType] == repeatType);
         Element taskElem = new Element("task");
         taskElem.addAttribute(new Attribute("id", id));
@@ -161,6 +170,7 @@ public class TaskListImpl implements TaskList {
         if (repeatHasEnd) {
             task.setEndRepeat(endRepeat);
         }
+        task.setTag(tag);
         return task;
     }
  

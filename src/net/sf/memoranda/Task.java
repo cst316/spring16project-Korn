@@ -21,6 +21,7 @@ import java.util.Collection;
 /*$Id: Task.java,v 1.9 2005/06/16 04:21:32 alexeya Exp $*/
 public interface Task {
 
+	public static final int CONSTRUCTOR_ARGS = 14;
     public static final int SCHEDULED = 0;
     public static final int ACTIVE = 1;
     public static final int COMPLETED = 2;
@@ -114,5 +115,8 @@ public interface Task {
     CalendarDate getEndRepeat();
 
     void setEndRepeat(CalendarDate endRepeat);
-
+    
+    void setTag(String tag);
+    
+    String getTag();
 }

@@ -240,6 +240,7 @@ public class AgendaPanel extends JPanel {
                         taskCreationParams.add(dlg.cbRepeatType.getSelectedIndex());
                         taskCreationParams.add(dlg.chkEndDate.isSelected());
                         taskCreationParams.add(repEnd);
+                        taskCreationParams.add(dlg.txtTag.getText());
                         newTask = CurrentProject.getTaskList().createTask(taskCreationParams);
 
                         newTask.setProgress(((Integer) dlg.progress.getValue()).intValue());

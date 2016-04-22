@@ -52,6 +52,7 @@ public class TaskOperationsTest {
         taskCreationParams.add(0);
         taskCreationParams.add(false);
         taskCreationParams.add(null);
+        taskCreationParams.add("");
         t = testTL.createTask(taskCreationParams);
         
         assertTrue(testTL.getTask(t.getId()).equals(t));
@@ -83,6 +84,7 @@ public class TaskOperationsTest {
         taskCreationParams.add(1);
         taskCreationParams.add(false);
         taskCreationParams.add(dateDay);
+        taskCreationParams.add("testing");
         t1 = testTL.createTask(taskCreationParams);
         
         Task t2;
@@ -99,6 +101,7 @@ public class TaskOperationsTest {
         taskCreationParams.add(2);
         taskCreationParams.add(false);
         taskCreationParams.add(dateWeek);
+        taskCreationParams.add("coding");
         t2 = testTL.createTask(taskCreationParams);
       
         Task t3;
@@ -115,6 +118,7 @@ public class TaskOperationsTest {
         taskCreationParams.add(3);
         taskCreationParams.add(false);
         taskCreationParams.add(dateMonth);
+        taskCreationParams.add("design");
         t3 = testTL.createTask(taskCreationParams);
         
         Task t4;
@@ -131,6 +135,7 @@ public class TaskOperationsTest {
         taskCreationParams.add(4);
         taskCreationParams.add(false);
         taskCreationParams.add(dateYear);
+        taskCreationParams.add("planning");
         t4 = testTL.createTask(taskCreationParams);       
 
         assertTrue(t1.isRepeatable() && t2.isRepeatable() && t3.isRepeatable() && t4.isRepeatable());
@@ -152,6 +157,7 @@ public class TaskOperationsTest {
         taskCreationParams.add(0);
         taskCreationParams.add(false);
         taskCreationParams.add(null);
+        taskCreationParams.add("testing");
         t = testTL.createTask(taskCreationParams);
         
         assertTrue(t.equals(testTL.getTask(t.getId())));
@@ -174,6 +180,7 @@ public class TaskOperationsTest {
             taskCreationParams.add(0);
             taskCreationParams.add(false);
             taskCreationParams.add(null);
+            taskCreationParams.add("testing");
             t = testTL.createTask(taskCreationParams);
         } catch (Exception e) {
             assertTrue(t == null);
@@ -197,6 +204,7 @@ public class TaskOperationsTest {
         taskCreationParams.add(4);
         taskCreationParams.add(false);
         taskCreationParams.add(null);
+        taskCreationParams.add("testing");
         t = testTL.createTask(taskCreationParams);
         assertTrue(t.getWorkingDaysOnly());
     }
