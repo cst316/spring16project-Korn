@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.Stack;
 import java.util.Vector;
 
-/*$Id: TaskPanel.java,v 1.27 2007/01/17 20:49:12 killerjoe Exp $*/
+
 public class TaskPanel extends JPanel {
     BorderLayout borderLayout1 = new BorderLayout();
     JButton historyBackB = new JButton();
