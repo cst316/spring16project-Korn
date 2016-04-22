@@ -16,7 +16,7 @@ import java.util.*;
 public class AgendaGenerator {
 
   static int fontsize() {
-    if (Configuration.get("BASE_FONT_SIZE") == "") {
+    if (Configuration.get("BASE_FONT_SIZE").equals( "")) {
       Configuration.put("BASE_FONT_SIZE", "16");
       return Integer.parseInt(Configuration.get("BASE_FONT_SIZE").toString());
     } else {

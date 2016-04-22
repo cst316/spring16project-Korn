@@ -22,9 +22,9 @@ public class AppList {
 
     public Element _root = null;
 
-    public static String OS_WINDOWS = "windows";
-    public static String OS_LINUX = "linux";
-    public static String OS_SOLARIS = "solaris";
+    public static final String OS_WINDOWS = "windows";
+    public static final String OS_LINUX = "linux";
+    public static final String OS_SOLARIS = "solaris";
 
     public static String getPlafCode(String osName) {
         osName = osName.toLowerCase();
