@@ -1,10 +1,15 @@
 package net.sf.memoranda.util;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.TreeMap;
+import java.util.*;
 
 /*$Id: LoadableProperties.java,v 1.4 2004/01/30 12:17:42 alexeya Exp $*/
 public class LoadableProperties extends Hashtable {
@@ -34,15 +39,15 @@ public class LoadableProperties extends Hashtable {
     }
 
     public void save(OutputStream outStream, boolean sorted) throws IOException {
-        if (!sorted) {
-            save(outStream);
-            return;
-        }
+    	if (!sorted) {
+    		save(outStream);
+    		return;
+    	}
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(outStream, "UTF-8"));
         String aKey;
         Object aValue;
         TreeMap tm = new TreeMap(this);
-        for (Iterator i = tm.keySet().iterator(); i.hasNext(); ) {
+        for (Iterator i = tm.keySet().iterator(); i.hasNext();) {
             aKey = (String) i.next();
             aValue = get(aKey);
             out.write(aKey + " = " + aValue);
@@ -51,12 +56,12 @@ public class LoadableProperties extends Hashtable {
         out.flush();
         out.close();
     }
-
+    
     public void save(OutputStream outStream) throws IOException {
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(outStream, "UTF-8"));
         String aKey;
         Object aValue;
-        for (Enumeration e = keys(); e.hasMoreElements(); ) {
+        for (Enumeration e = keys(); e.hasMoreElements();) {
             aKey = (String) e.nextElement();
             aValue = get(aKey);
             out.write(aKey + " = " + aValue);
@@ -67,21 +72,22 @@ public class LoadableProperties extends Hashtable {
     }
 
     private boolean isValid(String str) {
-        if (str == null) {
+        if (str == null)
             return false;
-        }
         if (str.length() > 0) {
             if (str.startsWith("#") || str.startsWith("!")) {
                 return false;
             }
-        } else {
+        }
+        else {
             return false;
         }
 
         int index = str.indexOf("=");
         if (index > 0 && str.length() > index) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -89,7 +95,8 @@ public class LoadableProperties extends Hashtable {
     private String getNextLine(BufferedReader br) {
         try {
             return br.readLine();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return null;
         }
 

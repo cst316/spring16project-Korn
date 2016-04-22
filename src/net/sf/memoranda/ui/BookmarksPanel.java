@@ -8,30 +8,32 @@
  */
 package net.sf.memoranda.ui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /*$Id: BookmarksPanel.java,v 1.4 2004/04/05 10:05:44 alexeya Exp $*/
 public class BookmarksPanel extends JPanel {
-    BorderLayout borderLayout1 = new BorderLayout();
-    JScrollPane scrollPane = new JScrollPane();
-    public NotesList notesList = new NotesList(NotesList.BOOKMARKS);
+  BorderLayout borderLayout1 = new BorderLayout();
+  JScrollPane scrollPane = new JScrollPane();
+  public NotesList notesList = new NotesList(NotesList.BOOKMARKS);
 
-    public BookmarksPanel() {
-        try {
-            jbInit();
-        } catch (Exception ex) {
-            new ExceptionDialog(ex);
-        }
+  public BookmarksPanel() {
+    try {
+      jbInit();
     }
-
-    void jbInit() throws Exception {
-        this.setLayout(borderLayout1);
-        this.add(scrollPane, BorderLayout.CENTER);
-        scrollPane.getViewport().add(notesList, null);
-
-
+    catch(Exception ex) {
+      new ExceptionDialog(ex);
     }
+  }
+  void jbInit() throws Exception {
+    this.setLayout(borderLayout1);
+    this.add(scrollPane, BorderLayout.CENTER);
+    scrollPane.getViewport().add(notesList, null);
+
+    
+  }
 
 
 }

@@ -1,7 +1,8 @@
 package net.sf.memoranda.ui.htmleditor.filechooser;
 
-import javax.swing.filechooser.FileFilter;
 import java.io.File;
+
+import javax.swing.filechooser.FileFilter;
 
 public class ImageFilter extends FileFilter {
 
@@ -12,16 +13,16 @@ public class ImageFilter extends FileFilter {
         }
 
         String extension = Utils.getExtension(f);
-        if (extension != null) {
+	if (extension != null) {
             if (extension.equals(Utils.png) ||
-                    extension.equals(Utils.gif) ||
-                    extension.equals(Utils.jpeg) ||
-                    extension.equals(Utils.jpg)) {
-                return true;
+                extension.equals(Utils.gif) ||
+                extension.equals(Utils.jpeg) ||
+                extension.equals(Utils.jpg)) {
+                    return true;
             } else {
                 return false;
             }
-        }
+    	}
 
         return false;
     }

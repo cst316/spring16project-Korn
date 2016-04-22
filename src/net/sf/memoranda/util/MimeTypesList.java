@@ -7,14 +7,12 @@
  * Copyright (c) 2003 Memoranda Team. http://memoranda.sf.net
  */
 package net.sf.memoranda.util;
+import java.util.Vector;
 
 import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
-
-import java.util.Vector;
-
 /**
  *
  */
@@ -31,9 +29,8 @@ public class MimeTypesList {
     public static Vector getAllMimeTypes() {
         Vector v = new Vector();
         Elements els = _root.getChildElements("mime-type");
-        for (int i = 0; i < els.size(); i++) {
+        for (int i = 0; i < els.size(); i++)
             v.add(new MimeType(els.get(i)));
-        }
         return v;
     }
 
@@ -43,11 +40,9 @@ public class MimeTypesList {
 
     public static MimeType getMimeType(String mimeId) {
         Elements els = _root.getChildElements("mime-type");
-        for (int i = 0; i < els.size(); i++) {
-            if (els.get(i).getAttribute("id").getValue().equals(mimeId)) {
+        for (int i = 0; i < els.size(); i++)
+            if (els.get(i).getAttribute("id").getValue().equals(mimeId))
                 return new MimeType(els.get(i));
-            }
-        }
         return new MimeType();
     }
 
@@ -56,11 +51,9 @@ public class MimeTypesList {
         for (int i = 0; i < els.size(); i++) {
             Element el = els.get(i);
             Elements exts = el.getChildElements("ext");
-            for (int j = 0; j < exts.size(); j++) {
-                if (exts.get(j).getValue().toLowerCase().equals(ext.toLowerCase())) {
+            for (int j = 0; j < exts.size(); j++)
+                if (exts.get(j).getValue().toLowerCase().equals(ext.toLowerCase()))
                     return new MimeType(el);
-                }
-            }
         }
         return new MimeType();
     }
@@ -74,12 +67,11 @@ public class MimeTypesList {
 
     public static void removeMimeType(String mimeId) {
         Elements els = _root.getChildElements("mime-type");
-        for (int i = 0; i < els.size(); i++) {
+        for (int i = 0; i < els.size(); i++)
             if (els.get(i).getAttribute("id").getValue().equals(mimeId)) {
                 _root.removeChild(els.get(i));
                 return;
             }
-        }
     }
 
     public static AppList getAppList() {
@@ -89,8 +81,8 @@ public class MimeTypesList {
     public static String getExtension(String s) {
         String ext = null;
         int i = s.lastIndexOf('.');
-        if (i > 0 && i < s.length() - 1) {
-            ext = s.substring(i + 1).toLowerCase();
+        if (i > 0 &&  i < s.length() - 1) {
+            ext = s.substring(i+1).toLowerCase();
         }
         return ext;
     }

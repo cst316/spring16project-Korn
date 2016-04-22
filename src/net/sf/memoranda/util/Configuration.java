@@ -7,77 +7,75 @@
  * Copyright (c) 2003 Memoranda Team. http://memoranda.sf.net
  */
 package net.sf.memoranda.util;
-
-import net.sf.memoranda.ui.ExceptionDialog;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import net.sf.memoranda.ui.ExceptionDialog;
 /**
  *
  */
 /*$Id: Configuration.java,v 1.5 2004/10/11 08:48:21 alexeya Exp $*/
 public class Configuration {
 
-    static LoadableProperties config = new LoadableProperties();
+    static LoadableProperties config  = new LoadableProperties();
     static String configPath = getConfigPath();
 
     static {
-        try {
-            config.load(new FileInputStream(configPath));
-            System.out.println("Loaded from " + configPath);
-        } catch (Exception e) {
-            File f = new File(configPath);
-            new File(f.getParent()).mkdirs();
-            /*DEBUG*/
-            System.out.println("New configuration created: " + configPath);
-            try {
-                config.load(Configuration.class.getResourceAsStream("resources/memoranda.default.properties"));
-                saveConfig();
-            } catch (Exception e2) {
-                new ExceptionDialog(e2, "Failed to load default configuration from resources.", "");
-                config = null;
-            }
-        }
+    try {
+     config.load(new FileInputStream(configPath));
+     System.out.println("Loaded from " + configPath);
     }
-
-    static String getConfigPath() {
-        String p = Util.getEnvDir() + "memoranda.properties";
-        if (new File(p).exists()) {
-            return p;
-        }
-        String p1 = Util.getEnvDir() + "jnotes2.properties";
-        if (new File(p1).exists()) {
-            /*DEBUG*/
-            System.out.println(p + " not found.\n" + p1 + " used instead.");
-            return p1;
-        }
+    catch (Exception e) {      
+      File f = new File(configPath);
+      new File(f.getParent()).mkdirs();      
+      /*DEBUG*/System.out.println("New configuration created: "+configPath);
+      try {
+        config.load(Configuration.class.getResourceAsStream("resources/memoranda.default.properties"));
+        saveConfig();      
+      }
+      catch (Exception e2) {
+        new ExceptionDialog(e2, "Failed to load default configuration from resources.", "");
+        config = null;
+      }
+    }
+  }
+  
+  static String getConfigPath() {
+    String p = Util.getEnvDir()+"memoranda.properties";
+    if (new File(p).exists()) 
         return p;
-    }
+    String p1 = Util.getEnvDir()+"jnotes2.properties";
+    if (new File(p1).exists()) {
+        /*DEBUG*/System.out.println(p + " not found.\n"+p1+" used instead.");
+        return p1;
+    }    
+    return p;
+  }
 
-    public static void saveConfig() {
-        try {
-            config.save(new FileOutputStream(configPath));
-        } catch (Exception e) {
-            new ExceptionDialog(e, "Failed to save a configuration file:<br>" + configPath, "");
-        }
+  public static void saveConfig() {
+    try {
+    config.save(new FileOutputStream(configPath));
     }
+    catch (Exception e) {
+     new ExceptionDialog(e, "Failed to save a configuration file:<br>"+configPath, "");
+    }
+  }
 
-    public static Object get(String key) {
-        if ((config.get(key)) == null) {
+  public static Object get(String key) {
+    if ((config.get(key)) == null) {
         /*DEBUG*///
-            System.out.println("Configuration: Key '" + key + "' not found.");
-            return "";
-        }
-        if (key.equals("BASE_FONT_SIZE") && config.get(key).toString().equals("")) {
-            config.put("BASE_FONT_SIZE", "16");
-        }
-        return config.get(key);
+    	System.out.println("Configuration: Key '"+key+"' not found.");
+        return "";
     }
+    if(key.equals("BASE_FONT_SIZE") && config.get(key).toString().equals("")){
+    	config.put("BASE_FONT_SIZE", "16");
+    }
+    return config.get(key);
+  }
 
-    @SuppressWarnings("unchecked")
-    public static void put(String key, Object value) {
-        config.put(key, value);
-    }
+  @SuppressWarnings("unchecked")
+public static void put(String key, Object value) {
+    config.put(key, value);
+  }
 }

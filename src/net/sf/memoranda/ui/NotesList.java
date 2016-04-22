@@ -1,21 +1,37 @@
 package net.sf.memoranda.ui;
 
-import net.sf.memoranda.*;
+import java.awt.Component;
+import java.awt.Font;
+import java.util.Collections;
+import java.util.Vector;
+
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
+
+import net.sf.memoranda.CurrentNote;
+import net.sf.memoranda.CurrentProject;
+import net.sf.memoranda.Note;
+import net.sf.memoranda.NoteList;
+import net.sf.memoranda.NoteListener;
+import net.sf.memoranda.Project;
+import net.sf.memoranda.ProjectListener;
+import net.sf.memoranda.ResourcesList;
+import net.sf.memoranda.TaskList;
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.date.CurrentDate;
 import net.sf.memoranda.date.DateListener;
 import net.sf.memoranda.util.Configuration;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.Collections;
-import java.util.Vector;
 //import net.sf.memoranda.util.NotesVectorSorter;
 
 /*$Id: NotesList.java,v 1.9 2005/05/05 16:19:16 ivanrise Exp $*/
 public class NotesList extends JList {
 
-    public static final int EMPTY = 0;
+    public static final int EMPTY = 0;    
     public static final int ALL = 1;
     public static final int BOOKMARKS = 2;
 
@@ -26,9 +42,9 @@ public class NotesList extends JList {
 
     public NotesList(int type) {
         super();
-        if (Configuration.get("NOTES_SORT_ORDER").toString().equalsIgnoreCase("true")) {
-            sortOrderDesc = true;
-        }
+		if(Configuration.get("NOTES_SORT_ORDER").toString().equalsIgnoreCase("true")) {
+			sortOrderDesc = true;
+		}
         _type = type;
         this.setFont(new java.awt.Font("Dialog", 0, 11));
         this.setModel(new NotesListModel());
@@ -37,7 +53,7 @@ public class NotesList extends JList {
                 updateUI();
             }
         });
-
+		
         CurrentNote.addNoteListener(new NoteListener() {
             public void noteChange(Note n, boolean toSaveCurrentNote) {
                 updateUI();
@@ -47,7 +63,6 @@ public class NotesList extends JList {
         CurrentProject.addProjectListener(new ProjectListener() {
             public void projectChange(Project p, NoteList nl, TaskList tl, ResourcesList rl) {
             }
-
             public void projectWasChanged() {
                 update();
             }
@@ -62,55 +77,55 @@ public class NotesList extends JList {
     public void update() {
         if (_type != EMPTY) {
             update(CurrentProject.getNoteList());
-        } else {
-            update(new Vector());
-        }
+		}
+        else {
+			update(new Vector());
+		}
     }
 
     public void update(NoteList nl) {
-        if (_type == ALL) {
+        if (_type == ALL)
             notes = (Vector) nl.getAllNotes();
-        } else {
+        else
             notes = (Vector) nl.getMarkedNotes();
-        }
-
-        //        Util.debug("No. of notes in noteList " + notes.size());
+        
+//        Util.debug("No. of notes in noteList " + notes.size());
         //NotesVectorSorter.sort(notes);
-        Collections.sort(notes);
-        if (sortOrderDesc) {
-            Collections.reverse(notes);
-        }
+		Collections.sort(notes);
+		if (sortOrderDesc) {
+			Collections.reverse(notes);		    
+		}
         updateUI();
     }
 
     public void update(Vector ns) {
         notes = ns;
         // NotesVectorSorter.sort(notes);
-        Collections.sort(notes);
-        if (sortOrderDesc) {
-            Collections.reverse(notes);
-        }
+		Collections.sort(notes);
+		if (sortOrderDesc) {
+			Collections.reverse(notes);		    
+		}		
         updateUI();
     }
 
-    public Note getNote(int index) {
+    public Note getNote(int index){
         return (Note) notes.get(index);
     }
-
+    
     void invertSortOrder() {
         sortOrderDesc = !sortOrderDesc;
     }
 
 
     /*$Id: NotesList.java,v 1.9 2005/05/05 16:19:16 ivanrise Exp $*/
-    public class NotesListModel extends AbstractListModel<Object> {
+public class NotesListModel extends AbstractListModel<Object> {
 
         public NotesListModel() {
             update();
         }
 
         public Object getElementAt(int i) {
-            Note note = (Note) notes.get(i);
+            Note note = (Note)notes.get(i);
             return note.getDate().getShortDateString() + " " + note.getTitle();
         }
 
@@ -123,46 +138,44 @@ public class NotesList extends JList {
     ImageIcon bookmarkIcon = new ImageIcon(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/star8.png"));
 
     public ListCellRenderer getCellRenderer() {
-        return new DefaultListCellRenderer() {
+        return new DefaultListCellRenderer()  {
 
-            public Component getListCellRendererComponent(
-                    JList list,
-                    Object value,            // value to display
-                    int index,               // cell index
-                    boolean isSelected,      // is the cell selected
-                    boolean cellHasFocus) {  // the list and the cell have the focus
-                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                String s = value.toString();
-                label.setText(s);
-                //Note currentNote = CurrentProject.getNoteList().getActiveNote();
-                Note currentNote = CurrentNote.get();
-                if (currentNote != null) {
-                    if (getNote(index).getId().equals(currentNote.getId())) {
-                        label.setFont(label.getFont().deriveFont(Font.BOLD));
-                    }
-                }
-                if (getNote(index).isMarked()) {
-                    label.setIcon(bookmarkIcon);
-                }
+     public Component getListCellRendererComponent(
+       JList list,
+       Object value,            // value to display
+       int index,               // cell index
+       boolean isSelected,      // is the cell selected
+       boolean cellHasFocus)    // the list and the cell have the focus
+     {
+         JLabel label = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+         String s = value.toString();
+         label.setText(s);
+         //Note currentNote = CurrentProject.getNoteList().getActiveNote();
+		 Note currentNote = CurrentNote.get();
+         if (currentNote != null) {
+            if (getNote(index).getId().equals(currentNote.getId()))
+                label.setFont(label.getFont().deriveFont(Font.BOLD));
+         }
+         if (getNote(index).isMarked())
+            label.setIcon(bookmarkIcon);
+         //setIcon();
+       /*if (isSelected) {
+             setBackground(list.getSelectionBackground());
+           setForeground(list.getSelectionForeground());
+       }
+         else {
+           setBackground(list.getBackground());
+           setForeground(list.getForeground());
+       }
+       setEnabled(list.isEnabled());
+       setFont(list.getFont());
+         setOpaque(true);*/
+         label.setToolTipText(s);
+         return label;
+     }
+    };
 
-                /*
-                setIcon();
+ }
 
-                if (isSelected) {
-                    setBackground(list.getSelectionBackground());
-                    setForeground(list.getSelectionForeground());
-                } else {
-                   setBackground(list.getBackground());
-                   setForeground(list.getForeground());
-                }
-                setEnabled(list.isEnabled());
-                setFont(list.getFont());
-                setOpaque(true);
-                */
 
-                label.setToolTipText(s);
-                return label;
-            }
-        };
-    }
 }

@@ -1,19 +1,35 @@
 package net.sf.memoranda.ui;
 
-import net.sf.memoranda.*;
-import net.sf.memoranda.util.CurrentStorage;
-import net.sf.memoranda.util.Local;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.CaretEvent;
-import javax.swing.text.Document;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.CaretEvent;
+import javax.swing.text.Document;
+
+import net.sf.memoranda.CurrentProject;
+import net.sf.memoranda.Note;
+import net.sf.memoranda.NoteList;
+import net.sf.memoranda.Project;
+import net.sf.memoranda.ProjectListener;
+import net.sf.memoranda.ResourcesList;
+import net.sf.memoranda.TaskList;
+import net.sf.memoranda.util.CurrentStorage;
+import net.sf.memoranda.util.Local;
 
 /*$Id: SearchPanel.java,v 1.5 2004/04/05 10:05:44 alexeya Exp $*/
 public class SearchPanel extends JPanel {
@@ -40,11 +56,11 @@ public class SearchPanel extends JPanel {
     public SearchPanel() {
         try {
             jbInit();
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             new ExceptionDialog(ex);
         }
     }
-
     void jbInit() throws Exception {
         border1 = BorderFactory.createEmptyBorder(2, 2, 2, 2);
 
@@ -101,9 +117,7 @@ public class SearchPanel extends JPanel {
             public void projectChange(Project p, NoteList nl, TaskList tl, ResourcesList rl) {
                 notesList.update(new Vector());
             }
-
-            public void projectWasChanged() {
-            }
+            public void projectWasChanged() {}
         });
         //notesList.update(new Vector());
 
@@ -121,25 +135,23 @@ public class SearchPanel extends JPanel {
     void searchField_caretUpdate(CaretEvent e) {
         searchB.setEnabled(searchField.getText().length() > 0);
     }
-
-
+    
+    
     void doSearch() {
         Pattern pattern;
         //this.add(progressBar, BorderLayout.SOUTH);
         int flags = Pattern.DOTALL;
-        if (!caseSensCB.isSelected()) {
+        if (!caseSensCB.isSelected())
             flags = flags + Pattern.CASE_INSENSITIVE + Pattern.UNICODE_CASE;
-        }
         String _find = searchField.getText();
-        if (!regexpCB.isSelected()) {
+        if (!regexpCB.isSelected())
             _find = "\\Q" + _find + "\\E";
-        }
-        if (wholeWCB.isSelected()) {
+        if (wholeWCB.isSelected())
             _find = "[\\s\\p{Punct}]" + _find + "[\\s\\p{Punct}]";
-        }
         try {
             pattern = Pattern.compile(_find, flags);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             new ExceptionDialog(ex, "Error in regular expression", "Check the regular expression syntax");
             return;
         }
@@ -157,10 +169,10 @@ public class SearchPanel extends JPanel {
             try {
                 String txt = doc.getText(0, doc.getLength());
                 Matcher matcher = pattern.matcher(txt);
-                if (matcher.find()) {
+                if (matcher.find())
                     found.add(note);
-                }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 ex.printStackTrace();
             }
         }

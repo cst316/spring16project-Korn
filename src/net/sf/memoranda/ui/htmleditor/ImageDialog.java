@@ -1,21 +1,37 @@
 package net.sf.memoranda.ui.htmleditor;
 
-import net.sf.memoranda.ui.htmleditor.util.Local;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+
+import net.sf.memoranda.ui.htmleditor.util.Local;
 
 /**
  * <p>Title: </p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2002</p>
  * <p>Company: </p>
- *
  * @author unascribed
  * @version 1.0
  */
@@ -41,7 +57,7 @@ public class ImageDialog extends JDialog implements WindowListener {
     public JTextField borderField = new JTextField();
     JLabel jLabel8 = new JLabel();
     String[] aligns = {"left", "right", "top", "middle", "bottom", "absmiddle",
-            "texttop", "baseline"};
+        "texttop", "baseline"}; 
     // Note: align values are not localized because they are HTML keywords 
     public JComboBox alignCB = new JComboBox(aligns);
     JLabel jLabel9 = new JLabel();
@@ -56,7 +72,8 @@ public class ImageDialog extends JDialog implements WindowListener {
         try {
             jbInit();
             pack();
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             ex.printStackTrace();
         }
         super.addWindowListener(this);
@@ -285,14 +302,16 @@ public class ImageDialog extends JDialog implements WindowListener {
         ImageIcon thmb = null;
         if (tmpIcon.getIconHeight() > 48) {
             thmb = new ImageIcon(tmpIcon.getImage()
-                    .getScaledInstance(-1, 48, Image.SCALE_DEFAULT));
-        } else {
+                    .getScaledInstance( -1, 48, Image.SCALE_DEFAULT));
+        }
+        else {
             thmb = tmpIcon;
         }
         if (thmb.getIconWidth() > 350) {
             return new ImageIcon(thmb.getImage()
                     .getScaledInstance(350, -1, Image.SCALE_DEFAULT));
-        } else {
+        }
+        else {
             return thmb;
         }
     }
@@ -300,35 +319,29 @@ public class ImageDialog extends JDialog implements WindowListener {
     //java.io.File selectedFile = null;
     public void updatePreview() {
         try {
-            if (new java.net.URL(fileField.getText()).getPath() != "") {
+            if (new java.net.URL(fileField.getText()).getPath() != "")
                 header.setIcon(getPreviewIcon(new java.io.File(
                         new java.net.URL(fileField.getText()).getPath())));
-            }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     public void windowOpened(WindowEvent e) {
     }
-
     public void windowClosing(WindowEvent e) {
         CANCELLED = true;
         this.dispose();
     }
-
     public void windowClosed(WindowEvent e) {
     }
-
     public void windowIconified(WindowEvent e) {
     }
-
     public void windowDeiconified(WindowEvent e) {
     }
-
     public void windowActivated(WindowEvent e) {
     }
-
     public void windowDeactivated(WindowEvent e) {
     }
 
@@ -369,9 +382,8 @@ public class ImageDialog extends JDialog implements WindowListener {
         chooser.setPreferredSize(new Dimension(550, 375));
         java.io.File lastSel = (java.io.File) Context.get(
                 "LAST_SELECTED_IMG_FILE");
-        if (lastSel != null) {
+        if (lastSel != null)
             chooser.setCurrentDirectory(lastSel);
-        }
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
                 fileField.setText(chooser.getSelectedFile().toURL().toString());
@@ -379,7 +391,8 @@ public class ImageDialog extends JDialog implements WindowListener {
                 Context
                         .put("LAST_SELECTED_IMG_FILE", chooser
                                 .getSelectedFile());
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 fileField.setText(chooser.getSelectedFile().getPath());
             }
             try {
@@ -388,7 +401,8 @@ public class ImageDialog extends JDialog implements WindowListener {
                 widthField.setText(new Integer(img.getIconWidth()).toString());
                 heightField
                         .setText(new Integer(img.getIconHeight()).toString());
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 ex.printStackTrace();
             }
         }

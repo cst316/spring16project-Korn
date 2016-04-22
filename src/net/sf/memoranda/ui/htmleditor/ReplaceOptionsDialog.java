@@ -1,18 +1,29 @@
 package net.sf.memoranda.ui.htmleditor;
 
-import net.sf.memoranda.ui.htmleditor.util.Local;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+
+import net.sf.memoranda.ui.htmleditor.util.Local;
 
 /**
  * <p>Title: </p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2002</p>
  * <p>Company: </p>
- *
  * @author unascribed
  * @version 1.0
  */
@@ -48,7 +59,7 @@ public class ReplaceOptionsDialog extends JDialog {
 
     Border border2;
 
-
+   
     BorderLayout borderLayout3 = new BorderLayout();
     JLabel textLabel = new JLabel();
     JButton yesB = new JButton();
@@ -60,7 +71,8 @@ public class ReplaceOptionsDialog extends JDialog {
             textLabel.setText(text);
             jbInit();
             pack();
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -71,21 +83,21 @@ public class ReplaceOptionsDialog extends JDialog {
 
     void jbInit() throws Exception {
         this.setResizable(false);
-        textLabel.setIcon(new ImageIcon(net.sf.memoranda.ui.htmleditor.HTMLEditor.class.getResource("resources/icons/findbig.png")));
+        textLabel.setIcon(new ImageIcon(net.sf.memoranda.ui.htmleditor.HTMLEditor.class.getResource("resources/icons/findbig.png"))) ;
         textLabel.setIconTextGap(10);
         border1 = BorderFactory.createEmptyBorder(5, 5, 5, 5);
         border2 = BorderFactory.createEmptyBorder();
-
+        
         panel1.setLayout(borderLayout1);
-
+       
         cancelB.setText(Local.getString("Cancel"));
         cancelB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 cancelB_actionPerformed(e);
             }
         });
-        // cancelB.setFocusable(false);
-
+       // cancelB.setFocusable(false);
+      
         yesAllB.setText(Local.getString("Yes to all"));
         yesAllB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -106,18 +118,18 @@ public class ReplaceOptionsDialog extends JDialog {
             }
         });
         yesB.setText(Local.getString("Yes"));
-
+        
         //yesB.setFocusable(false);
         this.getRootPane().setDefaultButton(yesB);
-
-
+        
+      
         noB.setText(Local.getString("No"));
         noB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 noB_actionPerformed(e);
             }
         });
-        // noB.setFocusable(false);
+       // noB.setFocusable(false);
         buttonsPanel.add(yesB, null);
         getContentPane().add(panel1);
         panel1.add(areaPanel, BorderLayout.CENTER);
@@ -126,7 +138,7 @@ public class ReplaceOptionsDialog extends JDialog {
         buttonsPanel.add(yesAllB, null);
         buttonsPanel.add(noB, null);
         buttonsPanel.add(cancelB, null);
-
+        
 
     }
 
@@ -139,12 +151,10 @@ public class ReplaceOptionsDialog extends JDialog {
         option = CANCEL_OPTION;
         this.dispose();
     }
-
     void yesB_actionPerformed(ActionEvent e) {
         option = YES_OPTION;
         this.dispose();
     }
-
     void noB_actionPerformed(ActionEvent e) {
         option = NO_OPTION;
         this.dispose();

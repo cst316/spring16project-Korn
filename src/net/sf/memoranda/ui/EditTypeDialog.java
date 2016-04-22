@@ -1,14 +1,28 @@
 package net.sf.memoranda.ui;
 
-import net.sf.memoranda.util.Local;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.io.File;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.CaretEvent;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.io.File;
+
+import net.sf.memoranda.util.Local;
 
 /*$Id: EditTypeDialog.java,v 1.9 2005/07/05 08:17:24 alexeya Exp $*/
 public class EditTypeDialog extends JDialog {
@@ -49,7 +63,7 @@ public class EditTypeDialog extends JDialog {
     JPanel jPanel5 = new JPanel();
     Border border7;
     TitledBorder titledBorder7;
-    String[] mimes = {"application", "audio", "image", "text", "video"};
+    String[] mimes = { "application", "audio", "image", "text", "video" };
     public String iconPath = "";
     BorderLayout borderLayout7 = new BorderLayout();
     BorderLayout borderLayout5 = new BorderLayout();
@@ -64,13 +78,14 @@ public class EditTypeDialog extends JDialog {
         try {
             jbInit();
             pack();
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             new ExceptionDialog(ex);
         }
     }
 
     void jbInit() throws Exception {
-        this.setResizable(false);
+	this.setResizable(false);
         border1 = BorderFactory.createLineBorder(Color.gray, 1);
         titledBorder1 = new TitledBorder(BorderFactory.createEmptyBorder(), Local.getString("File type extensions"));
         border2 = BorderFactory.createLineBorder(Color.gray, 1);
@@ -82,9 +97,9 @@ public class EditTypeDialog extends JDialog {
         border5 = BorderFactory.createLineBorder(Color.gray, 1);
         titledBorder5 = new TitledBorder(border5, Local.getString("Application"));
         border6 = BorderFactory.createEmptyBorder();
-        titledBorder6 = new TitledBorder(BorderFactory.createEmptyBorder(), Local.getString("Icon") + ":");
+        titledBorder6 = new TitledBorder(BorderFactory.createEmptyBorder(), Local.getString("Icon")+":");
         border7 = BorderFactory.createEmptyBorder();
-        titledBorder7 = new TitledBorder(BorderFactory.createEmptyBorder(), Local.getString("MIME-type") + ":");
+        titledBorder7 = new TitledBorder(BorderFactory.createEmptyBorder(), Local.getString("MIME-type")+":");
         border8 = BorderFactory.createLineBorder(Color.gray, 1);
         border9 = BorderFactory.createEmptyBorder(0, 5, 0, 5);
         buttonsPanel.setLayout(flowLayout1);
@@ -97,14 +112,14 @@ public class EditTypeDialog extends JDialog {
                 cancelB_actionPerformed(e);
             }
         });
-        flowLayout7.setAlignment(FlowLayout.LEFT);
+        flowLayout7.setAlignment(FlowLayout.LEFT);        
         header.setFont(new java.awt.Font("Dialog", 0, 20));
         header.setForeground(new Color(0, 0, 124));
         header.setText(Local.getString("Resource type"));
         header.setIcon(new ImageIcon(net.sf.memoranda.ui.EditTypeDialog.class.getResource(
-                "resources/icons/resource48.png")));
+            "resources/icons/resource48.png")));
         jPanel1.setLayout(borderLayout1);
-        dialogTitlePanel.setBackground(Color.WHITE);
+        dialogTitlePanel.setBackground(Color.WHITE); 
         dialogTitlePanel.setLayout(flowLayout7);
         dialogTitlePanel.setBorder(border9);
         okB.setEnabled(false);
@@ -196,8 +211,7 @@ public class EditTypeDialog extends JDialog {
         checkOkEnabled();
     }
 
-    void descField_caretUpdate(CaretEvent e) {
-    }
+    void descField_caretUpdate(CaretEvent e) {}
 
     void checkOkEnabled() {
         okB.setEnabled((extField.getText().length() > 0));
@@ -217,7 +231,7 @@ public class EditTypeDialog extends JDialog {
         UIManager.put("FileChooser.cancelButtonText", Local.getString("Cancel"));
         UIManager.put("FileChooser.cancelButtonToolTipText", Local.getString("Cancel"));
         UIManager.put("FileChooser.acceptAllFileFilterText", Local.getString("All Files") + " (*.*)");
-
+        
         JFileChooser chooser = new JFileChooser();
         chooser.setPreferredSize(new Dimension(550, 375));
         chooser.setFileHidingEnabled(false);
@@ -225,7 +239,7 @@ public class EditTypeDialog extends JDialog {
         //chooser.setAcceptAllFileFilterUsed(true);
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setCurrentDirectory(
-                new File(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/mimetypes").getPath()));
+            new File(net.sf.memoranda.ui.AppFrame.class.getResource("resources/icons/mimetypes").getPath()));
         /*if (System.getProperty("os.name").startsWith("Win")) {
             chooser.setFileFilter(new AllFilesFilter(AllFilesFilter.ICO));
             chooser.setCurrentDirectory(new File("C:\\Program Files"));
@@ -235,9 +249,11 @@ public class EditTypeDialog extends JDialog {
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
                 iconLabel.setIcon(new ImageIcon(chooser.getSelectedFile().getPath()));
-            } catch (Exception ex) {
-                //ex.printStackTrace();
-            } finally {
+           }
+            catch (Exception ex) {
+		    //ex.printStackTrace();
+	    }
+            finally {
                 iconPath = chooser.getSelectedFile().getPath();
             }
 
