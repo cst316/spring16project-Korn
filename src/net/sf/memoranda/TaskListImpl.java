@@ -169,6 +169,7 @@ public class TaskListImpl implements TaskList {
         task.setProgress(progress);
         task.setRepeatType(repeatType); // 0-none, 1-Daily, 2-Weekly, 3-Monthly, 4-Yearly
         task.setTag(tag);
+        assert(repeatHasEnd==(repeatType!=0));
         if (repeatHasEnd) {
             task.setEndRepeat(endRepeat);
             CalendarDate instanceDate = startDate.getNextRepeatingDate(repeatType);
