@@ -642,7 +642,7 @@ public class TaskPanel extends JPanel {
 			}
 		}
 		//creates checkBox
-		JCheckBox checkBox= new JCheckBox("Do you want to remove all instances of this task");
+		JCheckBox checkBox= new JCheckBox("Do you want to remove all instances of this task?");
 		Object[] params={msg, checkBox};
 		msg= "remove this";
 		int n =
@@ -683,7 +683,7 @@ public class TaskPanel extends JPanel {
 			//        				taskTable.getSelectedRows()[i], TaskTable.TASK_ID).toString());
 			//        		multi = (Vector) CurrentProject.getTaskList().getDuplicateTasks(same.getId(), same.getEndDate());
 			//        	}
-			JOptionPane.showMessageDialog(App.getFrame(), Integer.toString(removeCount));
+			JOptionPane.showMessageDialog(App.getFrame(), Integer.toString(removeCount) + " tasks deleted.");
 
 			//        	for(int i = 0; i < toremove.size(); i++) {
 			//        		CurrentProject.getTaskList().removeTask((Task) multi.get(i));
