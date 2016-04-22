@@ -6,29 +6,29 @@
  */
 package net.sf.memoranda.ui;
 
-import java.awt.event.ActionEvent;
-
-
 import net.sf.memoranda.util.Local;
 
-public class TaskReportDialog extends javax.swing.JDialog{
+import java.awt.event.ActionEvent;
+
+public class TaskReportDialog extends javax.swing.JDialog {
 
     public boolean CANCELLED = true;
 
-	private javax.swing.JPanel panel;
-	public TaskReportDialog(java.awt.Frame parent, String title){
-		super(parent, title, true);
-		initComponents1();
-	}
+    private javax.swing.JPanel panel;
 
-	private void initComponents1() {
-		// TODO Auto-generated method stub
-		 panel = new javax.swing.JPanel();
-		 this.add(panel);
-		 
-	}
-	 
-    private void initComponents() {//GEN-BEGIN:initComponents
+    public TaskReportDialog(java.awt.Frame parent, String title) {
+        super(parent, title, true);
+        initComponents1();
+    }
+
+    private void initComponents1() {
+        // TODO Auto-generated method stub
+        panel = new javax.swing.JPanel();
+        this.add(panel);
+
+    }
+
+    private void initComponents() { //GEN-BEGIN:initComponents
         jPanel2 = new javax.swing.JPanel();
         okB = new javax.swing.JButton();
         cancelB = new javax.swing.JButton();
@@ -64,7 +64,7 @@ public class TaskReportDialog extends javax.swing.JDialog{
         cancelB.setText(Local.getString("Cancel"));
         cancelB.setPreferredSize(new java.awt.Dimension(90, 25));
         cancelB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {                
+            public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
@@ -74,9 +74,6 @@ public class TaskReportDialog extends javax.swing.JDialog{
 
         filePanel.setLayout(new java.awt.BorderLayout());
 
- 
-        
-        
 
         filePanel.add(fileChooser, java.awt.BorderLayout.CENTER);
 
@@ -85,21 +82,20 @@ public class TaskReportDialog extends javax.swing.JDialog{
         optionsPanel.setBorder(new javax.swing.border.EmptyBorder(new java.awt.Insets(5, 5, 5, 5)));
         encPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
-        jLabel2.setText(Local.getString("Encoding")+":");
+        jLabel2.setText(Local.getString("Encoding") + ":");
         encPanel.add(jLabel2);
 
-   
-        usetemplChB.setText(Local.getString("Use template")+":");
+
+        usetemplChB.setText(Local.getString("Use template") + ":");
         usetemplChB.setMargin(new java.awt.Insets(0, 0, 0, 0));
         usetemplChB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {                
+            public void actionPerformed(ActionEvent e) {
                 if (usetemplChB.isSelected()) {
                     templF.setEnabled(true);
                     templBrowseB.setEnabled(true);
-                }
-                else {
+                } else {
                     templF.setEnabled(false);
-                    templBrowseB.setEnabled(false);                    
+                    templBrowseB.setEnabled(false);
                 }
             }
         });
@@ -120,7 +116,7 @@ public class TaskReportDialog extends javax.swing.JDialog{
 
         templBrowseB.setText("Browse");
         templBrowseB.setEnabled(false);
-        
+
         templPanel.add(templBrowseB, java.awt.BorderLayout.EAST);
 
         optionsPanel.add(templPanel);
@@ -137,20 +133,20 @@ public class TaskReportDialog extends javax.swing.JDialog{
         getContentPane().add(filePanel, java.awt.BorderLayout.CENTER);
         getRootPane().setDefaultButton(okB);
         pack();
-    }//GEN-END:initComponents
+    } //GEN-END:initComponents
 
     private void xhtmlChBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xhtmlChBActionPerformed
         // TODO add your handling code here:
     }
 
-    private void chooserActionPerformed() {//GEN-FIRST:event_chooserActionPerformed
-        okB.setEnabled(fileChooser.getSelectedFile() != null);            
+    private void chooserActionPerformed() { //GEN-FIRST:event_chooserActionPerformed
+        okB.setEnabled(fileChooser.getSelectedFile() != null);
     }
-   
-    
+
+
     private javax.swing.JButton cancelB;
     private javax.swing.JFileChooser fileChooser;
-    
+
     private javax.swing.JPanel encPanel;
     private javax.swing.JPanel filePanel;
     private javax.swing.JLabel jLabel2;
@@ -165,5 +161,5 @@ public class TaskReportDialog extends javax.swing.JDialog{
     public javax.swing.JCheckBox usetemplChB;
     public javax.swing.JCheckBox xhtmlChB;
     // End of variables declaration//GEN-END:variables
-    
+
 }

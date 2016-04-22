@@ -1,4 +1,3 @@
-
 package net.sf.memoranda.ui;
 
 import net.sf.memoranda.Project;
@@ -276,6 +275,5 @@ public class TaskTreeTableCellRenderer extends DefaultTreeCellRenderer implement
         System.err.println("Problem finding priority icon");
         return null;
     }
-    
-    
 }
+

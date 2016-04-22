@@ -162,7 +162,6 @@ public class TaskDialog extends JDialog {
                 cancelB_actionPerformed(e);
             }
         });
-		cmboRepeatType_actionPerformed(null);
 		
         okB.setMaximumSize(new Dimension(100, 26));
         okB.setMinimumSize(new Dimension(100, 26));
@@ -479,8 +478,8 @@ public class TaskDialog extends JDialog {
         chkWorkingDays.setEnabled(false);
         chkWorkingDays.setText("Working Days Only");
         chkWorkingDays.setHorizontalTextPosition(SwingConstants.LEADING);
-        chkEndDateRpt.setSelected(false);
         chkEndDateRpt.setEnabled(false);
+        chkEndDateRpt.setVisible(false);
         jPanelRepeatToggle.add(panel);
         
         panel.add(chkEndDateRpt);
@@ -524,6 +523,7 @@ public class TaskDialog extends JDialog {
                 endDateRpt.getModel().setValue(endCalRptFrame.cal.get().getCalendar().getTime());
             }
         });
+        cmboRepeatType_actionPerformed(null);
     }
 
 	public void setStartDate(CalendarDate d) {
@@ -567,21 +567,22 @@ public class TaskDialog extends JDialog {
 		}
 	}
     void chkEndDateRpt_actionPerformed(ActionEvent e) {
-		endDateRpt.setEnabled(chkEndDateRpt.isSelected());
-		setEndDateRptB.setEnabled(chkEndDateRpt.isSelected());
-		lblEndRepeat.setEnabled(chkEndDateRpt.isSelected());
-		if(chkEndDateRpt.isSelected()) {
-			Date currentEndDate = (Date) endDate.getModel().getValue();
-			Date currentStartDate = (Date) startDate.getModel().getValue();
-			if(currentEndDate.getTime() < currentStartDate.getTime()) {
-				endDate.getModel().setValue(currentStartDate);
-			}
-		}
 	}
+    
 	void cmboRepeatType_actionPerformed(ActionEvent e) {
 		jPanelRepeatToggle.setEnabled(cbRepeatType.getSelectedIndex()!=0);
 		chkWorkingDays.setEnabled(cbRepeatType.getSelectedIndex()!=0);
-		chkEndDateRpt.setEnabled(cbRepeatType.getSelectedIndex()!=0);
+		endDateRpt.setEnabled(cbRepeatType.getSelectedIndex()!=0);
+		setEndDateRptB.setEnabled(cbRepeatType.getSelectedIndex()!=0);
+		lblEndRepeat.setEnabled(cbRepeatType.getSelectedIndex()!=0);
+		if(cbRepeatType.getSelectedIndex()!=0) {
+			Date rptEndDate = (Date) endDateRpt.getModel().getValue();
+			Date currentStartDate = (Date) startDate.getModel().getValue();
+			if(rptEndDate.getTime() < currentStartDate.getTime()) {
+				endDateRpt.getModel().setValue(currentStartDate);
+			}
+		}
+		chkEndDateRpt.setSelected(cbRepeatType.getSelectedIndex()!=0);
 	}
 
 	

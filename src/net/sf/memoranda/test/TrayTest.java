@@ -21,14 +21,15 @@ public class TrayTest {
 
             // Wait until the frame is actually active before proceeding
             // on any tests
-            while (!(App.getFrame().isActive()))
+            while (!(App.getFrame().isActive())) {
                 Thread.sleep(100);
+            }
         }
     }
 
     @Test
     public void testAddTray() {
-		if (SystemTray.isSupported()) {
+        if (SystemTray.isSupported()) {
             // Starting off, there should be no tray
             assertEquals(App.getFrame().trayActive(), false);
             // Minimized, there should also be no tray icon
@@ -53,5 +54,5 @@ public class TrayTest {
             // There is no test to run.
             assertTrue(true);
         }
-	}
+    }
 }

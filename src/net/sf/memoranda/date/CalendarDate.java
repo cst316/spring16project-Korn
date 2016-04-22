@@ -8,12 +8,12 @@
  */
 package net.sf.memoranda.date;
 
+import net.sf.memoranda.util.Local;
+import net.sf.memoranda.util.Util;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import net.sf.memoranda.util.Local;
-import net.sf.memoranda.util.Util;
 
 /**
  *
@@ -43,10 +43,11 @@ public class CalendarDate {
         cal.set(Calendar.MONTH, _month);
         cal.getTime();
         int dmax = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-        if (day <= dmax)
-          _day = day;
-        else
-          _day = dmax;
+        if (day <= dmax) {
+            _day = day;
+        } else {
+            _day = dmax;
+        }
 
     }
 
@@ -84,6 +85,32 @@ public class CalendarDate {
         return new CalendarDate(cal);
     }
 
+    public CalendarDate getNextRepeatingDate(int repeatType) {
+        Calendar cal = toCalendar(_day, _month, _year);
+        int period;
+        if(repeatType==1){
+        	period = Calendar.DATE;
+        } else if (repeatType==2) {
+        	period = Calendar.WEEK_OF_YEAR;
+        } else if (repeatType==3) {
+        	period = Calendar.MONTH;
+        } else {
+        	period = Calendar.YEAR;
+        }
+        cal.add(period, 1);
+        return new CalendarDate(cal);
+    }
+    
+    public CalendarDate increaseByDifference(CalendarDate base, CalendarDate newDate) {
+        Calendar oldCal = toCalendar(base._day, base._month, base._year);
+        Calendar newCal = toCalendar(newDate._day, newDate._month, newDate._year);
+        long diff = newCal.getTimeInMillis() - oldCal.getTimeInMillis();
+                  //milisec->sec->min->hours->days
+        float days = diff /(1000 * 60 * 60 * 24);   
+        Calendar out =  toCalendar((int) (_day+days), _month, _year);
+        return new CalendarDate(out);
+    }
+    
     public static CalendarDate tomorrow() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, 1);
@@ -131,12 +158,10 @@ public class CalendarDate {
         if (object.getClass().isInstance(CalendarDate.class)) {
             CalendarDate d2 = (CalendarDate) object;
             return ((d2.getDay() == getDay()) && (d2.getMonth() == getMonth()) && (d2.getYear() == getYear()));
-        }
-        else if (object.getClass().isInstance(Calendar.class)) {
+        } else if (object.getClass().isInstance(Calendar.class)) {
             Calendar cal = (Calendar) object;
             return this.equals(new CalendarDate(cal));
-        }
-        else if (object.getClass().isInstance(Date.class)) {
+        } else if (object.getClass().isInstance(Date.class)) {
             Date d = (Date) object;
             return this.equals(new CalendarDate(d));
         }
@@ -145,22 +170,25 @@ public class CalendarDate {
     }
 
     public boolean equals(CalendarDate date) {
-        if (date == null)
+        if (date == null) {
             return false;
+        }
 
         return ((date.getDay() == getDay()) && (date.getMonth() == getMonth()) && (date.getYear() == getYear()));
     }
 
     public boolean before(CalendarDate date) {
-        if (date == null)
+        if (date == null) {
             return true;
+        }
 
         return this.getCalendar().before(date.getCalendar());
     }
 
     public boolean after(CalendarDate date) {
-        if (date == null)
+        if (date == null) {
             return true;
+        }
 
         return this.getCalendar().after(date.getCalendar());
     }
@@ -171,23 +199,23 @@ public class CalendarDate {
 
     public String toString() {
         return Util.getDateStamp(this);
-    }  
-    
+    }
+
     public String getFullDateString() {
         return Local.getDateString(this, DateFormat.FULL);
     }
-    
+
     public String getMediumDateString() {
         return Local.getDateString(this, DateFormat.MEDIUM);
     }
-    
+
     public String getLongDateString() {
         return Local.getDateString(this, DateFormat.LONG);
     }
-    
+
     public String getShortDateString() {
         return Local.getDateString(this, DateFormat.SHORT);
     }
-    
+
 
 }

@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
+import java.util.Stack;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -475,15 +476,21 @@ public class TaskPanel extends JPanel {
 		}
 		Task newTask;
 		long effort = Util.getMillisFromHours(dlg.txtEffort.getText());
-		newTask = CurrentProject.getTaskList().createTask(
-				sd, ed, dlg.todoField.getText(), 
-				dlg.priorityCB.getSelectedIndex(),effort,
-				dlg.descriptionField.getText(),null,
-				dlg.chkWorkingDays.isSelected(), //Boolean to denote recurrence is working days only
-				((Integer)dlg.progress.getValue()).intValue(),
-				dlg.cbRepeatType.getSelectedIndex(),
-				dlg.chkEndDateRpt.isSelected(),
-				repEnd,dlg.txtTag.getText());
+        Stack<Object> taskCreationParams = new Stack<Object>();
+        taskCreationParams.add(sd);
+        taskCreationParams.add(ed);
+        taskCreationParams.add(dlg.todoField.getText());
+        taskCreationParams.add(dlg.priorityCB.getSelectedIndex());
+        taskCreationParams.add(effort);
+        taskCreationParams.add(dlg.descriptionField.getText());
+        taskCreationParams.add(null);
+        taskCreationParams.add(dlg.chkWorkingDays.isSelected());
+        taskCreationParams.add(((Integer) dlg.progress.getValue()).intValue());
+        taskCreationParams.add(dlg.cbRepeatType.getSelectedIndex());
+        taskCreationParams.add(dlg.chkEndDateRpt.isSelected());
+        taskCreationParams.add(repEnd);
+        taskCreationParams.add(dlg.txtTag.getText());
+        newTask = CurrentProject.getTaskList().createTask(taskCreationParams);
 		newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
 		CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
 		taskTable.tableChanged();
@@ -530,15 +537,21 @@ public class TaskPanel extends JPanel {
 		}
 		long effort = Util.getMillisFromHours(dlg.txtEffort.getText());
 		Task newTask;
-		newTask = CurrentProject.getTaskList().createTask(
-				sd, ed, dlg.todoField.getText(), 
-				dlg.priorityCB.getSelectedIndex(),effort, 
-				dlg.descriptionField.getText(),null,
-				dlg.chkWorkingDays.isSelected(), //Boolean to denote recurrence is working days only
-				((Integer)dlg.progress.getValue()).intValue(),
-				dlg.cbRepeatType.getSelectedIndex(),
-				dlg.chkEndDateRpt.isSelected(),
-				repEnd,dlg.txtTag.getText());
+        Stack<Object> taskCreationParams = new Stack<Object>();
+        taskCreationParams.add(sd);
+        taskCreationParams.add(ed);
+        taskCreationParams.add(dlg.todoField.getText());
+        taskCreationParams.add(dlg.priorityCB.getSelectedIndex());
+        taskCreationParams.add(effort);
+        taskCreationParams.add(dlg.descriptionField.getText());
+        taskCreationParams.add(null);
+        taskCreationParams.add(dlg.chkWorkingDays.isSelected());
+        taskCreationParams.add(((Integer) dlg.progress.getValue()).intValue());
+        taskCreationParams.add(dlg.cbRepeatType.getSelectedIndex());
+        taskCreationParams.add(dlg.chkEndDateRpt.isSelected());
+        taskCreationParams.add(repEnd);
+        taskCreationParams.add(dlg.txtTag.getText());
+        newTask = CurrentProject.getTaskList().createTask(taskCreationParams);
 		newTask.setProgress(((Integer)dlg.progress.getValue()).intValue());
 		//		CurrentProject.getTaskList().adjustParentTasks(newTask);
 
@@ -580,16 +593,6 @@ public class TaskPanel extends JPanel {
 			t.setProgress(thisProgress);
 		}
 
-		//        CalendarDate sd = new CalendarDate((Date) dlg.startDate.getModel().getValue());
-		////        CalendarDate ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
-		//          CalendarDate ed;
-		// 		if(dlg.chkEndDate.isSelected())
-		// 			ed = new CalendarDate((Date) dlg.endDate.getModel().getValue());
-		// 		else
-		// 			ed = new CalendarDate(0,0,0);
-		//        long effort = Util.getMillisFromHours(dlg.effortField.getText());
-		//		Task newTask = CurrentProject.getTaskList().createTask(sd, ed, dlg.todoField.getText(), dlg.priorityCB.getSelectedIndex(),effort, dlg.descriptionField.getText(),parentTaskId);
-		//		
 
 		CurrentStorage.get().storeTaskList(CurrentProject.getTaskList(), CurrentProject.get());
 		taskTable.tableChanged();
@@ -612,7 +615,6 @@ public class TaskPanel extends JPanel {
 		//      
 		//    	Task t = CurrentProject.getTaskList().getTask(taskId);
 		/*XXX Task t2 = CurrentProject.getTaskList().getTask(taskTable.getCurrentRootTask());
-
     	String parentTaskId = t2.getParent();
     	if((parentTaskId == null) || (parentTaskId.equals(""))) {
     		parentTaskId = null;

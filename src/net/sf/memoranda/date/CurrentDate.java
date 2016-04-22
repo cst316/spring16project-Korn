@@ -7,6 +7,7 @@
  * Copyright (c) 2003 Memoranda Team. http://memoranda.sf.net
  */
 package net.sf.memoranda.date;
+
 import java.util.Collection;
 import java.util.Vector;
 
@@ -24,7 +25,9 @@ public class CurrentDate {
     }
 
     public static void set(CalendarDate date) {
-        if (date.equals(_date)) return;
+        if (date.equals(_date)) {
+            return;
+        }
         _date = date;
         dateChanged(date);
     }
@@ -42,7 +45,8 @@ public class CurrentDate {
     }
 
     private static void dateChanged(CalendarDate date) {
-        for (int i = 0; i < dateListeners.size(); i++)
-            ((DateListener)dateListeners.get(i)).dateChange(date);
+        for (int i = 0; i < dateListeners.size(); i++) {
+            ((DateListener) dateListeners.get(i)).dateChange(date);
+        }
     }
 }
