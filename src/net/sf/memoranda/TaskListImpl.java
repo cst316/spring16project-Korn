@@ -172,13 +172,17 @@ public class TaskListImpl implements TaskList {
         assert(repeatHasEnd==(repeatType!=0));
         if (repeatHasEnd) {
             task.setEndRepeat(endRepeat);
+            elements.put(id, task.getContent());
             CalendarDate instanceDate = startDate.getNextRepeatingDate(repeatType);
             while (instanceDate.before(endRepeat) || instanceDate.equals(endRepeat)){
-                String idRep = Util.generateId();
-                Task dup = task.duplicateTask(instanceDate, idRep);                
-                dup.setParentTask(parentTaskId, _root);
-                elements.put(id, dup.getContent());
-                instanceDate = instanceDate.getNextRepeatingDate(repeatType);
+                if (!workDays || (instanceDate.getDay()!= 0 && instanceDate.getDay()!= 6)) {
+					String idRep = Util.generateId();
+					Task dup = task.duplicateTask(instanceDate, idRep);
+					dup.setParentTask(parentTaskId, _root);
+					elements.put(idRep, dup.getContent());
+					instanceDate = instanceDate
+							.getNextRepeatingDate(repeatType);
+				}
 			}
         }
         return task;

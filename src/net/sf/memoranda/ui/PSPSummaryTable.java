@@ -8,7 +8,7 @@ import javax.swing.JTable;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.commons.collections.functors.ForClosure;
+//import org.apache.commons.collections.functors.ForClosure;
 
 import javax.swing.border.BevelBorder;
 
