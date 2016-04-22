@@ -13,6 +13,7 @@ import org.apache.commons.collections.functors.ForClosure;
 import javax.swing.border.BevelBorder;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.JScrollPane;
@@ -40,6 +41,9 @@ public class PSPSummaryTable extends JPanel {
 		tblTime.getColumnModel().getColumn(0).setPreferredWidth(110);
 		tblTime.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		paneTime = new JScrollPane(tblTime); 
+		int width = tblTime.getPreferredSize().width + 105;
+		int height = tblTime.getPreferredSize().height + 35;
+		paneTime.setPreferredSize(new Dimension(width ,height));
 		add(paneTime);
 		//Defect Table
 		tblDefects = new JTable();
@@ -48,6 +52,9 @@ public class PSPSummaryTable extends JPanel {
 		tblDefects.getColumnModel().getColumn(0).setPreferredWidth(110);
 		tblDefects.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		paneDefects = new JScrollPane(tblDefects); 
+		int widthD = tblDefects.getPreferredSize().width + 105;
+		int heightD = tblDefects.getPreferredSize().height + 35;
+		paneDefects.setPreferredSize(new Dimension(widthD ,heightD));
 		add(paneDefects);
 		//LoC Table
 		tblLoC = new JTable();
@@ -56,6 +63,9 @@ public class PSPSummaryTable extends JPanel {
 		tblLoC.getColumnModel().getColumn(0).setPreferredWidth(110);
 		tblLoC.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		paneLoC = new JScrollPane(tblLoC); 
+		int widthL = tblLoC.getPreferredSize().width + 105;
+		int heightL = tblLoC.getPreferredSize().height + 35;
+		paneLoC.setPreferredSize(new Dimension(widthL ,heightL));
 		add(paneLoC);
 	}
 
